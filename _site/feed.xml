@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Junghoon's Blog</title>
+    <description> Mobile Lover，Software Engineer</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Mon, 20 May 2019 13:22:34 +0900</pubDate>
+    <lastBuildDate>Mon, 20 May 2019 13:22:34 +0900</lastBuildDate>
+    <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>testpost</title>
+        <description>&lt;p&gt;Update: This is test post（&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Test post&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;test….
+……&lt;/p&gt;
+</description>
+        <pubDate>Mon, 20 May 2019 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/2019/05/20/vim-cn-im/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/05/20/vim-cn-im/</guid>
+        
+        <category>Vim</category>
+        
+        
+      </item>
+    
+  </channel>
+</rss>
