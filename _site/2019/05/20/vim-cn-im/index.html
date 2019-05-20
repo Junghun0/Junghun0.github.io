@@ -11,27 +11,29 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="testpost - Junghoon Blog">
+    <meta property="og:title" content="iOS 간단한 화면전환 방식 - JungHoon-Park">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="Update: This is test post（
+    <meta property="og:description" content="Sample : iOS Screen Change
 
 ">
     
     <meta property="article:published_time" content="2019-05-20T00:00:00Z">
     
     
-    <meta property="article:author" content="junghoon">
+    <meta property="article:author" content="JungHoon-Park">
     
     
-    <meta property="article:tag" content="Vim">
+    <meta property="article:tag" content="iOS">
+    
+    <meta property="article:tag" content="Study">
     
     
     <meta property="og:image" content="http://localhost:4000">
     <meta property="og:url" content="http://localhost:4000/2019/05/20/vim-cn-im/">
-    <meta property="og:site_name" content="Junghoon Blog">
+    <meta property="og:site_name" content="JungHoon-Park">
     
-    <title>testpost - Junghoon Blog</title>
+    <title>iOS 간단한 화면전환 방식 - JungHoon-Park</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -210,13 +212,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/archive/?tag=Vim" title="Vim">Vim</a>
+                        <a class="tag" href="/archive/?tag=iOS" title="iOS">iOS</a>
+                        
+                        <a class="tag" href="/archive/?tag=Study" title="Study">Study</a>
                         
                     </div>
-                    <h1>testpost</h1>
+                    <h1>iOS 간단한 화면전환 방식</h1>
                     
-                    <h2 class="subheading">Using Vim with non-english input method</h2>
-                    <span class="meta">Posted by junghoon on May 20, 2019</span>
+                    <h2 class="subheading">Using screen change</h2>
+                    <span class="meta">Posted by JungHoon-Park on May 20, 2019</span>
                 </div>
             </div>
         </div>
@@ -242,11 +246,173 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>Update: This is test post（</p>
+				<p>Sample : iOS Screen Change</p>
 
 <hr />
 
-<p>Test post</p>
+<ol>
+  <li>
+    <p><strong>뷰 컨트롤러에서 다른 뷰 컨트롤러를 호출하여 화면 전환하기(present)</strong></p>
+  </li>
+  <li>
+    <p><strong>내비게이션 컨트롤러를 사용하여 화면 전환하기</strong></p>
+  </li>
+  <li>
+    <p><strong>화면 전환용 객체 세그웨이(Segueway)를 사용하여 화면 전환하기</strong></p>
+  </li>
+</ol>
+
+<ul>
+  <li>뷰 컨트롤러의 뷰 위에 다른 뷰를 가져와 바꿔치기 하기 ( 하나의 뷰 컨트롤러가 두 개 이상의 루트 뷰를 관리해야 하므로 좋은방법은 아님,
+iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관리하는 MVC 패턴을 기본으로 함)</li>
+</ul>
+
+<hr />
+<h4 id="소스코드">소스코드</h4>
+
+<p>1_1. 화면이동</p>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre>    <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">presentSecondView</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">guard</span> <span class="k">let</span> <span class="nv">secondViewInstance</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">storyboard</span><span class="p">?</span><span class="o">.</span><span class="nf">instantiateViewController</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"SecondViewController"</span><span class="p">)</span> <span class="k">else</span><span class="p">{</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="n">secondViewInstance</span><span class="o">.</span><span class="n">modalTransitionStyle</span> <span class="o">=</span> <span class="kt">UIModalTransitionStyle</span><span class="o">.</span><span class="n">flipHorizontal</span>
+        <span class="k">self</span><span class="o">.</span><span class="nf">present</span><span class="p">(</span><span class="n">secondViewInstance</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>1_2. 뒤로이동</p>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>    <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">presentBackPressed</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">presentingViewController</span><span class="p">?</span><span class="o">.</span><span class="nf">dismiss</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>2_1. 화면이동</p>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>    <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">naviGoSecond</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">guard</span> <span class="k">let</span> <span class="nv">naviSecondview</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">storyboard</span><span class="p">?</span><span class="o">.</span><span class="nf">instantiateViewController</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"NavigationSecondView"</span><span class="p">)</span> <span class="k">else</span><span class="p">{</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="nf">pushViewController</span><span class="p">(</span><span class="n">naviSecondview</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+    <span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>2_2. 뒤로이동</p>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>    <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">popNavigationVIew</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="nf">popViewController</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+    <span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>3_1. 화면이동</p>
+<ul>
+  <li>Storyboard 에서 다른 ViewController 와 연결 -&gt; Action Segue</li>
+  <li>출발점이 뷰 컨트롤러 자체인 경우 -&gt; Manual Segue
+    <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>  <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">manualSegueBtn</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
+     <span class="k">self</span><span class="o">.</span><span class="nf">performSegue</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"ManualSegue"</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span>
+ <span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <p>UIStoryboardSegue 클래스를 서브클래싱항 새로운 가능을 갖춘 세그웨이 객체정의 -&gt; CustomSegue
+ Storyboard 에서 segue 클릭 후 StoryboardSegue 탭에 class 를 새로 정의한 클래스로 설정</p>
+
+    <ul>
+      <li>custom segue 정의</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="rouge-code"><pre><span class="kd">import</span> <span class="kt">UIKit</span>
+
+<span class="kd">class</span> <span class="kt">NewSegue</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">{</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">perform</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">//세그웨이의 출발지 뷰 컨트롤러</span>
+        <span class="k">let</span> <span class="nv">srcUVC</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">source</span>
+        
+        <span class="c1">//세그웨이의 목적지 뷰 컨트롤러</span>
+        <span class="k">let</span> <span class="nv">destUVC</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">destination</span>
+        
+        <span class="c1">//fromView 에서 toView 로 뷰를 전환한다</span>
+        <span class="kt">UIView</span><span class="o">.</span><span class="nf">transition</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="n">srcUVC</span><span class="o">.</span><span class="n">view</span><span class="p">,</span>
+                          <span class="nv">to</span><span class="p">:</span> <span class="n">destUVC</span><span class="o">.</span><span class="n">view</span><span class="p">,</span>
+                          <span class="nv">duration</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                          <span class="nv">options</span><span class="p">:</span> <span class="o">.</span><span class="n">transitionCurlDown</span><span class="p">,</span>
+                          <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>3_2. 뒤로이동</p>
+<ul>
+  <li>Storyboard 에서 상단의 Exit 아이콘과 연결(Action Segue, Manual Segue, Custom Segue)
+    <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>  <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">goBackSegue</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">){</span>
+  <span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+    <p>3_3. Segue 전처리 메소드
+Segue 실행하기 전에 값을 저장해둘 필요가 있거나, 경고창을 띄워주는 등의 처리를 해야 할 경우 전처리 메소드 사용 - Segue 실행되기 전에 자동으로 실행됨</p>
+    <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre>  <span class="k">override</span> <span class="kd">func</span> <span class="nf">prepare</span><span class="p">(</span><span class="k">for</span> <span class="nv">segue</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"ActionSegue"</span><span class="p">){</span>
+          <span class="kt">NSLog</span><span class="p">(</span><span class="s">"action segue 실행!"</span><span class="p">)</span>
+      <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"ManualSegue"</span><span class="p">){</span>
+          <span class="kt">NSLog</span><span class="p">(</span><span class="s">"Manual segue 실행!"</span><span class="p">)</span>
+      <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"CustomSegue"</span><span class="p">){</span>
+          <span class="kt">NSLog</span><span class="p">(</span><span class="s">"Custom segue 실행!"</span><span class="p">)</span>
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+          <span class="kt">NSLog</span><span class="p">(</span><span class="s">"알수없는 segue 입니다."</span><span class="p">)</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+</ul>
 
 <hr />
 
@@ -405,13 +571,12 @@
 </ul>
 
                 <p class="copyright text-muted">
-                    Copyright &copy; Junghoon's Blog 2019
-                    <br>
-                    Powered by <a href="http://huangxuan.me">Hux Blog</a> |
+                    All contents Copyright &copy; Junghoon's Blog 2019
+                    
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
                         frameborder="0" scrolling="0" width="100px" height="20px"
-                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                        src="https://ghbtns.com/github-btn.html?user=Junghun0&repo=Junghun0.github.io&type=star&count=true" >
                     </iframe>
                 </p>
             </div>
