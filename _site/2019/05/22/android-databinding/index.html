@@ -387,11 +387,11 @@
 8
 9
 </pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MainActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span><span class="o">{</span>
-
+    <span class="n">ActivityMainBinding</span> <span class="n">binding</span><span class="o">;</span>
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-        <span class="n">ActivityMainBinding</span> <span class="n">binding</span> <span class="o">=</span> <span class="n">DataBindingUtil</span><span class="o">.</span><span class="na">setContentView</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
+        <span class="n">binding</span> <span class="o">=</span> <span class="n">DataBindingUtil</span><span class="o">.</span><span class="na">setContentView</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
         <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="o">(</span><span class="s">"JungHoon"</span><span class="o">,</span> <span class="s">"Park"</span><span class="o">);</span>
         <span class="n">binding</span><span class="o">.</span><span class="na">setUser</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
 <span class="o">}</span>
@@ -413,6 +413,112 @@
 </pre></td><td class="rouge-code"><pre><span class="n">ListItemBinding</span> <span class="n">binding</span> <span class="o">=</span> <span class="n">DataBindingUtil</span><span class="o">.</span><span class="na">inflate</span><span class="o">(</span><span class="n">layoutInflater</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">list_item</span><span class="o">,</span> <span class="n">viewGroup</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>을 통해 뷰를 불러올 수 있다.</p>
+
+<h3 id="참고">참고</h3>
+<h4 id="이벤트-처리하기">이벤트 처리하기</h4>
+
+<p>버튼 클릭시 아래의 함수를 실행시키고 싶다면</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kt">void</span> <span class="nf">OnButtonClick</span><span class="o">(</span><span class="n">View</span> <span class="n">view</span><span class="o">){</span>
+    <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">"Button Click"</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>xml 에서 함수를 onClick 에 지정해준다.</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;Button</span>
+    <span class="na">android:id=</span><span class="s">"@+id/btnSample"</span>
+    <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+    <span class="na">android:onClick=</span><span class="s">"@{activity::onButtonClick}"</span>
+    <span class="na">android:text=</span><span class="s">"button"</span><span class="nt">/&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>xml 에서 activity 변수 지정</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;data&gt;</span>
+    <span class="nt">&lt;variable</span>
+        <span class="na">name=</span><span class="s">"activity"</span>
+        <span class="na">type=</span><span class="s">"com.example.databinding_sample.MainActivity"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/data&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>MainActivity 에서 사용하기</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="n">DatabindingActivityBinding</span> <span class="n">binding</span><span class="o">;</span>
+
+<span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="nd">@Nullable</span> <span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+    <span class="n">binding</span> <span class="o">=</span> <span class="n">DataBindingUtil</span><span class="o">.</span><span class="na">setContentView</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
+    <span class="n">binding</span><span class="o">.</span><span class="na">setActivity</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>setAcrtivity(this)는 우리가 위에서 지정한 activity라는 변수를 이 Class로 지정하겠다는 의미이다.</p>
+
+<h4 id="recyclerview-adapter-에서-사용하기">RecyclerView Adapter 에서 사용하기</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onBindViewHolder</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">BindingViewHolder</span> <span class="n">holder</span><span class="o">,</span> <span class="kt">int</span> <span class="n">position</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">holder</span><span class="o">.</span><span class="na">binding</span><span class="o">.</span><span class="na">setUser</span><span class="o">(</span><span class="n">mList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">position</span><span class="o">));</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BindingViewHolder</span> <span class="kd">extends</span> <span class="n">RecyclerView</span><span class="o">.</span><span class="na">ViewHolder</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">RecyclerItemLayoutBinding</span> <span class="n">binding</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">BindingViewHolder</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">itemView</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">itemView</span><span class="o">);</span>
+        <span class="n">binding</span> <span class="o">=</span> <span class="n">DataBindingUtil</span><span class="o">.</span><span class="na">bind</span><span class="o">(</span><span class="n">itemView</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="layout-세부정보-처리하기">Layout 세부정보 처리하기</h4>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;data&gt;</span>
+    <span class="nt">&lt;import</span> <span class="na">type=</span><span class="s">"android.view.View"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/data&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;TextView</span>
+   <span class="na">android:text=</span><span class="s">"@{user.lastName}"</span>
+   <span class="na">android:layout_width=</span><span class="s">"wrap_content"</span>
+   <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+   <span class="na">android:visibility=</span><span class="s">"@{user.isAdult ? View.VISIBLE : View.GONE}"</span><span class="nt">/&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
 
 
                 <hr style="visibility: hidden;">

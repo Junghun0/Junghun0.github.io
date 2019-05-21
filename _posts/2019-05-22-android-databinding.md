@@ -92,11 +92,11 @@ TextView의 android:text 특성에 사용되는 식 @{user.firstName}은 전자�
 #### 4. 데이터 바인딩 하기
 ~~~java
 public class MainActivity extends AppCompatActivity{
-
+    ActivityMainBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         User user = new User("JungHoon", "Park");
         binding.setUser(user);
 }
@@ -118,3 +118,77 @@ or
 ListItemBinding binding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item, viewGroup, false);
 ~~~
 을 통해 뷰를 불러올 수 있다.
+
+### 참고
+#### 이벤트 처리하기
+
+버튼 클릭시 아래의 함수를 실행시키고 싶다면
+~~~java
+public void OnButtonClick(View view){
+    Toast.makeText(this, "Button Click", Toast.LENGTH_SHORT).show();
+}
+~~~
+xml 에서 함수를 onClick 에 지정해준다.
+~~~xml
+<Button
+    android:id="@+id/btnSample"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:onClick="@{activity::onButtonClick}"
+    android:text="button"/>
+~~~
+xml 에서 activity 변수 지정
+~~~xml
+<data>
+    <variable
+        name="activity"
+        type="com.example.databinding_sample.MainActivity" />
+</data>
+~~~
+MainActivity 에서 사용하기
+~~~java
+DatabindingActivityBinding binding;
+
+@Override
+protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+    binding.setActivity(this);
+~~~
+setAcrtivity(this)는 우리가 위에서 지정한 activity라는 변수를 이 Class로 지정하겠다는 의미이다.
+
+#### RecyclerView Adapter 에서 사용하기
+
+~~~java
+@Override
+public void onBindViewHolder(@NonNull BindingViewHolder holder, int position) {
+    holder.binding.setUser(mList.get(position));
+}
+~~~
+~~~java
+public class BindingViewHolder extends RecyclerView.ViewHolder {
+    public RecyclerItemLayoutBinding binding;
+
+    public BindingViewHolder(@NonNull View itemView) {
+        super(itemView);
+        binding = DataBindingUtil.bind(itemView);
+    }
+}
+~~~
+
+#### Layout 세부정보 처리하기
+
+~~~xml
+<data>
+    <import type="android.view.View"/>
+</data>
+~~~
+~~~xml
+<TextView
+   android:text="@{user.lastName}"
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"
+   android:visibility="@{user.isAdult ? View.VISIBLE : View.GONE}"/>
+~~~
+
+
