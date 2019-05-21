@@ -5,8 +5,8 @@
     <description>description</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 21 May 2019 13:12:15 +0900</pubDate>
-    <lastBuildDate>Tue, 21 May 2019 13:12:15 +0900</lastBuildDate>
+    <pubDate>Tue, 21 May 2019 13:28:36 +0900</pubDate>
+    <lastBuildDate>Tue, 21 May 2019 13:28:36 +0900</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -367,6 +367,95 @@
         <pubDate>Mon, 20 May 2019 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/2019/05/20/ios-tableview/</link>
         <guid isPermaLink="true">http://localhost:4000/2019/05/20/ios-tableview/</guid>
+        
+        <category>Swift4</category>
+        
+        <category>Mobile</category>
+        
+        <category>iOS</category>
+        
+        <category>Study</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>[iOS] SideBar 만들기</title>
+        <description>&lt;p&gt;Sample : iOS SideBar SWRevelViewController&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;sidebar_ios&quot;&gt;SideBar_ios&lt;/h1&gt;
+
+&lt;h3 id=&quot;swrevelviewcontroller-라이브러리-사용&quot;&gt;SWRevelViewController 라이브러리 사용&lt;/h3&gt;
+&lt;h4 id=&quot;--httpsgithubcomjohn-lluchswrevealviewcontroller&quot;&gt;- https://github.com/John-Lluch/SWRevealViewController&lt;/h4&gt;
+&lt;h4 id=&quot;--swrevealviewcontrollerh--swrevealviewcontrollerm-추가&quot;&gt;- SWRevealViewController.h / SWRevealViewController.m 추가&lt;/h4&gt;
+&lt;div&gt;
+&lt;img width=&quot;600&quot; height=&quot;200&quot; src=&quot;https://user-images.githubusercontent.com/30828236/58068227-7b605880-7bcb-11e9-8053-56b1f192609c.png&quot; /&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;--브릿징-헤더란-&quot;&gt;- 브릿징 헤더란 ?&lt;/h4&gt;
+&lt;h4 id=&quot;-objective-c-라이브러리를-사용하기-위해서-브릿징-헤더-라는-파일이-필요-swift에게-objective-c-클래스의-존재를-알려준다&quot;&gt;–&amp;gt; Objective-c 라이브러리를 사용하기 위해서 브릿징 헤더 라는 파일이 필요 !(Swift에게 Objective-c 클래스의 존재를 알려준다)&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;- SampleSideBar_ios-Bridging-Header.h 파일에 import 해줌&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div&gt;
+&lt;img width=&quot;600&quot; height=&quot;130&quot; src=&quot;https://user-images.githubusercontent.com/30828236/54476914-075da900-4846-11e9-8336-6cdb1ea38d95.png&quot; /&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;- FrontViewController.swift&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-swift highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;FrontViewController&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;UIViewController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;@IBOutlet&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;sideBarButton&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;UIBarButtonItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;viewDidLoad&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;viewDidLoad&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        
+    &lt;span class=&quot;c1&quot;&gt;//메인 컨트롤러의 참조 정보를 가져온다.&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;revealVC&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;revealViewController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//버튼이 클릭될 때 메인 컨트롤러에 정의된 revealToggle(_:)을 호출하도록 정의한다&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sideBarButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;revealVC&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sideBarButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;action&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;#selector(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;revealVC.revealToggle(_:)&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//제스처를 뷰에 추가한다!&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;addGestureRecognizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;revealVC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;panGestureRecognizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;스토리보드&quot;&gt;스토리보드&lt;/h3&gt;
+&lt;div&gt;
+  &lt;img width=&quot;600&quot; height=&quot;500&quot; src=&quot;https://user-images.githubusercontent.com/30828236/54477207-fd897500-4848-11e9-90ca-9e0b69ef160c.png&quot; /&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;-메인-뷰컨트롤러와-테이블-뷰---reveal-view-controller-set-controller-속성의-segue-로-연결--segue-identifiersw_rear&quot;&gt;* 메인 뷰컨트롤러와 테이블 뷰 -&amp;gt; reveal view controller set controller 속성의 segue 로 연결 / segue Identifier(sw_rear)&lt;/h4&gt;
+
+&lt;h4 id=&quot;-첫-화면과-연결되는-navigationviewcontroller---reveal-view-controller-set-controller-속성-segue--segue-identifiersw_front&quot;&gt;* 첫 화면과 연결되는 navigationviewcontroller -&amp;gt; reveal view controller set controller 속성 segue / segue Identifier(sw_front)&lt;/h4&gt;
+
+&lt;h5 id=&quot;사이드-바-커스텀&quot;&gt;사이드 바 커스텀&lt;/h5&gt;
+&lt;div&gt;
+  &lt;img width=&quot;300&quot; height=&quot;450&quot; src=&quot;https://user-images.githubusercontent.com/30828236/54486855-6ae0e880-48d1-11e9-8977-53dd0dcdce89.png&quot; /&gt;
+&lt;/div&gt;
+
+</description>
+        <pubDate>Mon, 20 May 2019 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/2019/05/20/ios-sidebar/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/05/20/ios-sidebar/</guid>
         
         <category>Swift4</category>
         

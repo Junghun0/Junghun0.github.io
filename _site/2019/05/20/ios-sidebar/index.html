@@ -11,10 +11,10 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="[iOS] 간단한 화면전환 방식 - Junghoon's Blog">
+    <meta property="og:title" content="[iOS] SideBar 만들기 - Junghoon's Blog">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="Sample : iOS Screen Change
+    <meta property="og:description" content="Sample : iOS SideBar SWRevelViewController
 
 ">
     
@@ -34,10 +34,10 @@
     
     
     <meta property="og:image" content="http://localhost:4000">
-    <meta property="og:url" content="http://localhost:4000/2019/05/20/ios-screen-change/">
+    <meta property="og:url" content="http://localhost:4000/2019/05/20/ios-sidebar/">
     <meta property="og:site_name" content="Junghoon's Blog">
     
-    <title>[iOS] 간단한 화면전환 방식 - Junghoon's Blog</title>
+    <title>[iOS] SideBar 만들기 - Junghoon's Blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -46,7 +46,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2019/05/20/ios-screen-change/">
+    <link rel="canonical" href="http://localhost:4000/2019/05/20/ios-sidebar/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -77,7 +77,7 @@
 
     <!-- Navigation -->
 
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
 
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -190,7 +190,7 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/post-bg-halting.jpg" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 
@@ -199,7 +199,7 @@
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/post-bg-halting.jpg');
+        background-image: url('/img/home-bg.jpg');
         background: ;
     }
 
@@ -213,7 +213,7 @@
     
 </style>
 
-<header class="intro-header" >
+<header class="intro-header style-text" >
 
     <div class="header-mask"></div>
     
@@ -232,9 +232,9 @@
                         <a class="tag" href="/archive/?tag=Study" title="Study">Study</a>
                         
                     </div>
-                    <h1>[iOS] 간단한 화면전환 방식</h1>
+                    <h1>[iOS] SideBar 만들기</h1>
                     
-                    <h2 class="subheading">Using screen change</h2>
+                    <h2 class="subheading">Make SideBar iOS Sample</h2>
                     <span class="meta">Posted by JungHoon-Park on May 20, 2019</span>
                 </div>
             </div>
@@ -261,93 +261,29 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>Sample : iOS Screen Change</p>
+				<p>Sample : iOS SideBar SWRevelViewController</p>
 
 <hr />
 
-<h3 id="1-뷰-컨트롤러에서-다른-뷰-컨트롤러를-호출하여-화면-전환하기present">1. <strong>뷰 컨트롤러에서 다른 뷰 컨트롤러를 호출하여 화면 전환하기(present)</strong></h3>
+<h1 id="sidebar_ios">SideBar_ios</h1>
 
-<h3 id="2-내비게이션-컨트롤러를-사용하여-화면-전환하기">2. <strong>내비게이션 컨트롤러를 사용하여 화면 전환하기</strong></h3>
+<h3 id="swrevelviewcontroller-라이브러리-사용">SWRevelViewController 라이브러리 사용</h3>
+<h4 id="--httpsgithubcomjohn-lluchswrevealviewcontroller">- https://github.com/John-Lluch/SWRevealViewController</h4>
+<h4 id="--swrevealviewcontrollerh--swrevealviewcontrollerm-추가">- SWRevealViewController.h / SWRevealViewController.m 추가</h4>
+<div>
+<img width="600" height="200" src="https://user-images.githubusercontent.com/30828236/58068227-7b605880-7bcb-11e9-8053-56b1f192609c.png" />
+</div>
 
-<h3 id="3-화면-전환용-객체-세그웨이segueway를-사용하여-화면-전환하기">3. <strong>화면 전환용 객체 세그웨이(Segueway)를 사용하여 화면 전환하기</strong></h3>
+<h4 id="--브릿징-헤더란-">- 브릿징 헤더란 ?</h4>
+<h4 id="-objective-c-라이브러리를-사용하기-위해서-브릿징-헤더-라는-파일이-필요-swift에게-objective-c-클래스의-존재를-알려준다">–&gt; Objective-c 라이브러리를 사용하기 위해서 브릿징 헤더 라는 파일이 필요 !(Swift에게 Objective-c 클래스의 존재를 알려준다)</h4>
 
-<ul>
-  <li>뷰 컨트롤러의 뷰 위에 다른 뷰를 가져와 바꿔치기 하기 ( 하나의 뷰 컨트롤러가 두 개 이상의 루트 뷰를 관리해야 하므로 좋은방법은 아님,
-iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관리하는 MVC 패턴을 기본으로 함)</li>
-</ul>
+<p><strong>- SampleSideBar_ios-Bridging-Header.h 파일에 import 해줌</strong></p>
 
-<hr />
+<div>
+<img width="600" height="130" src="https://user-images.githubusercontent.com/30828236/54476914-075da900-4846-11e9-8336-6cdb1ea38d95.png" />
+</div>
 
-<h4 id="소스코드">소스코드</h4>
-
-<p><strong>1_1. 화면이동</strong></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">presentSecondView</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">guard</span> <span class="k">let</span> <span class="nv">secondViewInstance</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">storyboard</span><span class="p">?</span><span class="o">.</span><span class="nf">instantiateViewController</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"SecondViewController"</span><span class="p">)</span> <span class="k">else</span><span class="p">{</span>
-        <span class="k">return</span>
-    <span class="p">}</span>
-    <span class="n">secondViewInstance</span><span class="o">.</span><span class="n">modalTransitionStyle</span> <span class="o">=</span> <span class="kt">UIModalTransitionStyle</span><span class="o">.</span><span class="n">flipHorizontal</span>
-    <span class="k">self</span><span class="o">.</span><span class="nf">present</span><span class="p">(</span><span class="n">secondViewInstance</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>1_2. 뒤로이동</strong></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">presentBackPressed</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">presentingViewController</span><span class="p">?</span><span class="o">.</span><span class="nf">dismiss</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-
-<p><strong>2_1. 화면이동</strong></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">naviGoSecond</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">guard</span> <span class="k">let</span> <span class="nv">naviSecondview</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">storyboard</span><span class="p">?</span><span class="o">.</span><span class="nf">instantiateViewController</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"NavigationSecondView"</span><span class="p">)</span> <span class="k">else</span><span class="p">{</span>
-        <span class="k">return</span>
-    <span class="p">}</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="nf">pushViewController</span><span class="p">(</span><span class="n">naviSecondview</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>2_2. 뒤로이동</strong></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">popNavigationVIew</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="nf">popViewController</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>3_1. 화면이동</strong></p>
-<ul>
-  <li>Storyboard 에서 다른 ViewController 와 연결 -&gt; Action Segue</li>
-  <li>출발점이 뷰 컨트롤러 자체인 경우 -&gt; Manual Segue
-    <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">manualSegueBtn</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
- <span class="k">self</span><span class="o">.</span><span class="nf">performSegue</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"ManualSegue"</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div>    </div>
-  </li>
-  <li>
-    <p>UIStoryboardSegue 클래스를 서브클래싱항 새로운 가능을 갖춘 세그웨이 객체정의 -&gt; CustomSegue
- Storyboard 에서 segue 클릭 후 StoryboardSegue 탭에 class 를 새로 정의한 클래스로 설정</p>
-
-    <ul>
-      <li>custom segue 정의</li>
-    </ul>
-  </li>
-</ul>
+<p><strong>- FrontViewController.swift</strong></p>
 
 <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
@@ -364,82 +300,55 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
 13
 14
 15
-16
-17
-18
-19
-</pre></td><td class="rouge-code"><pre><span class="kd">import</span> <span class="kt">UIKit</span>
-
-<span class="kd">class</span> <span class="kt">NewSegue</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">{</span>
-    
-<span class="k">override</span> <span class="kd">func</span> <span class="nf">perform</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">//세그웨이의 출발지 뷰 컨트롤러</span>
-    <span class="k">let</span> <span class="nv">srcUVC</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">source</span>
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="kt">FrontViewController</span> <span class="p">:</span> <span class="kt">UIViewController</span><span class="p">{</span>
+    <span class="kd">@IBOutlet</span> <span class="k">var</span> <span class="nv">sideBarButton</span><span class="p">:</span> <span class="kt">UIBarButtonItem</span><span class="o">!</span>
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
         
-    <span class="c1">//세그웨이의 목적지 뷰 컨트롤러</span>
-    <span class="k">let</span> <span class="nv">destUVC</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">destination</span>
-        
-    <span class="c1">//fromView 에서 toView 로 뷰를 전환한다</span>
-    <span class="kt">UIView</span><span class="o">.</span><span class="nf">transition</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="n">srcUVC</span><span class="o">.</span><span class="n">view</span><span class="p">,</span>
-                    <span class="nv">to</span><span class="p">:</span> <span class="n">destUVC</span><span class="o">.</span><span class="n">view</span><span class="p">,</span>
-                    <span class="nv">duration</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-                    <span class="nv">options</span><span class="p">:</span> <span class="o">.</span><span class="n">transitionCurlDown</span><span class="p">,</span>
-                    <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="c1">//메인 컨트롤러의 참조 정보를 가져온다.</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">revealVC</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="nf">revealViewController</span><span class="p">(){</span>
+        <span class="c1">//버튼이 클릭될 때 메인 컨트롤러에 정의된 revealToggle(_:)을 호출하도록 정의한다</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">sideBarButton</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">revealVC</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">sideBarButton</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="kd">#selector(</span><span class="nf">revealVC.revealToggle(_:)</span><span class="kd">)</span>
+        <span class="c1">//제스처를 뷰에 추가한다!</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="nf">addGestureRecognizer</span><span class="p">(</span><span class="n">revealVC</span><span class="o">.</span><span class="nf">panGestureRecognizer</span><span class="p">())</span>
+        <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>3_2. 뒤로이동</strong></p>
+<hr />
 
-<p><em>Storyboard 에서 상단의 Exit 아이콘과 연결(Action Segue, Manual Segue, Custom Segue)</em></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">goBackSegue</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">){}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
+<h3 id="스토리보드">스토리보드</h3>
+<div>
+  <img width="600" height="500" src="https://user-images.githubusercontent.com/30828236/54477207-fd897500-4848-11e9-90ca-9e0b69ef160c.png" />
+</div>
 
-<p><strong>3_3. Segue 전처리 메소드</strong></p>
+<h4 id="-메인-뷰컨트롤러와-테이블-뷰---reveal-view-controller-set-controller-속성의-segue-로-연결--segue-identifiersw_rear">* 메인 뷰컨트롤러와 테이블 뷰 -&gt; reveal view controller set controller 속성의 segue 로 연결 / segue Identifier(sw_rear)</h4>
 
-<p><em>Segue 실행하기 전에 값을 저장해둘 필요가 있거나, 경고창을 띄워주는 등의 처리를 해야 할 경우 전처리 메소드 사용 - Segue 실행되기 전에 자동으로 실행됨</em></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="rouge-code"><pre><span class="k">override</span> <span class="kd">func</span> <span class="nf">prepare</span><span class="p">(</span><span class="k">for</span> <span class="nv">segue</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?)</span> <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"ActionSegue"</span><span class="p">){</span>
-        <span class="kt">NSLog</span><span class="p">(</span><span class="s">"action segue 실행!"</span><span class="p">)</span>
-    <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"ManualSegue"</span><span class="p">){</span>
-        <span class="kt">NSLog</span><span class="p">(</span><span class="s">"Manual segue 실행!"</span><span class="p">)</span>
-    <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"CustomSegue"</span><span class="p">){</span>
-        <span class="kt">NSLog</span><span class="p">(</span><span class="s">"Custom segue 실행!"</span><span class="p">)</span>
-    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-        <span class="kt">NSLog</span><span class="p">(</span><span class="s">"알수없는 segue 입니다."</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
+<h4 id="-첫-화면과-연결되는-navigationviewcontroller---reveal-view-controller-set-controller-속성-segue--segue-identifiersw_front">* 첫 화면과 연결되는 navigationviewcontroller -&gt; reveal view controller set controller 속성 segue / segue Identifier(sw_front)</h4>
 
-<h3 id="소스코드링크github"><a href="https://github.com/Junghun0/SampleScreenChange_ios.git">소스코드링크(github)</a></h3>
+<h5 id="사이드-바-커스텀">사이드 바 커스텀</h5>
+<div>
+  <img width="300" height="450" src="https://user-images.githubusercontent.com/30828236/54486855-6ae0e880-48d1-11e9-8977-53dd0dcdce89.png" />
+</div>
+
 
 
                 <hr style="visibility: hidden;">
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2019/05/20/ios-data-deliver/" data-toggle="tooltip" data-placement="top" title="[iOS] 화면간 데이터 전달 방식">
+                        <a href="/2019/05/20/ios-screen-change/" data-toggle="tooltip" data-placement="top" title="[iOS] 간단한 화면전환 방식">
                         Previous<br>
-                        <span>[iOS] 화면간 데이터 전달 방식</span>
+                        <span>[iOS] 간단한 화면전환 방식</span>
                         </a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2019/05/20/ios-sidebar/" data-toggle="tooltip" data-placement="top" title="[iOS] SideBar 만들기">
+                        <a href="/2019/05/20/ios-tableview/" data-toggle="tooltip" data-placement="top" title="[iOS] 테이블뷰 만들기">
                         Next<br>
-                        <span>[iOS] SideBar 만들기</span>
+                        <span>[iOS] 테이블뷰 만들기</span>
                         </a>
                     </li>
                     
@@ -543,8 +452,8 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "junghoon-github-io";
-    var disqus_identifier = "/2019/05/20/ios-screen-change";
-    var disqus_url = "http://localhost:4000/2019/05/20/ios-screen-change/";
+    var disqus_identifier = "/2019/05/20/ios-sidebar";
+    var disqus_url = "http://localhost:4000/2019/05/20/ios-sidebar/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
