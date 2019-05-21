@@ -315,26 +315,26 @@
 18
 19
 20
-</pre></td><td class="rouge-code"><pre>    <span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">interval</span><span class="p">:</span> <span class="kt">UIStepper</span><span class="o">!</span>
-    <span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">email</span><span class="p">:</span> <span class="kt">UITextField</span><span class="o">!</span>
-    <span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">isUpdate</span><span class="p">:</span> <span class="kt">UISwitch</span><span class="o">!</span>
-    <span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">intervalText</span><span class="p">:</span> <span class="kt">UILabel</span><span class="o">!</span>
-    <span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">isUpdateText</span><span class="p">:</span> <span class="kt">UILabel</span><span class="o">!</span>
-    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+</pre></td><td class="rouge-code"><pre><span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">interval</span><span class="p">:</span> <span class="kt">UIStepper</span><span class="o">!</span>
+<span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">email</span><span class="p">:</span> <span class="kt">UITextField</span><span class="o">!</span>
+<span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">isUpdate</span><span class="p">:</span> <span class="kt">UISwitch</span><span class="o">!</span>
+<span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">intervalText</span><span class="p">:</span> <span class="kt">UILabel</span><span class="o">!</span>
+<span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">isUpdateText</span><span class="p">:</span> <span class="kt">UILabel</span><span class="o">!</span>
+<span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">onSwitch</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">UISwitch</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">sender</span><span class="o">.</span><span class="n">isOn</span> <span class="o">==</span> <span class="kc">true</span><span class="p">){</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">isUpdateText</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"갱신함"</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">isUpdateText</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"갱신하지 않음"</span>
     <span class="p">}</span>
-    <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">onSwitch</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">UISwitch</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">sender</span><span class="o">.</span><span class="n">isOn</span> <span class="o">==</span> <span class="kc">true</span><span class="p">){</span>
-            <span class="k">self</span><span class="o">.</span><span class="n">isUpdateText</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"갱신함"</span>
-        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-            <span class="k">self</span><span class="o">.</span><span class="n">isUpdateText</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"갱신하지 않음"</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+<span class="p">}</span>
     
-    <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">onStepper</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">UIStepper</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">let</span> <span class="nv">value</span> <span class="o">=</span> <span class="kt">Int</span><span class="p">(</span><span class="n">sender</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">self</span><span class="o">.</span><span class="n">intervalText</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"</span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s">분 마다"</span>
-    <span class="p">}</span>
+<span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">onStepper</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">UIStepper</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">value</span> <span class="o">=</span> <span class="kt">Int</span><span class="p">(</span><span class="n">sender</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">intervalText</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"</span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s">분 마다"</span>
+<span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p><strong>1_2. 값을 전달받을 프로퍼티 정의</strong></p>
 <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -353,22 +353,22 @@
 14
 15
 16
-</pre></td><td class="rouge-code"><pre>    <span class="kd">class</span> <span class="kt">SecondViewController</span> <span class="p">:</span> <span class="kt">UIViewController</span><span class="p">{</span>
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="kt">SecondViewController</span> <span class="p">:</span> <span class="kt">UIViewController</span><span class="p">{</span>
     
-    <span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">resultInterval</span><span class="p">:</span> <span class="kt">UILabel</span><span class="o">!</span>
-    <span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">resultUpdate</span><span class="p">:</span> <span class="kt">UILabel</span><span class="o">!</span>
-    <span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">resultEmail</span><span class="p">:</span> <span class="kt">UILabel</span><span class="o">!</span>
+<span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">resultInterval</span><span class="p">:</span> <span class="kt">UILabel</span><span class="o">!</span>
+<span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">resultUpdate</span><span class="p">:</span> <span class="kt">UILabel</span><span class="o">!</span>
+<span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">resultEmail</span><span class="p">:</span> <span class="kt">UILabel</span><span class="o">!</span>
     
-    <span class="k">var</span> <span class="nv">paramInterval</span><span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">var</span> <span class="nv">paramUpdate</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span>
-    <span class="k">var</span> <span class="nv">paramEmail</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">""</span>
+<span class="k">var</span> <span class="nv">paramInterval</span><span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">var</span> <span class="nv">paramUpdate</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span>
+<span class="k">var</span> <span class="nv">paramEmail</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">""</span>
     
-    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
-        <span class="k">self</span><span class="o">.</span><span class="n">resultEmail</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">paramEmail</span>
-        <span class="k">self</span><span class="o">.</span><span class="n">resultUpdate</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="p">(</span><span class="k">self</span><span class="o">.</span><span class="n">paramUpdate</span> <span class="o">==</span> <span class="kc">true</span> <span class="p">?</span> <span class="s">"자동갱신"</span> <span class="p">:</span> <span class="s">"자동갱신안함"</span><span class="p">)</span>
-        <span class="k">self</span><span class="o">.</span><span class="n">resultInterval</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"</span><span class="se">\(</span><span class="kt">Int</span><span class="p">(</span><span class="n">paramInterval</span><span class="p">)</span><span class="se">)</span><span class="s">분 마다 갱신"</span>
-    <span class="p">}</span>
+<span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">resultEmail</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">paramEmail</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">resultUpdate</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="p">(</span><span class="k">self</span><span class="o">.</span><span class="n">paramUpdate</span> <span class="o">==</span> <span class="kc">true</span> <span class="p">?</span> <span class="s">"자동갱신"</span> <span class="p">:</span> <span class="s">"자동갱신안함"</span><span class="p">)</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">resultInterval</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"</span><span class="se">\(</span><span class="kt">Int</span><span class="p">(</span><span class="n">paramInterval</span><span class="p">)</span><span class="se">)</span><span class="s">분 마다 갱신"</span>
+<span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 
 <p><strong>1_3. 값을 전달받을 viewcontroller의 인스턴스를 직접 생성하거나, 이미 생성되어 있는 인스턴스의 참조를 읽어옴</strong></p>
@@ -377,11 +377,11 @@
 3
 4
 5
-</pre></td><td class="rouge-code"><pre>   <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">onSubmit</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">guard</span> <span class="k">let</span> <span class="nv">resultView</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">storyboard</span><span class="p">?</span><span class="o">.</span><span class="nf">instantiateViewController</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"SecondViewController"</span><span class="p">)</span> <span class="k">as?</span> <span class="kt">SecondViewController</span> <span class="k">else</span><span class="p">{</span>
-                      <span class="k">return</span>
-             <span class="p">}</span>
-      <span class="p">}</span>
+</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">onSubmit</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">resultView</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">storyboard</span><span class="p">?</span><span class="o">.</span><span class="nf">instantiateViewController</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"SecondViewController"</span><span class="p">)</span> <span class="k">as?</span> <span class="kt">SecondViewController</span> <span class="k">else</span><span class="p">{</span>
+            <span class="k">return</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p><strong>1_4. 정의한 프로퍼티에 값을 대입 후 화면 전환</strong></p>
 <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -394,16 +394,16 @@
 8
 9
 10
-</pre></td><td class="rouge-code"><pre>     <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">onSubmit</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">guard</span> <span class="k">let</span> <span class="nv">resultView</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">storyboard</span><span class="p">?</span><span class="o">.</span><span class="nf">instantiateViewController</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"SecondViewController"</span><span class="p">)</span> <span class="k">as?</span> <span class="kt">SecondViewController</span> <span class="k">else</span><span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
-        <span class="n">resultView</span><span class="o">.</span><span class="n">paramEmail</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">email</span><span class="o">.</span><span class="n">text</span><span class="o">!</span>
-        <span class="n">resultView</span><span class="o">.</span><span class="n">paramUpdate</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">isUpdate</span><span class="o">.</span><span class="n">isOn</span>
-        <span class="n">resultView</span><span class="o">.</span><span class="n">paramInterval</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">interval</span><span class="o">.</span><span class="n">value</span>
-        
-        <span class="k">self</span><span class="o">.</span><span class="nf">present</span><span class="p">(</span><span class="n">resultView</span><span class="p">,</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">onSubmit</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">resultView</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">storyboard</span><span class="p">?</span><span class="o">.</span><span class="nf">instantiateViewController</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"SecondViewController"</span><span class="p">)</span> <span class="k">as?</span> <span class="kt">SecondViewController</span> <span class="k">else</span><span class="p">{</span>
+        <span class="k">return</span>
     <span class="p">}</span>
+    <span class="n">resultView</span><span class="o">.</span><span class="n">paramEmail</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">email</span><span class="o">.</span><span class="n">text</span><span class="o">!</span>
+    <span class="n">resultView</span><span class="o">.</span><span class="n">paramUpdate</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">isUpdate</span><span class="o">.</span><span class="n">isOn</span>
+    <span class="n">resultView</span><span class="o">.</span><span class="n">paramInterval</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">interval</span><span class="o">.</span><span class="n">value</span>
+        
+    <span class="k">self</span><span class="o">.</span><span class="nf">present</span><span class="p">(</span><span class="n">resultView</span><span class="p">,</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+<span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p><strong>1_5. segue 로 화면 전환할때</strong></p>
 <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -422,22 +422,22 @@
 14
 15
 16
-</pre></td><td class="rouge-code"><pre>    <span class="c1">//manual segue</span>
-    <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">onPerformSegue</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">self</span><span class="o">.</span><span class="nf">performSegue</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"ManualSubmit"</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span>
-    <span class="p">}</span>
+</pre></td><td class="rouge-code"><pre><span class="c1">//manual segue</span>
+<span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">onPerformSegue</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">self</span><span class="o">.</span><span class="nf">performSegue</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"ManualSubmit"</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span>
+<span class="p">}</span>
     
-    <span class="k">override</span> <span class="kd">func</span> <span class="nf">prepare</span><span class="p">(</span><span class="k">for</span> <span class="nv">segue</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?)</span> <span class="p">{</span>
-        <span class="k">let</span> <span class="nv">destinationview</span> <span class="o">=</span> <span class="n">segue</span><span class="o">.</span><span class="n">destination</span>
+<span class="k">override</span> <span class="kd">func</span> <span class="nf">prepare</span><span class="p">(</span><span class="k">for</span> <span class="nv">segue</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">destinationview</span> <span class="o">=</span> <span class="n">segue</span><span class="o">.</span><span class="n">destination</span>
         
-        <span class="k">guard</span> <span class="k">let</span> <span class="nv">resultViewController</span> <span class="o">=</span> <span class="n">destinationview</span> <span class="k">as?</span> <span class="kt">NaviResultViewController</span> <span class="k">else</span><span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
-        
-        <span class="n">resultViewController</span><span class="o">.</span><span class="n">paramEmail</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">emailText</span><span class="o">.</span><span class="n">text</span><span class="o">!</span>
-        <span class="n">resultViewController</span><span class="o">.</span><span class="n">paramUpdate</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">switchbtn</span><span class="o">.</span><span class="n">isOn</span>
-        <span class="n">resultViewController</span><span class="o">.</span><span class="n">paramInterval</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">interval</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">resultViewController</span> <span class="o">=</span> <span class="n">destinationview</span> <span class="k">as?</span> <span class="kt">NaviResultViewController</span> <span class="k">else</span><span class="p">{</span>
+        <span class="k">return</span>
     <span class="p">}</span>
+        
+    <span class="n">resultViewController</span><span class="o">.</span><span class="n">paramEmail</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">emailText</span><span class="o">.</span><span class="n">text</span><span class="o">!</span>
+    <span class="n">resultViewController</span><span class="o">.</span><span class="n">paramUpdate</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">switchbtn</span><span class="o">.</span><span class="n">isOn</span>
+    <span class="n">resultViewController</span><span class="o">.</span><span class="n">paramInterval</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">interval</span><span class="o">.</span><span class="n">value</span>
+<span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 
 <p><strong>2_1. 전달받는 viewcontroller의 인스턴스를 생성하는 것이 아니라 현재 존재하는 viewcontroller의 인스턴스의 참조값을 얻어온다.</strong></p>
@@ -453,18 +453,18 @@
 10
 11
 12
-</pre></td><td class="rouge-code"><pre>     <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">secondSubmitBtn</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">let</span> <span class="nv">valuebackfirst</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">presentingViewController</span>
-        <span class="k">guard</span> <span class="k">let</span> <span class="nv">previewcontroller</span> <span class="o">=</span> <span class="n">valuebackfirst</span> <span class="k">as?</span> <span class="kt">ValuebackFirst</span> <span class="k">else</span><span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
-        
-        <span class="n">previewcontroller</span><span class="o">.</span><span class="n">paramEmail</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">inputEmail</span><span class="o">.</span><span class="n">text</span>
-        <span class="n">previewcontroller</span><span class="o">.</span><span class="n">paramInterval</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">secondStepper</span><span class="o">.</span><span class="n">value</span>
-        <span class="n">previewcontroller</span><span class="o">.</span><span class="n">paramUpdate</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">secondSwitch</span><span class="o">.</span><span class="n">isOn</span>
-        
-        <span class="k">self</span><span class="o">.</span><span class="n">presentingViewController</span><span class="p">?</span><span class="o">.</span><span class="nf">dismiss</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">secondSubmitBtn</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">valuebackfirst</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">presentingViewController</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">previewcontroller</span> <span class="o">=</span> <span class="n">valuebackfirst</span> <span class="k">as?</span> <span class="kt">ValuebackFirst</span> <span class="k">else</span><span class="p">{</span>
+        <span class="k">return</span>
     <span class="p">}</span>
+        
+    <span class="n">previewcontroller</span><span class="o">.</span><span class="n">paramEmail</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">inputEmail</span><span class="o">.</span><span class="n">text</span>
+    <span class="n">previewcontroller</span><span class="o">.</span><span class="n">paramInterval</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">secondStepper</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">previewcontroller</span><span class="o">.</span><span class="n">paramUpdate</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">secondSwitch</span><span class="o">.</span><span class="n">isOn</span>
+        
+    <span class="k">self</span><span class="o">.</span><span class="n">presentingViewController</span><span class="p">?</span><span class="o">.</span><span class="nf">dismiss</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+<span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 
 <p><strong>2_2. 인스턴스가 초기화 될때 마다 호출되는 viewDidLoad() 메소드를 사용하지않고, 화면이 새롭게 그려질 때마다 호출되는 viewWillAppear() 메소드사용</strong></p>
@@ -479,23 +479,30 @@
 9
 10
 11
-</pre></td><td class="rouge-code"><pre>    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewWillAppear</span><span class="p">(</span><span class="n">_</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="k">let</span> <span class="nv">email</span> <span class="o">=</span> <span class="n">paramEmail</span><span class="p">{</span>
-            <span class="n">resultEmail</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">email</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="k">let</span> <span class="nv">update</span> <span class="o">=</span> <span class="n">paramUpdate</span><span class="p">{</span>
-            <span class="n">resultUpdate</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">update</span><span class="o">==</span><span class="kc">true</span> <span class="p">?</span> <span class="s">"자동갱신"</span> <span class="p">:</span> <span class="s">"자동갱신안함"</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="k">let</span> <span class="nv">interval</span> <span class="o">=</span> <span class="n">paramInterval</span><span class="p">{</span>
-            <span class="n">resultInterval</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"</span><span class="se">\(</span><span class="kt">Int</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span><span class="se">)</span><span class="s">분마다 갱신"</span>
-        <span class="p">}</span>
+</pre></td><td class="rouge-code"><pre><span class="k">override</span> <span class="kd">func</span> <span class="nf">viewWillAppear</span><span class="p">(</span><span class="n">_</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">email</span> <span class="o">=</span> <span class="n">paramEmail</span><span class="p">{</span>
+        <span class="n">resultEmail</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">email</span>
     <span class="p">}</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">update</span> <span class="o">=</span> <span class="n">paramUpdate</span><span class="p">{</span>
+        <span class="n">resultUpdate</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">update</span><span class="o">==</span><span class="kc">true</span> <span class="p">?</span> <span class="s">"자동갱신"</span> <span class="p">:</span> <span class="s">"자동갱신안함"</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">interval</span> <span class="o">=</span> <span class="n">paramInterval</span><span class="p">{</span>
+        <span class="n">resultInterval</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"</span><span class="se">\(</span><span class="kt">Int</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span><span class="se">)</span><span class="s">분마다 갱신"</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 
 
 
                 <hr style="visibility: hidden;">
                 <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/05/20/ios-alert/" data-toggle="tooltip" data-placement="top" title="iOS 알림창 만들기">
+                        Previous<br>
+                        <span>iOS 알림창 만들기</span>
+                        </a>
+                    </li>
                     
                     
                     <li class="next">
@@ -561,17 +568,17 @@
                 <a data-sort="0000" 
                     href="/archive/?tag=Swift4"
                     title="Swift4"
-                    rel="2">Swift4</a>
+                    rel="3">Swift4</a>
         
                 <a data-sort="0000" 
                     href="/archive/?tag=Mobile"
                     title="Mobile"
-                    rel="2">Mobile</a>
+                    rel="3">Mobile</a>
         
                 <a data-sort="0000" 
                     href="/archive/?tag=iOS"
                     title="iOS"
-                    rel="2">iOS
+                    rel="3">iOS
     </div>
 </section>
 
