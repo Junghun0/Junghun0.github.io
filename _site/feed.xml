@@ -5,8 +5,8 @@
     <description>description</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 21 May 2019 13:28:36 +0900</pubDate>
-    <lastBuildDate>Tue, 21 May 2019 13:28:36 +0900</lastBuildDate>
+    <pubDate>Tue, 21 May 2019 13:29:51 +0900</pubDate>
+    <lastBuildDate>Tue, 21 May 2019 13:29:51 +0900</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -451,6 +451,8 @@
 &lt;div&gt;
   &lt;img width=&quot;300&quot; height=&quot;450&quot; src=&quot;https://user-images.githubusercontent.com/30828236/54486855-6ae0e880-48d1-11e9-8977-53dd0dcdce89.png&quot; /&gt;
 &lt;/div&gt;
+
+&lt;h3 id=&quot;소스코드링크github&quot;&gt;&lt;a href=&quot;https://github.com/Junghun0/SideBar_ios.git&quot;&gt;소스코드링크(github)&lt;/a&gt;&lt;/h3&gt;
 
 </description>
         <pubDate>Mon, 20 May 2019 00:00:00 +0900</pubDate>
