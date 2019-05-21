@@ -5,12 +5,12 @@
     <description>description</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 21 May 2019 12:44:22 +0900</pubDate>
-    <lastBuildDate>Tue, 21 May 2019 12:44:22 +0900</lastBuildDate>
+    <pubDate>Tue, 21 May 2019 12:46:33 +0900</pubDate>
+    <lastBuildDate>Tue, 21 May 2019 12:46:33 +0900</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
-        <title>iOS 간단한 화면전환 방식</title>
+        <title>[iOS] 간단한 화면전환 방식</title>
         <description>&lt;p&gt;Sample : iOS Screen Change&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -184,11 +184,13 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
         
         <category>iOS</category>
         
+        <category>Study</category>
+        
         
       </item>
     
       <item>
-        <title>iOS 화면간 데이터 전달 방식</title>
+        <title>[iOS] 화면간 데이터 전달 방식</title>
         <description>&lt;p&gt;Sample : iOS Data Deliver&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -437,11 +439,13 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
         
         <category>iOS</category>
         
+        <category>Study</category>
+        
         
       </item>
     
       <item>
-        <title>iOS 커스텀 알림창 만들기</title>
+        <title>[iOS] 커스텀 알림창 만들기</title>
         <description>&lt;p&gt;Sample : iOS Custom Alert&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -1008,11 +1012,13 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
         
         <category>iOS</category>
         
+        <category>Study</category>
+        
         
       </item>
     
       <item>
-        <title>iOS 알림창 만들기</title>
+        <title>[iOS] 알림창 만들기</title>
         <description>&lt;p&gt;Sample : iOS Alert&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -1204,6 +1210,8 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
         <category>Mobile</category>
         
         <category>iOS</category>
+        
+        <category>Study</category>
         
         
       </item>

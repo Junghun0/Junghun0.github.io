@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "iOS 커스텀 알림창 만들기"
+title: "[iOS] 커스텀 알림창 만들기"
 subtitle: 'Make Custom Alert iOS Sample'
 author: "JungHoon-Park"
 header-style: text
@@ -11,6 +11,7 @@ tags:
   - Swift4
   - Mobile
   - iOS
+  - Study
 ---
 
 Sample : iOS Custom Alert

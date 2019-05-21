@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "iOS 화면간 데이터 전달 방식"
+title: "[iOS] 화면간 데이터 전달 방식"
 subtitle: 'Data Deliver iOS Sample'
 author: "JungHoon-Park"
 header-style: text
@@ -11,6 +11,7 @@ tags:
   - Swift4
   - Mobile
   - iOS
+  - Study
 ---
 
 Sample : iOS Data Deliver

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "iOS 간단한 화면전환 방식"
+title: "[iOS] 간단한 화면전환 방식"
 subtitle: 'Using screen change'
 author: "JungHoon-Park"
 header-img: "img/post-bg-halting.jpg"
@@ -11,6 +11,7 @@ tags:
   - Swift4
   - Mobile
   - iOS
+  - Study
 ---
 
 Sample : iOS Screen Change
