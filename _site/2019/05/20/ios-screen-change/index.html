@@ -261,17 +261,11 @@
 
 <hr />
 
-<ol>
-  <li>
-    <p><strong>뷰 컨트롤러에서 다른 뷰 컨트롤러를 호출하여 화면 전환하기(present)</strong></p>
-  </li>
-  <li>
-    <p><strong>내비게이션 컨트롤러를 사용하여 화면 전환하기</strong></p>
-  </li>
-  <li>
-    <p><strong>화면 전환용 객체 세그웨이(Segueway)를 사용하여 화면 전환하기</strong></p>
-  </li>
-</ol>
+<h3 id="1-뷰-컨트롤러에서-다른-뷰-컨트롤러를-호출하여-화면-전환하기present">1. <strong>뷰 컨트롤러에서 다른 뷰 컨트롤러를 호출하여 화면 전환하기(present)</strong></h3>
+
+<h3 id="2-내비게이션-컨트롤러를-사용하여-화면-전환하기">2. <strong>내비게이션 컨트롤러를 사용하여 화면 전환하기</strong></h3>
+
+<h3 id="3-화면-전환용-객체-세그웨이segueway를-사용하여-화면-전환하기">3. <strong>화면 전환용 객체 세그웨이(Segueway)를 사용하여 화면 전환하기</strong></h3>
 
 <ul>
   <li>뷰 컨트롤러의 뷰 위에 다른 뷰를 가져와 바꿔치기 하기 ( 하나의 뷰 컨트롤러가 두 개 이상의 루트 뷰를 관리해야 하므로 좋은방법은 아님,
@@ -281,7 +275,7 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
 <hr />
 <h4 id="소스코드">소스코드</h4>
 
-<p>1_1. 화면이동</p>
+<p><strong>1_1. 화면이동</strong></p>
 <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -297,7 +291,7 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
         <span class="k">self</span><span class="o">.</span><span class="nf">present</span><span class="p">(</span><span class="n">secondViewInstance</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
     <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p>1_2. 뒤로이동</p>
+<p><strong>1_2. 뒤로이동</strong></p>
 <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -306,7 +300,7 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
     <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 
-<p>2_1. 화면이동</p>
+<p><strong>2_1. 화면이동</strong></p>
 <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -320,7 +314,7 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
         <span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="nf">pushViewController</span><span class="p">(</span><span class="n">naviSecondview</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
     <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p>2_2. 뒤로이동</p>
+<p><strong>2_2. 뒤로이동</strong></p>
 <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -328,7 +322,7 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
         <span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="nf">popViewController</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
     <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p>3_1. 화면이동</p>
+<p><strong>3_1. 화면이동</strong></p>
 <ul>
   <li>Storyboard 에서 다른 ViewController 와 연결 -&gt; Action Segue</li>
   <li>출발점이 뷰 컨트롤러 자체인 경우 -&gt; Manual Segue
@@ -389,17 +383,19 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p>3_2. 뒤로이동</p>
-<ul>
-  <li>Storyboard 에서 상단의 Exit 아이콘과 연결(Action Segue, Manual Segue, Custom Segue)
-    <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<p><strong>3_2. 뒤로이동</strong></p>
+
+<p><em>Storyboard 에서 상단의 Exit 아이콘과 연결(Action Segue, Manual Segue, Custom Segue)</em></p>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
-</pre></td><td class="rouge-code"><pre>  <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">goBackSegue</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">){</span>
-  <span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div>    </div>
-    <p>3_3. Segue 전처리 메소드
-Segue 실행하기 전에 값을 저장해둘 필요가 있거나, 경고창을 띄워주는 등의 처리를 해야 할 경우 전처리 메소드 사용 - Segue 실행되기 전에 자동으로 실행됨</p>
-    <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>    <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">goBackSegue</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">){</span>
+    <span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><strong>3_3. Segue 전처리 메소드</strong></p>
+
+<p><em>Segue 실행하기 전에 값을 저장해둘 필요가 있거나, 경고창을 띄워주는 등의 처리를 해야 할 경우 전처리 메소드 사용 - Segue 실행되기 전에 자동으로 실행됨</em></p>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -410,28 +406,29 @@ Segue 실행하기 전에 값을 저장해둘 필요가 있거나, 경고창을 
 9
 10
 11
-</pre></td><td class="rouge-code"><pre>  <span class="k">override</span> <span class="kd">func</span> <span class="nf">prepare</span><span class="p">(</span><span class="k">for</span> <span class="nv">segue</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?)</span> <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"ActionSegue"</span><span class="p">){</span>
-          <span class="kt">NSLog</span><span class="p">(</span><span class="s">"action segue 실행!"</span><span class="p">)</span>
-      <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"ManualSegue"</span><span class="p">){</span>
-          <span class="kt">NSLog</span><span class="p">(</span><span class="s">"Manual segue 실행!"</span><span class="p">)</span>
-      <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"CustomSegue"</span><span class="p">){</span>
-          <span class="kt">NSLog</span><span class="p">(</span><span class="s">"Custom segue 실행!"</span><span class="p">)</span>
-      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-          <span class="kt">NSLog</span><span class="p">(</span><span class="s">"알수없는 segue 입니다."</span><span class="p">)</span>
-      <span class="p">}</span>
-  <span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div>    </div>
-  </li>
-</ul>
-
-<hr />
-
-<p>……</p>
+</pre></td><td class="rouge-code"><pre>    <span class="k">override</span> <span class="kd">func</span> <span class="nf">prepare</span><span class="p">(</span><span class="k">for</span> <span class="nv">segue</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"ActionSegue"</span><span class="p">){</span>
+            <span class="kt">NSLog</span><span class="p">(</span><span class="s">"action segue 실행!"</span><span class="p">)</span>
+        <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"ManualSegue"</span><span class="p">){</span>
+            <span class="kt">NSLog</span><span class="p">(</span><span class="s">"Manual segue 실행!"</span><span class="p">)</span>
+        <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"CustomSegue"</span><span class="p">){</span>
+            <span class="kt">NSLog</span><span class="p">(</span><span class="s">"Custom segue 실행!"</span><span class="p">)</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="kt">NSLog</span><span class="p">(</span><span class="s">"알수없는 segue 입니다."</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
 
 
                 <hr style="visibility: hidden;">
                 <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/05/20/ios-data-deliver/" data-toggle="tooltip" data-placement="top" title="iOS 화면간 데이터 전달 방식">
+                        Previous<br>
+                        <span>iOS 화면간 데이터 전달 방식</span>
+                        </a>
+                    </li>
                     
                     
                 </ul>
@@ -484,8 +481,23 @@ Segue 실행하기 전에 값을 저장해둘 필요가 있거나, 경고창을 
         
         
         
+        </a>
         
         
+                <a data-sort="0000" 
+                    href="/archive/?tag=Swift4"
+                    title="Swift4"
+                    rel="2">Swift4</a>
+        
+                <a data-sort="0000" 
+                    href="/archive/?tag=Mobile"
+                    title="Mobile"
+                    rel="2">Mobile</a>
+        
+                <a data-sort="0000" 
+                    href="/archive/?tag=iOS"
+                    title="iOS"
+                    rel="2">iOS
     </div>
 </section>
 
@@ -545,7 +557,7 @@ Segue 실행하기 전에 값을 저장해둘 필요가 있거나, 경고창을 
         anchors.options = {
           visible: 'always',
           placement: 'right',
-          icon: '#'
+          icon: ''
         };
         anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
     })
@@ -597,7 +609,7 @@ Segue 실행하기 전에 값을 저장해둘 필요가 있거나, 경고창을 
                 <p class="copyright text-muted">
                     All Contents Copyright &copy; Junghoon's Blog 2019
                     <br>
-                    Powered by <a href="http://huangxuan.me">JungHoon's Blog</a> |
+                    Powered by <a href="http://Junghun0.github.io">JungHoon's Blog</a> |
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
                         frameborder="0" scrolling="0" width="100px" height="20px"
