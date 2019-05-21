@@ -414,7 +414,7 @@
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>을 통해 뷰를 불러올 수 있다.</p>
 
-<h3 id="참고">참고</h3>
+<h3 id="-참고-">&lt; 참고 &gt;</h3>
 <h4 id="이벤트-처리하기">이벤트 처리하기</h4>
 
 <p>버튼 클릭시 아래의 함수를 실행시키고 싶다면</p>
@@ -497,6 +497,53 @@
     <span class="o">}</span>
 <span class="o">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="recyclerview-adapter-에서-glide-사용할-때">RecyclerView Adapter 에서 Glide 사용할 때</h4>
+
+<p>RecyclerView의 item xml 의 ImageView에서 첫번째 속성을 추가한다.
+사용자가 직접 photo 라는 속성을 만든것이다.</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;ImageView</span>
+    <span class="na">app:photo=</span><span class="s">"{@photo.thumbnailUrl}"</span>
+    <span class="na">android:id=</span><span class="s">"@+id/thumbnail_imageView"</span>
+    <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"match_parent"</span>
+    <span class="na">android:layout_gravity=</span><span class="s">"center"</span>
+    <span class="na">android:layout_margin=</span><span class="s">"7dp"</span>
+    <span class="na">android:scaleType=</span><span class="s">"centerCrop"</span>
+    <span class="na">app:srcCompat=</span><span class="s">"@drawable/ic_launcher_background"</span> <span class="nt">/&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>이후에 @BindingAdapter Class 를 생성해준다.</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PhotoBindingAdapter</span><span class="o">{</span>
+    <span class="nd">@BindingAdapter</span><span class="o">(</span><span class="s">"photo"</span><span class="o">)</span><span class="c1">//xml 에서 사용자가 지정한 속성이름</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">setImage</span><span class="o">(</span><span class="n">ImageView</span> <span class="n">view</span><span class="o">,</span> <span class="n">String</span> <span class="n">url</span><span class="o">){</span>
+        <span class="n">Glide</span><span class="o">.</span><span class="na">with</span><span class="o">(</span><span class="n">view</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">url</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">centerCrop</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">placeholder</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">mipmap</span><span class="o">.</span><span class="na">ic_launcher</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">into</span><span class="o">(</span><span class="n">view</span><span class="o">)</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>평소에 onBindViewHolder 함수내에서 Glide 를 처리했었다면 BindingAdapter를 통해 RecyclerView Adapter의 코드 수를 줄이고, 분리하여 관리할 수 있다.</p>
 
 <h4 id="layout-세부정보-처리하기">Layout 세부정보 처리하기</h4>
 

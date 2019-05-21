@@ -119,7 +119,7 @@ ListItemBinding binding = DataBindingUtil.inflate(layoutInflater, R.layout.list_
 ~~~
 을 통해 뷰를 불러올 수 있다.
 
-### 참고
+### < 참고 >
 #### 이벤트 처리하기
 
 버튼 클릭시 아래의 함수를 실행시키고 싶다면
@@ -175,6 +175,36 @@ public class BindingViewHolder extends RecyclerView.ViewHolder {
     }
 }
 ~~~
+
+#### RecyclerView Adapter 에서 Glide 사용할 때
+
+RecyclerView의 item xml 의 ImageView에서 첫번째 속성을 추가한다.
+사용자가 직접 photo 라는 속성을 만든것이다.
+~~~xml
+<ImageView
+    app:photo="{@photo.thumbnailUrl}"
+    android:id="@+id/thumbnail_imageView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_margin="7dp"
+    android:scaleType="centerCrop"
+    app:srcCompat="@drawable/ic_launcher_background" />
+~~~
+이후에 @BindingAdapter Class 를 생성해준다.
+~~~java
+public class PhotoBindingAdapter{
+    @BindingAdapter("photo")//xml 에서 사용자가 지정한 속성이름
+    public static void setImage(ImageView view, String url){
+        Glide.with(view)
+                .load(url)
+                .centerCrop()
+                .placeholder(R.mipmap.ic_launcher)
+                .into(view)
+    }
+}
+~~~
+평소에 onBindViewHolder 함수내에서 Glide 를 처리했었다면 BindingAdapter를 통해 RecyclerView Adapter의 코드 수를 줄이고, 분리하여 관리할 수 있다.
 
 #### Layout 세부정보 처리하기
 
