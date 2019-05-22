@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="description">
+    <meta name="keywords"  content="Mobile">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="[RxJava] RxJava 정리 - Junghoon's Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="RxJavaStudy
+
+">
+    
+    <meta property="article:published_time" content="2019-05-22T00:00:00Z">
+    
+    
+    <meta property="article:author" content="JungHoon-Park">
+    
+    
+    <meta property="article:tag" content="RxJava">
+    
+    <meta property="article:tag" content="Study">
+    
+    
+    <meta property="og:image" content="http://localhost:4000">
+    <meta property="og:url" content="http://localhost:4000/2019/05/22/rxjava-study/">
+    <meta property="og:site_name" content="Junghoon's Blog">
+    
+    <title>[RxJava] RxJava 정리 - Junghoon's Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2019/05/22/rxjava-study/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Junghoon's Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="/archive/">Archive</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/portfolio/">Portfolio</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg.jpg');
+        background: ;
+    }
+
+    
+    header.intro-header .header-mask{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: rgba(0,0,0, 0.3);
+    }
+    
+</style>
+
+<header class="intro-header style-text" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=RxJava" title="RxJava">RxJava</a>
+                        
+                        <a class="tag" href="/archive/?tag=Study" title="Study">Study</a>
+                        
+                    </div>
+                    <h1>[RxJava] RxJava 정리</h1>
+                    
+                    <h2 class="subheading"> RxJava Study </h2>
+                    <span class="meta">Posted by JungHoon-Park on May 22, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h1 id="rxjavastudy">RxJavaStudy</h1>
+
+<h2 id="observable-class">Observable Class</h2>
+
+<ul>
+  <li>Observable 은 Observer Pattern 을 구현</li>
+  <li>Observer Pattern 은 객체의 상태 변화를 관찰하는 관찰자(Observer) 목록을 객체에 등록한다.</li>
+  <li>상태 변화가 있을 때마다 메서드를 호출하여 객체가 직접 목록의 각 Observer에게 변화를 알린다.</li>
+  <li>Life Cycle 은 존재하지 않으며 보통 단일 함수를 통해 변화만 알린다.</li>
+</ul>
+
+<hr />
+<h3 id="observable의-세-가지-알림">Observable의 세 가지 알림</h3>
+<ol>
+  <li><strong>onNext</strong> : Observable이 데이터의 발행을 알린다. 기존의 Observer Pattern 과 동일함</li>
+  <li><strong>onComplete</strong> : 모든 데이터의 발행을 완료했음을 알린다. onComplete 이벤트는 단 한번만 발생하며, 발생한 후에는 더 이상 onNext 이벤트가 발생하면 안된다.</li>
+  <li><strong>onError</strong> : Observable 에서 어떤 이유로 에러가 발생했음을 알린다. onError 이벤트가 발생하면 이후에 onNext 및 onComplete 이벤트는 발생하지 않는다. 즉, Observable의 실행을 종료</li>
+</ol>
+
+<h3 id="just-함수">just() 함수</h3>
+<ul>
+  <li>인자로 넣은 데이터를 차례로 발행하려고 Observable을 생성</li>
+  <li>한 개의 값을 넣을 수도 있고 인자로 최대 10개를 넣을 수 있다.</li>
+  <li>단 타입은 모두 같아야 한다.</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre> <span class="n">Observable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<ul>
+  <li>모든 데이터 발행이 완료되면 onComplete 이벤트 발생</li>
+</ul>
+
+<h3 id="subscribe-함수">subscribe() 함수</h3>
+
+<ul>
+  <li>RxJava는 내가 동작시키기 원하는 것을 사전에 정의해둔 다음 실제 그것이 실행되는 시점을 조절 가능 -&gt; 이때 사용하는 것이 <strong>subscribe()</strong> 이다.</li>
+  <li>Observable 은 just() 등의 팩토리 함수로 데이터 흐름을 정의한 후 subscribe() 함수를 호출해야 실제로 데이터를 발행함</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">final</span> <span class="n">Disposable</span> <span class="nf">subscribe</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nf">subscribe</span><span class="o">(</span><span class="n">Functions</span><span class="o">.</span><span class="na">emptyConsumer</span><span class="o">(),</span> <span class="n">Functions</span><span class="o">.</span><span class="na">ON_ERROR_MISSING</span><span class="o">,</span> <span class="n">Functions</span><span class="o">.</span><span class="na">EMPTY_ACTION</span><span class="o">,</span> <span class="n">Functions</span><span class="o">.</span><span class="na">emptyConsumer</span><span class="o">());</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">final</span> <span class="n">Disposable</span> <span class="nf">subscribe</span><span class="o">(</span><span class="n">Consumer</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">onNext</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nf">subscribe</span><span class="o">(</span><span class="n">onNext</span><span class="o">,</span> <span class="n">Functions</span><span class="o">.</span><span class="na">ON_ERROR_MISSING</span><span class="o">,</span> <span class="n">Functions</span><span class="o">.</span><span class="na">EMPTY_ACTION</span><span class="o">,</span> <span class="n">Functions</span><span class="o">.</span><span class="na">emptyConsumer</span><span class="o">());</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">final</span> <span class="n">Disposable</span> <span class="nf">subscribe</span><span class="o">(</span><span class="n">Consumer</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">onNext</span><span class="o">,</span> <span class="n">Consumer</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">Throwable</span><span class="o">&gt;</span> <span class="n">onError</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nf">subscribe</span><span class="o">(</span><span class="n">onNext</span><span class="o">,</span> <span class="n">onError</span><span class="o">,</span> <span class="n">Functions</span><span class="o">.</span><span class="na">EMPTY_ACTION</span><span class="o">,</span> <span class="n">Functions</span><span class="o">.</span><span class="na">emptyConsumer</span><span class="o">());</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">final</span> <span class="n">Disposable</span> <span class="nf">subscribe</span><span class="o">(</span><span class="n">Consumer</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">onNext</span><span class="o">,</span> <span class="n">Consumer</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">Throwable</span><span class="o">&gt;</span> <span class="n">onError</span><span class="o">,</span>
+<span class="n">Action</span> <span class="n">onComplete</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nf">subscribe</span><span class="o">(</span><span class="n">onNext</span><span class="o">,</span> <span class="n">onError</span><span class="o">,</span> <span class="n">onComplete</span><span class="o">,</span> <span class="n">Functions</span><span class="o">.</span><span class="na">emptyConsumer</span><span class="o">());</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>인자가 없는 subscribe() 함수는 onNext와 onComplete 이벤트를 무시하고 onError 이벤트가 발생했을 때만 OnErrorNotImplementedException을 던진다. 따라서 Observable로 작성한 코드를 테스트하거나 디버깅할 때 활용</li>
+  <li>인자가 1개 있는 오버로딩은 onNext 이벤트를 처리한다. 이때도 onError 이벤트가 발생하면 OnErrorNotImplementedException을 던진다.</li>
+  <li>인자가 2개인 함수는 onNext와 onError 이벤트를 처리한다.</li>
+  <li>인자가 3개인 함수는 onNext, onError, onComplete 이벤트를 모두 처리할 수 있다.</li>
+</ol>
+
+<ul>
+  <li>위의 함수 원형은 모두 Disposable 인터페이스의 객체를 리턴한다.</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="kt">void</span> <span class="nf">dispose</span><span class="o">()</span>
+<span class="kt">boolean</span> <span class="nf">isDisposed</span><span class="o">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ul>
+  <li>dispose()는 Observable에게 더 이상 데이터를 발행하지 않도록 구독을 해지하는 함수이다.</li>
+  <li>Observable이 onComplete 알림을 보냈을 때 자동으로 dispose()를 호출해 Observable과 구독자의 관계를 끊는다.</li>
+  <li>onComplete 이벤트가 정상적으로 발생했다면 구독자가 별도로 dispose()를 호출할 필요는 없다.</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kt">void</span> <span class="nf">usingIsDisposed</span><span class="o">(){</span>
+    <span class="n">Observable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">Observable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="s">"RED"</span><span class="o">,</span><span class="s">"GREEN"</span><span class="o">,</span><span class="s">"YELLOW"</span><span class="o">,</span><span class="s">"BLUE"</span><span class="o">);</span>
+
+    <span class="n">Disposable</span> <span class="n">disposable</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span>
+            <span class="n">v</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"onNext() : value :"</span> <span class="o">+</span> <span class="n">v</span><span class="o">),</span>
+            <span class="n">err</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"onError() : err :"</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="na">getMessage</span><span class="o">()),</span>
+            <span class="o">()</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"onComplete()"</span><span class="o">)</span>
+<span class="o">);</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"isDisposed() : "</span><span class="o">+</span> <span class="n">disposable</span><span class="o">.</span><span class="na">isDisposed</span><span class="o">());</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="create-함수">create() 함수</h3>
+<ul>
+  <li>onNext, onComplete, onError 같은 알람을 개발자가 직접 호출해야 한다.</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="n">Observable</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">Observable</span><span class="o">.</span><span class="na">create</span><span class="o">(</span>
+        <span class="o">(</span><span class="n">ObservableEmitter</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">emitter</span><span class="o">)</span> <span class="o">-&gt;{</span>
+            <span class="n">emitter</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span>
+            <span class="n">emitter</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="mi">200</span><span class="o">);</span>
+            <span class="n">emitter</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="mi">300</span><span class="o">);</span>
+            <span class="n">emitter</span><span class="o">.</span><span class="na">onComplete</span><span class="o">();</span>
+    <span class="o">});</span>
+    <span class="n">source</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<ul>
+  <li>subscribe() 을 호출하지 않으면 아무것도 출력되지 않는다.</li>
+</ul>
+
+<h3 id="fromarray-함수">fromArray() 함수</h3>
+<ul>
+  <li>배열에 들어 있는 데이터를 처리할 때 사용</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kt">void</span> <span class="nf">makeFromArray</span><span class="o">(){</span>
+    <span class="n">Integer</span><span class="o">[]</span> <span class="n">arr</span> <span class="o">=</span> <span class="o">{</span><span class="mi">100</span><span class="o">,</span><span class="mi">200</span><span class="o">,</span><span class="mi">300</span><span class="o">,</span><span class="mi">400</span><span class="o">};</span>
+    <span class="n">Observable</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">Observable</span><span class="o">.</span><span class="na">fromArray</span><span class="o">(</span><span class="n">arr</span><span class="o">);</span>
+    <span class="n">source</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"---------------------"</span><span class="o">);</span>
+
+    <span class="cm">/* int[] 로 선언할 경우 -&gt; toIntegerArray 메소드 사용
+    int[] arr = {100,200,300,400};
+    Observable&lt;Integer&gt; source = Observable.fromArray(toIntegerArray(arr));
+    source.subscribe(System.out::println);
+    */</span>
+<span class="o">}</span>
+<span class="kd">private</span> <span class="kd">static</span> <span class="n">Integer</span><span class="o">[]</span> <span class="nf">toIntegerArray</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">intArray</span><span class="o">){</span>
+    <span class="k">return</span> <span class="n">IntStream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">intArray</span><span class="o">).</span><span class="na">boxed</span><span class="o">().</span><span class="na">toArray</span><span class="o">(</span><span class="n">Integer</span><span class="o">[]::</span><span class="k">new</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="fromiterable-함수">fromIterable() 함수</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kt">void</span> <span class="nf">makeIterator</span><span class="o">(){</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">names</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+    <span class="n">names</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"a"</span><span class="o">);</span>
+    <span class="n">names</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"b"</span><span class="o">);</span>
+    <span class="n">names</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"c"</span><span class="o">);</span>
+    <span class="n">names</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"d"</span><span class="o">);</span>
+
+    <span class="n">Observable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">Observable</span><span class="o">.</span><span class="na">fromIterable</span><span class="o">(</span><span class="n">names</span><span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">source</span><span class="o">.</span><span class="na">subscribe</span><span class="o">().</span><span class="na">isDisposed</span><span class="o">());</span>
+    <span class="n">source</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">source</span><span class="o">.</span><span class="na">subscribe</span><span class="o">().</span><span class="na">isDisposed</span><span class="o">());</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="fromcallable-함수">fromCallable() 함수</h3>
+
+<ul>
+  <li>비동기 클래스나 인터페이스와의 연동</li>
+  <li>Callable 인터페이스
+    <ul>
+      <li>비동기 실행 후 결과를 리턴하는 call() 메서드를 정의</li>
+      <li>Runnable 인터페이스와는 실행 결과를 리턴한다는 점에서 차이가 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="c1">//람다 표현식을 사용할 때</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">usingCallable</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="n">Callable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">callable</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+        <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+        <span class="k">return</span> <span class="s">"Hello callable"</span><span class="o">;</span>
+    <span class="o">};</span>
+
+    <span class="n">Observable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">Observable</span><span class="o">.</span><span class="na">fromCallable</span><span class="o">(</span><span class="n">callable</span><span class="o">);</span>
+    <span class="n">source</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="c1">//람다 표현식을 사용하지 않을때</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">usingCallable2</span><span class="o">()</span> <span class="o">{</span>
+<span class="n">Callable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">callable</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="n">String</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+            <span class="k">return</span> <span class="s">"Hello callable2"</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+
+    <span class="n">Observable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">Observable</span><span class="o">.</span><span class="na">fromCallable</span><span class="o">(</span><span class="n">callable</span><span class="o">);</span>
+        <span class="n">source</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+    <span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="fromfuture-함수">fromFuture() 함수</h3>
+
+<ul>
+  <li>동시성 API 로 비동기 계산의 결과를 구할 때 사용</li>
+  <li>Executor 인터페이스를 구현한 클래스에 Callable 객체를 인자로 넣어 Future 객체를 반환함</li>
+  <li>get() 메서드를 호출하면 Callable 객체에서 구현한 계산 결과가 나올 때까지 블로킹 됨</li>
+  <li>Executors 클래스는 단일 스레드 실행자(SingleThreadExecutor)뿐 아니라 다양한 스레드풀(FixedThreadPool, CachedThreadPool)을 지원함
+    <ul>
+      <li>RxJava는 위와 같은 실행자를 사용하기보단 RxJava에서 제공하는 스케줄러를 활용하도록 권장함</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kt">void</span> <span class="nf">usingFuture</span><span class="o">(){</span>
+    <span class="n">Future</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">future</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newSingleThreadExecutor</span><span class="o">().</span><span class="na">submit</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+        <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+        <span class="k">return</span> <span class="s">"Hello Future"</span><span class="o">;</span>
+    <span class="o">});</span>
+
+    <span class="n">Observable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">Observable</span><span class="o">.</span><span class="na">fromFuture</span><span class="o">(</span><span class="n">future</span><span class="o">);</span>
+    <span class="n">source</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="single-class">Single Class</h3>
+
+<ul>
+  <li>1
+    <ul>
+      <li>Single.fromObservable 을 활용</li>
+      <li>기존 Observable에서 첫 번째 값을 발행하면 onSuccess 이벤트를 호출한 후 종료
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="c1">//1.기존 Observable 에서 Single 객체로 변환하기</span>
+  <span class="n">Observable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">Observable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="s">"Hello Single!"</span><span class="o">);</span>
+  <span class="n">Single</span><span class="o">.</span><span class="na">fromObservable</span><span class="o">(</span><span class="n">source</span><span class="o">).</span><span class="na">subscribe</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>2
+    <ul>
+      <li>just()를 통해 Observable에 single() 함수를. 호출한다.</li>
+      <li>single() 함수는 default value 를 인자로 갖는다.</li>
+      <li>Observable에서 값이 발행되지 않을 때도 인자로 넣은 기본값을 대신 발행함
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="c1">//2. single() 함수를 호출해 Single 객체 생성하기</span>
+  <span class="n">Observable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="s">"Hello Single!"</span><span class="o">)</span>
+          <span class="o">.</span><span class="na">single</span><span class="o">(</span><span class="s">"default Item"</span><span class="o">)</span>
+          <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>3
+    <ul>
+      <li>여러 개의 데이터를 발행할 수 있는 Observable을 Single 객체로 변환</li>
+      <li>first() 를 호출하면 Observable 이 Single객체로 변환</li>
+      <li>하나 이상의 데이터를 발행하더라도 첫 번째 데이터 발행 후 onSuccess 이벤트 발생
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="c1">//3. first() 함수를 호출해 Single 객체 생성하기</span>
+  <span class="n">String</span><span class="o">[]</span> <span class="n">colors</span> <span class="o">=</span> <span class="o">{</span><span class="s">"Red"</span><span class="o">,</span><span class="s">"Blue"</span><span class="o">,</span><span class="s">"Gold"</span><span class="o">};</span>
+  <span class="n">Observable</span><span class="o">.</span><span class="na">fromArray</span><span class="o">(</span><span class="n">colors</span><span class="o">)</span>
+          <span class="o">.</span><span class="na">first</span><span class="o">(</span><span class="s">"default value"</span><span class="o">)</span>
+          <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>4
+    <ul>
+      <li>empty() 함수를 통해 Single 객체를 생성</li>
+      <li>첫 번째 데이터 발행 후 onSuccess 이벤트가 발생
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="c1">//4. empty Observable 에서 Single 객체 생성하기</span>
+  <span class="n">Observable</span><span class="o">.</span><span class="na">empty</span><span class="o">()</span>
+          <span class="o">.</span><span class="na">single</span><span class="o">(</span><span class="s">"default value"</span><span class="o">)</span>
+          <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>5
+    <ul>
+      <li>take() 함수를 통해 Single 객체를 생성
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="c1">//5. take() 함수에서 Single 객체 생성하기</span>
+<span class="n">Observable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="k">new</span> <span class="n">Order</span><span class="o">(</span><span class="s">"Order_1"</span><span class="o">),</span><span class="k">new</span> <span class="n">Order</span><span class="o">(</span><span class="s">"Order_2"</span><span class="o">))</span>
+  <span class="o">.</span><span class="na">take</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+  <span class="o">.</span><span class="na">single</span><span class="o">(</span><span class="k">new</span> <span class="n">Order</span><span class="o">(</span><span class="s">"default order"</span><span class="o">))</span>
+  <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="hot-observable">Hot Observable</h3>
+
+<ul>
+  <li>구독자가 존재 여부와 관계없이 데이터를 발행하는 Observable</li>
+  <li>여러 구독자를 고려할 수 있다.</li>
+  <li>예를 들어 마우스 이벤트, 키보드 이벤트, 시스템 이벤트, 센서 데이터 등이 있다.</li>
+  <li>구현할 때 배압을 고려해야한다.
+ 	- 배압(back pressure) 는 데이터를 발행하는 속도와 구독자가 처리하는 속도의 차이가 클 때 발생한다.</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kt">void</span> <span class="nf">usingFuture</span><span class="o">(){</span>
+    <span class="n">Future</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">future</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newSingleThreadExecutor</span><span class="o">().</span><span class="na">submit</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+        <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+        <span class="k">return</span> <span class="s">"Hello Future"</span><span class="o">;</span>
+    <span class="o">});</span>
+
+    <span class="n">Observable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">Observable</span><span class="o">.</span><span class="na">fromFuture</span><span class="o">(</span><span class="n">future</span><span class="o">);</span>
+    <span class="n">source</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="subject-class">Subject Class</h3>
+
+<ul>
+  <li>Cold Observable 을 Hot Observable 로 바꿔준다.</li>
+  <li>Observable 의 속성과 구독자의 속성이 모두 있다.</li>
+  <li>Observable처럼 데이터를 발행할 수도 있고 구독자처럼 발행된 데이터를 바로 처리할 수도 있다.</li>
+  <li>AsyncSubject, BehaviorSubject, PublishSubject, ReplaySubject 등이 있다.</li>
+</ul>
+
+<h3 id="asyncsubject-class">AsyncSubject Class</h3>
+
+<ul>
+  <li>Observable에서 발행한 마지막 데이터를 얻어올 수 있는 Subject 클래스다.</li>
+  <li>완료되기 전 마지막 데이터에만 관심이 있으며 이전 데이터는 무시한다.</li>
+  <li>AsyncSubject 객체는 정적 팩토리 함수인 create()로 생성한다. (Observable.create() 와 같은 기능)</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="n">AsyncSubject</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">subject</span> <span class="o">=</span> <span class="n">AsyncSubject</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"SubScriber #1 =&gt;"</span><span class="o">+</span><span class="n">data</span><span class="o">));</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="s">"1"</span><span class="o">);</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="s">"3"</span><span class="o">);</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Subscriber #2 =&gt;"</span><span class="o">+</span> <span class="n">data</span><span class="o">));</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="s">"5"</span><span class="o">);</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onComplete</span><span class="o">();</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="n">Float</span><span class="o">[]</span> <span class="n">temperature</span> <span class="o">=</span> <span class="o">{</span><span class="mf">10.1f</span><span class="o">,</span> <span class="mf">13.4f</span><span class="o">,</span> <span class="mf">12.5f</span><span class="o">};</span>
+    <span class="n">Observable</span><span class="o">&lt;</span><span class="n">Float</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">Observable</span><span class="o">.</span><span class="na">fromArray</span><span class="o">(</span><span class="n">temperature</span><span class="o">);</span>
+
+    <span class="n">AsyncSubject</span><span class="o">&lt;</span><span class="n">Float</span><span class="o">&gt;</span> <span class="n">subject</span> <span class="o">=</span> <span class="n">AsyncSubject</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"Subscriber #1 =&gt; "</span><span class="o">+</span> <span class="n">data</span><span class="o">));</span>
+    <span class="n">source</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">subject</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="n">AsyncSubject</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">subject</span> <span class="o">=</span> <span class="n">AsyncSubject</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
+        <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+        <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="mi">11</span><span class="o">);</span>
+        <span class="n">subject</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Subscriber #1 =&gt;"</span> <span class="o">+</span> <span class="n">data</span><span class="o">));</span>
+        <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="mi">12</span><span class="o">);</span>
+        <span class="n">subject</span><span class="o">.</span><span class="na">onComplete</span><span class="o">();</span>
+        <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="mi">13</span><span class="o">);</span>
+        <span class="n">subject</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Subscriber #2 =&gt;"</span> <span class="o">+</span> <span class="n">data</span><span class="o">));</span>
+        <span class="n">subject</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Subscriber #3 =&gt;"</span> <span class="o">+</span> <span class="n">data</span><span class="o">));</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="behaviorsubject-class">BehaviorSubject Class</h3>
+
+<ul>
+  <li>구독자가 구독을 하면 가장 최근 값 혹은 기본값을 넘겨주는 클래스</li>
+  <li>createDefault() 함수로 생성</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="rouge-code"><pre><span class="n">AsyncSubject</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">subject</span> <span class="o">=</span> <span class="n">AsyncSubject</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="mi">11</span><span class="o">);</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Subscriber #1 =&gt;"</span> <span class="o">+</span> <span class="n">data</span><span class="o">));</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="mi">12</span><span class="o">);</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onComplete</span><span class="o">();</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="mi">13</span><span class="o">);</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Subscriber #2 =&gt;"</span> <span class="o">+</span> <span class="n">data</span><span class="o">));</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Subscriber #3 =&gt;"</span> <span class="o">+</span> <span class="n">data</span><span class="o">));</span>
+        
+ <span class="cm">/*
+Subscriber #1 =&gt;6
+Subscriber #1 =&gt;1
+Subscriber #1 =&gt;3
+Subscriber #2 =&gt;3
+Subscriber #1 =&gt;5
+Subscriber #2 =&gt;5
+*/</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="publishsubject-class">PublishSubject Class</h3>
+
+<ul>
+  <li>구독자가 subscribe() 함수를 호출하면 값을 발행하기 시작</li>
+  <li>AsyncSubject 클래스처럼 마지막 값만 발행하거나 BehaviorSubject 클래스처럼 발행한 값이 없을 때 기본값을 대신 발행하지도 않는다.</li>
+  <li>해당 시간에 발생한 데이터를 그대로 구독자에게 전달받음</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre><span class="n">PublishSubject</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">subject</span> <span class="o">=</span> <span class="n">PublishSubject</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Subscriber #1 =&gt;"</span> <span class="o">+</span> <span class="n">data</span><span class="o">));</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="s">"1"</span><span class="o">);</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="s">"3"</span><span class="o">);</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Subscriber #2 =&gt;"</span> <span class="o">+</span> <span class="n">data</span><span class="o">));</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="s">"5"</span><span class="o">);</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onComplete</span><span class="o">();</span>
+        
+    <span class="cm">/*
+    Subscriber #1 =&gt;1
+    Subscriber #1 =&gt;3
+    Subscriber #1 =&gt;5
+    Subscriber #2 =&gt;5
+    */</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="replaysubject-class">ReplaySubject Class</h3>
+
+<ul>
+  <li>구독자가 새로 생기면 항상 데이터의 처음부터 끝까지 발행하는 것을 보장</li>
+  <li>모든 데이터 내용을 저장해두는 과정 중 메모리 누수가 발생할 가능성을 염두에 두고 사용할 때 주의해야함</li>
+  <li>create() 함수를 이용해 생성</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="rouge-code"><pre><span class="n">ReplaySubject</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">subject</span> <span class="o">=</span> <span class="n">ReplaySubject</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Subscriber #1 -&gt;"</span> <span class="o">+</span> <span class="n">data</span><span class="o">));</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="s">"10"</span><span class="o">);</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="s">"20"</span><span class="o">);</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Subscriber #2 -&gt;"</span> <span class="o">+</span> <span class="n">data</span><span class="o">));</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="s">"30"</span><span class="o">);</span>
+    <span class="n">subject</span><span class="o">.</span><span class="na">onComplete</span><span class="o">();</span>
+
+    <span class="cm">/*
+    Subscriber #1 -&gt;10
+    Subscriber #1 -&gt;20
+    Subscriber #2 -&gt;10
+    Subscriber #2 -&gt;20
+    Subscriber #1 -&gt;30
+    Subscriber #2 -&gt;30
+    */</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="rxjava의-제네릭-함수형-인터페이스">RxJava의 제네릭 함수형 인터페이스</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"><center>인터페이스 이름</center></th>
+      <th style="text-align: center"><center>포함 메서드</center></th>
+      <th style="text-align: right"><center>설명</center></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>Predicate&lt; T &gt;</strong></td>
+      <td style="text-align: center"><center>boolean test(T t) </center></td>
+      <td style="text-align: right"><em>t 값을 받아서 참이나 거짓을 반환한다</em></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Consumer&lt; T &gt;</strong></td>
+      <td style="text-align: center"><center>void accept(T t) </center></td>
+      <td style="text-align: right"><em>t 값을 받아서 처리한다.반환값은 없다.</em></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Function&lt; T, R &gt;</strong></td>
+      <td style="text-align: center"><center>R apply(T t) </center></td>
+      <td style="text-align: right"><em>t 값을 받아서 결과를 반환한다.</em></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="리액티브-함수-분류">리액티브 함수 분류</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"><center>연산자 종류</center></th>
+      <th style="text-align: center"><center>연산자 함수</center></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>생성 연산자</strong></td>
+      <td style="text-align: center"><center>**just()**, **fromXXX()**, **create()**, interval(), range(), timer(), intervalRange(), defer(), repeat()</center></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>변환 연산자</strong></td>
+      <td style="text-align: center"><center>**map()**, **flatMap()**, concatMap(), switchMap(), groupBy(), scan(), buffer(), window()</center></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>필터 연산자</strong></td>
+      <td style="text-align: center"><center>**filter()**, **take()**, **skip()**, distinct()</center></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>결합 연산자</strong></td>
+      <td style="text-align: center"><center>zip(), combineLatest(), merge(), concat()</center></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>조건 연산자</strong></td>
+      <td style="text-align: center"><center>amb(), takeUntil(), skipUntil(), all()</center></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>에러 처리 연산자</strong></td>
+      <td style="text-align: center"><center>onErrorReturn(), onErrorResumeNext(), retry(), retryUntil()</center></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>기타 연산자</strong></td>
+      <td style="text-align: center"><center>**subscribe()**, subscribeOn(), observeOn(), **reduce()**, count()</center></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="생성-연산자">생성 연산자</h4>
+
+<ul>
+  <li>
+    <h4 id="interval">interval()</h4>
+    <ul>
+      <li>일정 시간 간격으로 데이터 흐름을 생성</li>
+      <li>일정시간(period)를 쉬었다가 데이터를 발행
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">static</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="nf">interval</span><span class="o">(</span><span class="kt">long</span> <span class="n">period</span><span class="o">,</span> <span class="n">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">return</span> <span class="nf">interval</span><span class="o">(</span><span class="n">period</span><span class="o">,</span> <span class="n">period</span><span class="o">,</span> <span class="n">unit</span><span class="o">,</span> <span class="n">Schedulers</span><span class="o">.</span><span class="na">computation</span><span class="o">());</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>첫번째 함수와 동작은 같고 최초 지연 시간을 조절할 수 있다. (initialDelay 0이면 바로 데이터를 발행)
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">static</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="nf">interval</span><span class="o">(</span><span class="kt">long</span> <span class="n">period</span><span class="o">,</span> <span class="n">TimeUnit</span> <span class="n">unit</span><span class="o">,</span> <span class="n">Scheduler</span> <span class="n">scheduler</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">return</span> <span class="nf">interval</span><span class="o">(</span><span class="n">period</span><span class="o">,</span> <span class="n">period</span><span class="o">,</span> <span class="n">unit</span><span class="o">,</span> <span class="n">scheduler</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <h4 id="timer">timer()</h4>
+    <ul>
+      <li>interval() 함수와 유사하지만 한 번만 실행하는 함수</li>
+      <li>일정 시간이 지난 후에 한 개의 데이터를 발행하고 onComplete() 이벤트가 발생</li>
+      <li>interval()과 마찬가지로 메인 스레드가 아닌 계산 스케줄러에서 실행됨</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">static</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="nf">timer</span><span class="o">(</span><span class="kt">long</span> <span class="n">delay</span><span class="o">,</span> <span class="n">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">timer</span><span class="o">(</span><span class="n">delay</span><span class="o">,</span> <span class="n">unit</span><span class="o">,</span> <span class="n">Schedulers</span><span class="o">.</span><span class="na">computation</span><span class="o">());</span>
+    <span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<ul>
+  <li>
+    <h4 id="range">range()</h4>
+    <ul>
+      <li>주어진 값 n 부터 m 개의 Integer 객체를 발행한다.</li>
+      <li>interval() 과 timer() 는 Long 객체를 발행했지만 range()는 Integer 객체를 발행하는 것이 다르다.</li>
+      <li>스케줄러에서 실행되지 않는다.</li>
+      <li>현재 스레드에서 실행함</li>
+      <li>range()는 반복분(for,while)을 대체 할 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">static</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="nf">range</span><span class="o">(</span><span class="kd">final</span> <span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">count</span><span class="o">)</span> <span class="o">{</span>
+
+ <span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<ul>
+  <li>
+    <h4 id="intervalrange">intervalRange()</h4>
+    <ul>
+      <li>interval() 함수처럼 일정한 시간 간격으로 값을 출력하지만 range() 함수처럼 n 부터 m 개만큼의 값만 생성하고 onComplete 이벤트 발생</li>
+      <li>리턴타입은 Long</li>
+      <li>interval() 함수처럼 무한히 데이터 흐름을 발행하지 않는다.</li>
+      <li>계산 스케줄러에서 실행됨</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">static</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="nf">intervalRange</span><span class="o">(</span><span class="kt">long</span> <span class="n">start</span><span class="o">,</span> <span class="kt">long</span> <span class="n">count</span><span class="o">,</span> <span class="kt">long</span> <span class="n">initialDelay</span><span class="o">,</span> <span class="kt">long</span> <span class="n">period</span><span class="o">,</span> <span class="n">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">intervalRange</span><span class="o">(</span><span class="n">start</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> <span class="n">initialDelay</span><span class="o">,</span> <span class="n">period</span><span class="o">,</span> <span class="n">unit</span><span class="o">,</span> <span class="n">Schedulers</span><span class="o">.</span><span class="na">computation</span><span class="o">());</span>
+    <span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<ul>
+  <li>
+    <h4 id="defer">defer()</h4>
+    <ul>
+      <li>timer() 함수와 비슷하지만 데이터 흐름 생성을 구독자가 subscribe() 함수를 호출할 때까지 미룰 수 있다.</li>
+      <li>이때 새로운 Observable 이 생성됨</li>
+      <li>스케줄러가 NONE 이므로 현재 스레드 에서 실행</li>
+      <li>인자로는 Callable &lt; Observable&lt; T » 를 받음</li>
+      <li>Callable 객체이므로 구독자가 subscribe()를 호출할 때까지 call()메서드의 호출을 미룰 수 있다.
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="nd">@SchedulerSupport</span><span class="o">(</span><span class="n">SchedulerSupport</span><span class="o">.</span><span class="na">NONE</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">defer</span><span class="o">(</span><span class="n">Callable</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">ObservableSource</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">T</span><span class="o">&gt;&gt;</span> <span class="n">supplier</span><span class="o">)</span> <span class="o">{</span>     
+  <span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <h4 id="repeat">repeat()</h4>
+    <ul>
+      <li>repeat() 함수는 인자를 입력하지 않으면 영원히 반복 실행</li>
+      <li>repeat(N) 함수를 활용해 N번 만큼만 반복 실행하게 할수있다.</li>
+      <li>동작이 한 번 끝난 다음에 다시 구독하는 방식으로 동작</li>
+      <li>다시 구독할 때마다 동작하는 스레드의 번호가 달라진다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="변환-연산자">변환 연산자</h3>
+<ul>
+  <li>
+    <h4 id="map">map()</h4>
+    <ul>
+      <li>입력값을 어떤 함수에 넣어서 원하는 값으로 변환하는 함수</li>
+      <li>일정시간(period)를 쉬었다가 데이터를 발행</li>
+      <li>스케줄러를 지원하지 않는다. 즉 현재 스레드에서 실행</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="nd">@SchedulerSupport</span><span class="o">(</span><span class="n">SchedulerSupport</span><span class="o">.</span><span class="na">NONE</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span> <span class="nf">map</span><span class="o">(</span><span class="n">Function</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">,</span> <span class="o">?</span> <span class="kd">extends</span> <span class="n">R</span><span class="o">&gt;</span> <span class="n">mapper</span><span class="o">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<ul>
+  <li>
+    <h4 id="flatmap">flatMap()</h4>
+    <ul>
+      <li>입력값을 어떤 함수에 넣어서 원하는 값으로 변환하는 함수</li>
+      <li>결과가 Observable 로 나온다</li>
+      <li>스케줄러를 지원하지 않는다. 즉 현재 스레드에서 실행</li>
+      <li>T를 넣으면 여러 개의 R이 나오도록 매핑한다.</li>
+      <li>먼저 들어온 데이터를 처리하는 도중에 새로운 데이터가 들어오면 나중에 들어온 데이터의 처리 결과가 먼저 출력될 수도 있다.(인터리빙/interleaving)</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="nd">@CheckReturnValue</span>
+    <span class="nd">@SchedulerSupport</span><span class="o">(</span><span class="n">SchedulerSupport</span><span class="o">.</span><span class="na">NONE</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kd">final</span> <span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span> <span class="nf">flatMap</span><span class="o">(</span><span class="n">Function</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">,</span> <span class="o">?</span> <span class="kd">extends</span> <span class="n">ObservableSource</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">R</span><span class="o">&gt;&gt;</span> <span class="n">mapper</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">flatMap</span><span class="o">(</span><span class="n">mapper</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+    <span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h3 id="rxjava-스케줄러-종류">RxJava 스케줄러 종류</h3>
+<hr />
+
+<table>
+  <thead>
+    <tr>
+      <th>스케줄러</th>
+      <th style="text-align: center">RxJava 2.x</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">뉴 스레드 스케줄러</code></td>
+      <td style="text-align: center">newThread()</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">싱글 스레드 스케줄러</code></td>
+      <td style="text-align: center"><strong>single()</strong></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">계산 스케줄러</code></td>
+      <td style="text-align: center">computation()</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">IO 스케줄러</code></td>
+      <td style="text-align: center">io()</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">트램펄린 스케줄러</code></td>
+      <td style="text-align: center">trampoline()</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">메인 스레드 스케줄러</code></td>
+      <td style="text-align: center"><strong>지원안함</strong></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">테스트 스케줄러</code></td>
+      <td style="text-align: center"><strong>지원안함</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="소스코드링크github"><a href="https://github.com/Junghun0/RxJavaStudy.git">소스코드링크(github)</a></h3>
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/05/22/android-databinding/" data-toggle="tooltip" data-placement="top" title="[Android] DataBinding 사용해보기">
+                        Previous<br>
+                        <span>[Android] DataBinding 사용해보기</span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        </a>
+        
+        
+                <a data-sort="0003" 
+                    href="/archive/?tag=Swift4"
+                    title="Swift4"
+                    rel="7">Swift4</a>
+        
+                <a data-sort="0000" 
+                    href="/archive/?tag=Study"
+                    title="Study"
+                    rel="10">Study</a>
+        
+                <a data-sort="0001" 
+                    href="/archive/?tag=Mobile"
+                    title="Mobile"
+                    rel="9">Mobile</a>
+        
+                <a data-sort="0003" 
+                    href="/archive/?tag=iOS"
+                    title="iOS"
+                    rel="7">iOS</a>
+        
+                <a data-sort="0008" 
+                    href="/archive/?tag=Android"
+                    title="Android"
+                    rel="2">Android
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="https://dydtjr1128.github.io">dydtjr1128</a></li>
+  
+  <li><a href="https://seongmun-hong.github.io/">SeongMun-Hong</a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "junghoon-github-io";
+    var disqus_identifier = "/2019/05/22/rxjava-study";
+    var disqus_url = "http://localhost:4000/2019/05/22/rxjava-study/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: ''
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/Junghun0">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    All Contents Copyright &copy; Junghoon's Blog 2019
+                    <br>
+                    Powered by <a href="http://Junghun0.github.io">JungHoon's Blog</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=Junghun0&repo=Junghun0.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-140397414-1';
+    var _gaDomain = '';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
