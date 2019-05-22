@@ -11,33 +11,33 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="[iOS] 간단한 화면전환 방식 - Junghoon's Blog">
+    <meta property="og:title" content="[Android] LiveData + ViewModel 사용해보기  - Junghoon's Blog">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="Sample : iOS Screen Change
+    <meta property="og:description" content="Android Architecture Components - ViewModel
 
 ">
     
-    <meta property="article:published_time" content="2019-05-20T00:00:00Z">
+    <meta property="article:published_time" content="2019-05-22T00:00:00Z">
     
     
     <meta property="article:author" content="JungHoon-Park">
     
     
-    <meta property="article:tag" content="Swift4">
+    <meta property="article:tag" content="Android">
     
     <meta property="article:tag" content="Mobile">
     
-    <meta property="article:tag" content="iOS">
+    <meta property="article:tag" content="Architecture">
     
     <meta property="article:tag" content="Study">
     
     
     <meta property="og:image" content="http://localhost:4000">
-    <meta property="og:url" content="http://localhost:4000/2019/05/20/ios-screen-change/">
+    <meta property="og:url" content="http://localhost:4000/2019/05/22/android-viewmodel/">
     <meta property="og:site_name" content="Junghoon's Blog">
     
-    <title>[iOS] 간단한 화면전환 방식 - Junghoon's Blog</title>
+    <title>[Android] LiveData + ViewModel 사용해보기  - Junghoon's Blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -46,7 +46,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2019/05/20/ios-screen-change/">
+    <link rel="canonical" href="http://localhost:4000/2019/05/22/android-viewmodel/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -77,7 +77,7 @@
 
     <!-- Navigation -->
 
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
 
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -192,7 +192,7 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/post-bg-halting.jpg" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 
@@ -201,7 +201,7 @@
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/post-bg-halting.jpg');
+        background-image: url('/img/home-bg.jpg');
         background: ;
     }
 
@@ -215,7 +215,7 @@
     
 </style>
 
-<header class="intro-header" >
+<header class="intro-header style-text" >
 
     <div class="header-mask"></div>
     
@@ -225,19 +225,19 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/archive/?tag=Swift4" title="Swift4">Swift4</a>
+                        <a class="tag" href="/archive/?tag=Android" title="Android">Android</a>
                         
                         <a class="tag" href="/archive/?tag=Mobile" title="Mobile">Mobile</a>
                         
-                        <a class="tag" href="/archive/?tag=iOS" title="iOS">iOS</a>
+                        <a class="tag" href="/archive/?tag=Architecture" title="Architecture">Architecture</a>
                         
                         <a class="tag" href="/archive/?tag=Study" title="Study">Study</a>
                         
                     </div>
-                    <h1>[iOS] 간단한 화면전환 방식</h1>
+                    <h1>[Android] LiveData + ViewModel 사용해보기 </h1>
                     
-                    <h2 class="subheading">Using screen change</h2>
-                    <span class="meta">Posted by JungHoon-Park on May 20, 2019</span>
+                    <h2 class="subheading"> Android LiveData + ViewModel Part of Android Jetpack. </h2>
+                    <span class="meta">Posted by JungHoon-Park on May 22, 2019</span>
                 </div>
             </div>
         </div>
@@ -263,95 +263,81 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>Sample : iOS Screen Change</p>
+				<h2 id="android-architecture-components---viewmodel">Android Architecture Components - ViewModel</h2>
 
-<hr />
+<h3 id="viewmodel-">ViewModel ?</h3>
+<p><code class="highlighter-rouge">ViewModel</code>클래스는 UI 관련 데이터를 저장하고 관리하기 위해 설계되었다.
+안드로이드 프레임워크는 특정 사용자 동작 또는 사용자 제어에서 완전히 벗어난 장치 이벤트에 대한 응답으로 UI 컨트롤러를 파괴하거나 re-create 하도록 한다.<br /><br />
+약 시스템이 UI 컨트롤러를 destory하거나 re-creates한다면 별도로 저장되지 않은 데이터를 잃게 된다.
+여러분의 앱이 사용자의 리스트를 포함하고 있다고 생각해봅시다. 만약 액티비티가 상태 변경으로 재 생성이 된다면, 새 액티비티는 사용자 리스트를 re-fetch 해야한다.<br /><br />
+간단한 데이터의 경우 <code class="highlighter-rouge">onSaveInstanceState()</code> 메소드를 써서 <code class="highlighter-rouge">onCreate()</code>에서 다시 데이터를 받을 수 있지만,
+이 방식은 bitmap과 리스트 형식의 많은 양의 데이터가 아닌 serialized, deserialize가 가능한 작은 데이터에 적합하다.<br />
+또 다른 문제는 UI 컨트롤러가 리턴을 받기위해 상당시간 소요되는 비동기방식의 call이 빈번하게 일어날 경우 입니다.<br />
+메모리 누수를 피하기 위해 시스템이 Call들을 정리해야 한다. 이런 관리는 많은 유지 관리가 필요하고 상태 변화로 인해 객체를 재 생성하는 경우, 이미 만들어진 객체를 다시 호출해야 하므로 리소스 낭비가 심하다.<br />
+<br />
+액티비티와 프래그먼트 같은 UI 컨트롤러는 주로 UI 데이터를 보여주고, 사용자 이벤트에 반응하고, 퍼미션 요청을 처리한다.<br />
+그러므로 UI 컨트롤러가 데이터베이스 또는 네트워크에서 데이터를 로드하는 작업까지 요청되면 너무 무거운 클래스가 되어버린다. 이런식으로 UI 컨트롤러에 과한 책임을 할당하면 테스트가 더 어려워진다.<br />
+그래서 <code class="highlighter-rouge">ViewModel</code>을 통해 UI 컨트롤러 로직에서 데이터 소유권을 분리시키는 것이 훨씬 효율적이다.<br />
+<br />
+Android Architecture Components에서 <code class="highlighter-rouge">ViewModel</code> 이라는 UI 컨트롤러를 위한 헬퍼 클래스를 제공한다. 즉, UI를 위한 데이터를 준비하는 역할을 한다.<br />
+<code class="highlighter-rouge">ViewModel</code>객체는 자동으로 화면 회전같은 상태 변화동안 자동으로 유지되고 다음 액티비티 또는 프래그먼트 인스턴스에 즉시 사용가능하다.<br /><br />
+<strong>출처(https://developer.android.com/topic/libraries/architecture/viewmodel)</strong><br /></p>
+<h3 id="사용해보기">사용해보기</h3>
+<p><strong>간단한 버튼을 통해 숫자를 증감하는 앱으로 ViewModel 사용해보기</strong><br /><br />
+1.build.gradle 에 추가</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="n">def</span> <span class="n">lifecycle_version</span> <span class="o">=</span> <span class="s">"1.1.1"</span>
+<span class="n">implementation</span> <span class="s">"android.arch.lifecycle:extensions:$lifecycle_version"</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="n">dataBinding</span> <span class="o">{</span>
+    <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
 
-<h3 id="1-뷰-컨트롤러에서-다른-뷰-컨트롤러를-호출하여-화면-전환하기present">1. <strong>뷰 컨트롤러에서 다른 뷰 컨트롤러를 호출하여 화면 전환하기(present)</strong></h3>
-
-<h3 id="2-내비게이션-컨트롤러를-사용하여-화면-전환하기">2. <strong>내비게이션 컨트롤러를 사용하여 화면 전환하기</strong></h3>
-
-<h3 id="3-화면-전환용-객체-세그웨이segueway를-사용하여-화면-전환하기">3. <strong>화면 전환용 객체 세그웨이(Segueway)를 사용하여 화면 전환하기</strong></h3>
-
-<ul>
-  <li>뷰 컨트롤러의 뷰 위에 다른 뷰를 가져와 바꿔치기 하기 ( 하나의 뷰 컨트롤러가 두 개 이상의 루트 뷰를 관리해야 하므로 좋은방법은 아님,
-iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관리하는 MVC 패턴을 기본으로 함)</li>
-</ul>
-
-<hr />
-
-<h4 id="소스코드">소스코드</h4>
-
-<p><strong>1_1. 화면이동</strong></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<p>2.xml 에 테스트용으로 버튼 2개와 숫자를 보여줄 TextView를 만든다.</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
 6
 7
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">presentSecondView</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">guard</span> <span class="k">let</span> <span class="nv">secondViewInstance</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">storyboard</span><span class="p">?</span><span class="o">.</span><span class="nf">instantiateViewController</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"SecondViewController"</span><span class="p">)</span> <span class="k">else</span><span class="p">{</span>
-        <span class="k">return</span>
-    <span class="p">}</span>
-    <span class="n">secondViewInstance</span><span class="o">.</span><span class="n">modalTransitionStyle</span> <span class="o">=</span> <span class="kt">UIModalTransitionStyle</span><span class="o">.</span><span class="n">flipHorizontal</span>
-    <span class="k">self</span><span class="o">.</span><span class="nf">present</span><span class="p">(</span><span class="n">secondViewInstance</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>1_2. 뒤로이동</strong></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">presentBackPressed</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">presentingViewController</span><span class="p">?</span><span class="o">.</span><span class="nf">dismiss</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
-<span class="p">}</span>
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;android.support.design.widget.FloatingActionButton</span>
+      <span class="na">android:id=</span><span class="s">"@+id/add_Button"</span>
+      <span class="na">android:layout_width=</span><span class="s">"wrap_content"</span>
+      <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+      <span class="na">android:onClick=</span><span class="s">"@{activity::onAddButtonClick}"</span>
+      <span class="na">android:src=</span><span class="s">"@drawable/add"</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;android.support.design.widget.FloatingActionButton</span>
+      <span class="na">android:id=</span><span class="s">"@+id/sub_Button"</span>
+      <span class="na">android:layout_width=</span><span class="s">"wrap_content"</span>
+      <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+      <span class="na">android:onClick=</span><span class="s">"@{activity::onSubButtonClick}"</span>
+      <span class="na">android:src=</span><span class="s">"@drawable/sub"</span> <span class="nt">/&gt;</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 
-<p><strong>2_1. 화면이동</strong></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<p>3.ViewModel을 상속받는 Class를 생성한다.</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
-4
-5
-6
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">naviGoSecond</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">guard</span> <span class="k">let</span> <span class="nv">naviSecondview</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">storyboard</span><span class="p">?</span><span class="o">.</span><span class="nf">instantiateViewController</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"NavigationSecondView"</span><span class="p">)</span> <span class="k">else</span><span class="p">{</span>
-        <span class="k">return</span>
-    <span class="p">}</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="nf">pushViewController</span><span class="p">(</span><span class="n">naviSecondview</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
-<span class="p">}</span>
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CounterViewModel</span> <span class="kd">extends</span> <span class="n">ViewModel</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="o">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>2_2. 뒤로이동</strong></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">popNavigationVIew</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="nf">popViewController</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>3_1. 화면이동</strong></p>
-<ul>
-  <li>Storyboard 에서 다른 ViewController 와 연결 -&gt; Action Segue</li>
-  <li>출발점이 뷰 컨트롤러 자체인 경우 -&gt; Manual Segue
-    <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">manualSegueBtn</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
- <span class="k">self</span><span class="o">.</span><span class="nf">performSegue</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"ManualSegue"</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div>    </div>
-  </li>
-  <li>
-    <p>UIStoryboardSegue 클래스를 서브클래싱항 새로운 가능을 갖춘 세그웨이 객체정의 -&gt; CustomSegue
- Storyboard 에서 segue 클릭 후 StoryboardSegue 탭에 class 를 새로 정의한 클래스로 설정</p>
 
-    <ul>
-      <li>custom segue 정의</li>
-    </ul>
-  </li>
-</ul>
-
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<p>4.MainActivity 에서 버튼 이벤트 처리 및 ViewModel 가져오기</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -370,78 +356,49 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
 17
 18
 19
-</pre></td><td class="rouge-code"><pre><span class="kd">import</span> <span class="kt">UIKit</span>
+20
+21
+</pre></td><td class="rouge-code"><pre><span class="kd">private</span> <span class="n">ActivityViewModelBinding</span> <span class="n">binding</span><span class="o">;</span>
+<span class="kd">private</span> <span class="n">CounterViewModel</span> <span class="n">viewModel</span><span class="o">;</span>
+<span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+    <span class="n">binding</span> <span class="o">=</span> <span class="n">DataBindingUtil</span><span class="o">.</span><span class="na">setContentView</span><span class="o">(</span><span class="k">this</span><span class="o">,</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_view_model</span><span class="o">);</span>
+    <span class="n">binding</span><span class="o">.</span><span class="na">setActivity</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="c1">//ViewModel 가져오기</span>
+    <span class="n">viewModel</span> <span class="o">=</span> <span class="n">ViewModelProviders</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="n">CounterViewModel</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">binding</span><span class="o">.</span><span class="na">countTextView</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">viewModel</span><span class="o">.</span><span class="na">counter</span> <span class="o">+</span> <span class="s">" "</span><span class="o">);</span>
+<span class="o">}</span>
 
-<span class="kd">class</span> <span class="kt">NewSegue</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">{</span>
-    
-<span class="k">override</span> <span class="kd">func</span> <span class="nf">perform</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">//세그웨이의 출발지 뷰 컨트롤러</span>
-    <span class="k">let</span> <span class="nv">srcUVC</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">source</span>
-        
-    <span class="c1">//세그웨이의 목적지 뷰 컨트롤러</span>
-    <span class="k">let</span> <span class="nv">destUVC</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">destination</span>
-        
-    <span class="c1">//fromView 에서 toView 로 뷰를 전환한다</span>
-    <span class="kt">UIView</span><span class="o">.</span><span class="nf">transition</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="n">srcUVC</span><span class="o">.</span><span class="n">view</span><span class="p">,</span>
-                    <span class="nv">to</span><span class="p">:</span> <span class="n">destUVC</span><span class="o">.</span><span class="n">view</span><span class="p">,</span>
-                    <span class="nv">duration</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-                    <span class="nv">options</span><span class="p">:</span> <span class="o">.</span><span class="n">transitionCurlDown</span><span class="p">,</span>
-                    <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAddButtonClick</span><span class="o">(</span><span class="n">View</span> <span class="n">view</span><span class="o">){</span>
+    <span class="n">viewModel</span><span class="o">.</span><span class="na">counter</span><span class="o">++;</span>
+    <span class="n">binding</span><span class="o">.</span><span class="na">countTextView</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">viewModel</span><span class="o">.</span><span class="na">counter</span> <span class="o">+</span> <span class="s">" "</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSubButtonClick</span><span class="o">(</span><span class="n">View</span> <span class="n">view</span><span class="o">){</span>
+    <span class="n">viewModel</span><span class="o">.</span><span class="na">counter</span><span class="o">--;</span>
+    <span class="n">binding</span><span class="o">.</span><span class="na">countTextView</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">viewModel</span><span class="o">.</span><span class="na">counter</span> <span class="o">+</span> <span class="s">" "</span><span class="o">);</span>
+<span class="o">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>3_2. 뒤로이동</strong></p>
+<p><strong>ViewModel을 사용함으로써 화면 회전등의 UI 컨트롤러를 destory하거나 re-creates하는 상황에서도 예제의 ViewModel의 counter 는 상태가 유지됨을 확인 할 수 있다.</strong></p>
 
-<p><em>Storyboard 에서 상단의 Exit 아이콘과 연결(Action Segue, Manual Segue, Custom Segue)</em></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">goBackSegue</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">){}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-
-<p><strong>3_3. Segue 전처리 메소드</strong></p>
-
-<p><em>Segue 실행하기 전에 값을 저장해둘 필요가 있거나, 경고창을 띄워주는 등의 처리를 해야 할 경우 전처리 메소드 사용 - Segue 실행되기 전에 자동으로 실행됨</em></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="rouge-code"><pre><span class="k">override</span> <span class="kd">func</span> <span class="nf">prepare</span><span class="p">(</span><span class="k">for</span> <span class="nv">segue</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?)</span> <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"ActionSegue"</span><span class="p">){</span>
-        <span class="kt">NSLog</span><span class="p">(</span><span class="s">"action segue 실행!"</span><span class="p">)</span>
-    <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"ManualSegue"</span><span class="p">){</span>
-        <span class="kt">NSLog</span><span class="p">(</span><span class="s">"Manual segue 실행!"</span><span class="p">)</span>
-    <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"CustomSegue"</span><span class="p">){</span>
-        <span class="kt">NSLog</span><span class="p">(</span><span class="s">"Custom segue 실행!"</span><span class="p">)</span>
-    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-        <span class="kt">NSLog</span><span class="p">(</span><span class="s">"알수없는 segue 입니다."</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-
-<h3 id="소스코드링크github"><a href="https://github.com/Junghun0/SampleScreenChange_ios.git">소스코드링크(github)</a></h3>
 
 
                 <hr style="visibility: hidden;">
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2019/05/20/ios-data-deliver/" data-toggle="tooltip" data-placement="top" title="[iOS] 화면간 데이터 전달 방식">
+                        <a href="/2019/05/22/android-mvp/" data-toggle="tooltip" data-placement="top" title="[Android] MVP Architecture 정리">
                         Previous<br>
-                        <span>[iOS] 화면간 데이터 전달 방식</span>
+                        <span>[Android] MVP Architecture 정리</span>
                         </a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2019/05/20/ios-sidebar/" data-toggle="tooltip" data-placement="top" title="[iOS] SideBar 만들기">
+                        <a href="/2019/05/22/rxjava-study/" data-toggle="tooltip" data-placement="top" title="[RxJava] RxJava 정리">
                         Next<br>
-                        <span>[iOS] SideBar 만들기</span>
+                        <span>[RxJava] RxJava 정리</span>
                         </a>
                     </li>
                     
@@ -559,8 +516,8 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "junghoon-github-io";
-    var disqus_identifier = "/2019/05/20/ios-screen-change";
-    var disqus_url = "http://localhost:4000/2019/05/20/ios-screen-change/";
+    var disqus_identifier = "/2019/05/22/android-viewmodel";
+    var disqus_url = "http://localhost:4000/2019/05/22/android-viewmodel/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

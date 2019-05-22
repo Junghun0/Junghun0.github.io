@@ -412,13 +412,13 @@ ReplaySubject<String> subject = ReplaySubject.create();
 
 |  <center>연산자 종류</center> |  <center>연산자 함수</center> |
 |:--------|:--------:|
-|**생성 연산자** | <center>**just()**, **fromXXX()**, **create()**, interval(), range(), timer(), intervalRange(), defer(), repeat()</center>
-|**변환 연산자** | <center>**map()**, **flatMap()**, concatMap(), switchMap(), groupBy(), scan(), buffer(), window()</center>
-|**필터 연산자** | <center>**filter()**, **take()**, **skip()**, distinct()</center>
-|**결합 연산자** | <center>zip(), combineLatest(), merge(), concat()</center>
-|**조건 연산자** | <center>amb(), takeUntil(), skipUntil(), all()</center>
-|**에러 처리 연산자** | <center>onErrorReturn(), onErrorResumeNext(), retry(), retryUntil()</center>
-|**기타 연산자** | <center>**subscribe()**, subscribeOn(), observeOn(), **reduce()**, count()</center>
+|**생성 연산자** | **just()**, **fromXXX()**, **create()**, interval(), range(), timer(), intervalRange(), defer(), repeat()
+|**변환 연산자** | **map()**, **flatMap()**, concatMap(), switchMap(), groupBy(), scan(), buffer(), window()
+|**필터 연산자** | **filter()**, **take()**, **skip()**, distinct()
+|**결합 연산자** | zip(), combineLatest(), merge(), concat()
+|**조건 연산자** | amb(), takeUntil(), skipUntil(), all()
+|**에러 처리 연산자** | onErrorReturn(), onErrorResumeNext(), retry(), retryUntil()
+|**기타 연산자** | **subscribe()**, subscribeOn(), observeOn(), **reduce()**, count()
 
 #### 생성 연산자
 
