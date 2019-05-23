@@ -256,6 +256,92 @@ protected void onCreate(Bundle savedInstanceState) {
 ~~~
 **코드가 굉장히 깔끔해졌다!!**
 
+### 사용해보기 2
+
+1.SeekBar를 가지고 있는 Fragment 만들기 , Databinding 하기
+~~~xml
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+  <data>
+      <variable
+          name="viewModel"
+          type="com.example.junghoon_sample_apps.sample4_viewmodel2.VMShareViewModel" />
+  </data>
+
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      tools:context=".sample4_viewmodel2.SeekBarFragment">
+
+      <SeekBar
+          android:id="@+id/seekbar"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:max="100"
+          android:progress="@{viewModel.progress}" />
+
+  </FrameLayout>
+</layout>
+~~~
+
+2.ViewModel Class 만들기
+~~~java
+public class VMShareViewModel extends ViewModel {
+    public MutableLiveData<Integer> progress = new MutableLiveData<>();
+}
+~~~
+
+3.Activity의 xml 구성
+~~~xml
+<fragment
+    android:id="@+id/fragment1"
+    android:name="com.example.junghoon_sample_apps.sample4_viewmodel2.SeekBarFragment"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"/>
+
+<fragment
+    android:id="@+id/fragment2"
+    android:name="com.example.junghoon_sample_apps.sample4_viewmodel2.SeekBarFragment"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"/>
+~~~
+
+4.SeekBar를 가지고 있는 fragment의 onViewCreated
+~~~java
+@Override
+public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    //viewmodel 가져오기
+    final VMShareViewModel viewModel = ViewModelProviders.of(requireActivity()).get(VMShareViewModel.class);
+
+    FragmentSeekBarBinding binding = DataBindingUtil.bind(view);
+    binding.setLifecycleOwner(requireActivity());
+    binding.setViewModel(viewModel);
+
+    binding.seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            viewModel.progress.setValue(progress);
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    });
+}
+~~~
+
+5.결과화면
+![img](https://user-images.githubusercontent.com/30828236/58221440-7f1be880-7d4d-11e9-9bc2-c7bb01838586.png)
+
 
 
 
