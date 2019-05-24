@@ -33,7 +33,7 @@ tags:
 Android Architecture Components에서 `ViewModel` 이라는 UI 컨트롤러를 위한 헬퍼 클래스를 제공한다. 즉, UI를 위한 데이터를 준비하는 역할을 한다.<br />
 `ViewModel`객체는 자동으로 화면 회전같은 상태 변화동안 자동으로 유지되고 다음 액티비티 또는 프래그먼트 인스턴스에 즉시 사용가능하다.<br />
 
-![img](https://user-images.githubusercontent.com/30828236/58179720-b2c22880-7ce3-11e9-8db4-7fece141cf73.png)
+![viewmodel](https://user-images.githubusercontent.com/30828236/58179720-b2c22880-7ce3-11e9-8db4-7fece141cf73.png)
 <br />
 
 **출처(https://developer.android.com/topic/libraries/architecture/viewmodel)**<br />
@@ -340,13 +340,4 @@ public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceStat
 ~~~
 
 5.결과화면
-![img](https://user-images.githubusercontent.com/30828236/58221440-7f1be880-7d4d-11e9-9bc2-c7bb01838586.png)
-
-
-
-
-
-
-
-
-
+![livedata](https://user-images.githubusercontent.com/30828236/58221440-7f1be880-7d4d-11e9-9bc2-c7bb01838586.png)
