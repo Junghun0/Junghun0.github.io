@@ -282,7 +282,7 @@
 Android Architecture Components에서 <code class="highlighter-rouge">ViewModel</code> 이라는 UI 컨트롤러를 위한 헬퍼 클래스를 제공한다. 즉, UI를 위한 데이터를 준비하는 역할을 한다.<br />
 <code class="highlighter-rouge">ViewModel</code>객체는 자동으로 화면 회전같은 상태 변화동안 자동으로 유지되고 다음 액티비티 또는 프래그먼트 인스턴스에 즉시 사용가능하다.<br /></p>
 
-<p><img src="https://user-images.githubusercontent.com/30828236/58179720-b2c22880-7ce3-11e9-8db4-7fece141cf73.png" alt="img" />
+<p><img src="https://user-images.githubusercontent.com/30828236/58179720-b2c22880-7ce3-11e9-8db4-7fece141cf73.png" alt="viewmodel" />
 <br /></p>
 
 <p><strong>출처(https://developer.android.com/topic/libraries/architecture/viewmodel)</strong><br /></p>
@@ -650,6 +650,152 @@ MutableLiveData를 이용해 관찰가능한 데이터로 만들어준다.</p>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p><strong>코드가 굉장히 깔끔해졌다!!</strong></p>
 
+<h3 id="사용해보기-2">사용해보기 2</h3>
+
+<p>1.SeekBar를 가지고 있는 Fragment 만들기 , Databinding 하기</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;layout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+    <span class="na">xmlns:tools=</span><span class="s">"http://schemas.android.com/tools"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;data&gt;</span>
+      <span class="nt">&lt;variable</span>
+          <span class="na">name=</span><span class="s">"viewModel"</span>
+          <span class="na">type=</span><span class="s">"com.example.junghoon_sample_apps.sample4_viewmodel2.VMShareViewModel"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/data&gt;</span>
+
+  <span class="nt">&lt;FrameLayout</span>
+      <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+      <span class="na">android:layout_height=</span><span class="s">"match_parent"</span>
+      <span class="na">tools:context=</span><span class="s">".sample4_viewmodel2.SeekBarFragment"</span><span class="nt">&gt;</span>
+
+      <span class="nt">&lt;SeekBar</span>
+          <span class="na">android:id=</span><span class="s">"@+id/seekbar"</span>
+          <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+          <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+          <span class="na">android:max=</span><span class="s">"100"</span>
+          <span class="na">android:progress=</span><span class="s">"@{viewModel.progress}"</span> <span class="nt">/&gt;</span>
+
+  <span class="nt">&lt;/FrameLayout&gt;</span>
+<span class="nt">&lt;/layout&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>2.ViewModel Class 만들기</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">VMShareViewModel</span> <span class="kd">extends</span> <span class="n">ViewModel</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">MutableLiveData</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">progress</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MutableLiveData</span><span class="o">&lt;&gt;();</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>3.Activity의 xml 구성</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;fragment</span>
+    <span class="na">android:id=</span><span class="s">"@+id/fragment1"</span>
+    <span class="na">android:name=</span><span class="s">"com.example.junghoon_sample_apps.sample4_viewmodel2.SeekBarFragment"</span>
+    <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"0dp"</span>
+    <span class="na">android:layout_weight=</span><span class="s">"1"</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;fragment</span>
+    <span class="na">android:id=</span><span class="s">"@+id/fragment2"</span>
+    <span class="na">android:name=</span><span class="s">"com.example.junghoon_sample_apps.sample4_viewmodel2.SeekBarFragment"</span>
+    <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"0dp"</span>
+    <span class="na">android:layout_weight=</span><span class="s">"1"</span><span class="nt">/&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>4.SeekBar를 가지고 있는 fragment의 onViewCreated</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre></td><td class="rouge-code"><pre><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onViewCreated</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">view</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">.</span><span class="na">onViewCreated</span><span class="o">(</span><span class="n">view</span><span class="o">,</span> <span class="n">savedInstanceState</span><span class="o">);</span>
+    <span class="c1">//viewmodel 가져오기</span>
+    <span class="kd">final</span> <span class="n">VMShareViewModel</span> <span class="n">viewModel</span> <span class="o">=</span> <span class="n">ViewModelProviders</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">requireActivity</span><span class="o">()).</span><span class="na">get</span><span class="o">(</span><span class="n">VMShareViewModel</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="n">FragmentSeekBarBinding</span> <span class="n">binding</span> <span class="o">=</span> <span class="n">DataBindingUtil</span><span class="o">.</span><span class="na">bind</span><span class="o">(</span><span class="n">view</span><span class="o">);</span>
+    <span class="n">binding</span><span class="o">.</span><span class="na">setLifecycleOwner</span><span class="o">(</span><span class="n">requireActivity</span><span class="o">());</span>
+    <span class="n">binding</span><span class="o">.</span><span class="na">setViewModel</span><span class="o">(</span><span class="n">viewModel</span><span class="o">);</span>
+
+    <span class="n">binding</span><span class="o">.</span><span class="na">seekbar</span><span class="o">.</span><span class="na">setOnSeekBarChangeListener</span><span class="o">(</span><span class="k">new</span> <span class="n">SeekBar</span><span class="o">.</span><span class="na">OnSeekBarChangeListener</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onProgressChanged</span><span class="o">(</span><span class="n">SeekBar</span> <span class="n">seekBar</span><span class="o">,</span> <span class="kt">int</span> <span class="n">progress</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">fromUser</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">viewModel</span><span class="o">.</span><span class="na">progress</span><span class="o">.</span><span class="na">setValue</span><span class="o">(</span><span class="n">progress</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onStartTrackingTouch</span><span class="o">(</span><span class="n">SeekBar</span> <span class="n">seekBar</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onStopTrackingTouch</span><span class="o">(</span><span class="n">SeekBar</span> <span class="n">seekBar</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="o">}</span>
+    <span class="o">});</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>5.결과화면
+<img src="https://user-images.githubusercontent.com/30828236/58221440-7f1be880-7d4d-11e9-9bc2-c7bb01838586.png" alt="livedata" /></p>
 
 
                 <hr style="visibility: hidden;">
@@ -723,7 +869,7 @@ MutableLiveData를 이용해 관찰가능한 데이터로 만들어준다.</p>
         </a>
         
         
-                <a data-sort="0005" 
+                <a data-sort="0006" 
                     href="/archive/?tag=Swift4"
                     title="Swift4"
                     rel="7">Swift4</a>
@@ -731,14 +877,14 @@ MutableLiveData를 이용해 관찰가능한 데이터로 만들어준다.</p>
                 <a data-sort="0000" 
                     href="/archive/?tag=Study"
                     title="Study"
-                    rel="12">Study</a>
+                    rel="13">Study</a>
         
                 <a data-sort="0001" 
                     href="/archive/?tag=Mobile"
                     title="Mobile"
-                    rel="11">Mobile</a>
+                    rel="12">Mobile</a>
         
-                <a data-sort="0005" 
+                <a data-sort="0006" 
                     href="/archive/?tag=iOS"
                     title="iOS"
                     rel="7">iOS</a>
@@ -746,9 +892,9 @@ MutableLiveData를 이용해 관찰가능한 데이터로 만들어준다.</p>
                 <a data-sort="0008" 
                     href="/archive/?tag=Android"
                     title="Android"
-                    rel="4">Android</a>
+                    rel="5">Android</a>
         
-                <a data-sort="0010" 
+                <a data-sort="0011" 
                     href="/archive/?tag=Architecture"
                     title="Architecture"
                     rel="2">Architecture
