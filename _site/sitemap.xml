@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
     <url>
+        <loc>http://localhost:4000/2019/06/08/android-fragment/</loc>
+    </url>
+    
+    <url>
         <loc>http://localhost:4000/2019/05/26/android-viewpager2/</loc>
     </url>
     
