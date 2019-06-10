@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[Android] Fragment"
+title: "[Android] Fragment 란"
 subtitle: ' About Fragment '
 author: "JungHoon-Park"
 header-style: text
@@ -13,7 +13,7 @@ tags:
   - Study
 ---
 
-# Fragment
+# Fragment 란?
 
 `Fragment`는 동작 또는 `Activity` 내에서 UI의 일부를 나타낸다. 여러 개의 프래그먼트를 하나의 액티비티에 조합하여 창이 여러 개인 UI를 구축할 수 있으며, 하나의 프래그먼트를 여러 액티비티에서 재사용할 수 있다. 프래그먼트는 자체 수명 주기를 가지고, 자체 입력 이벤트를 받으며, 액티비티 실행 중에 추가 및 제거가 가능한 액티비티의 모듈식 섹션이라고 생각하면 된다.<br /><br />
 프래그먼트는 항상 액티비티 내에 포함되어 있어야 하며 해당 프래그먼트의 수명 주기는 호스트 액티비티의 수명 주기에 직접적으로 영향을 받는다.<br /><br />

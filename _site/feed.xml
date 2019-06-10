@@ -5,18 +5,338 @@
     <description>description</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 08 Jun 2019 18:29:52 +0900</pubDate>
-    <lastBuildDate>Sat, 08 Jun 2019 18:29:52 +0900</lastBuildDate>
+    <pubDate>Mon, 10 Jun 2019 20:39:32 +0900</pubDate>
+    <lastBuildDate>Mon, 10 Jun 2019 20:39:32 +0900</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
-        <title>[Android] Fragment</title>
-        <description>&lt;h1 id=&quot;fragment&quot;&gt;Fragment&lt;/h1&gt;
+        <title>[Android] Service 란</title>
+        <description>&lt;h1 id=&quot;service-란&quot;&gt;Service 란?&lt;/h1&gt;
+&lt;p&gt;화면 없이 &lt;code class=&quot;highlighter-rouge&quot;&gt;백그라운드에서 실행되는 프로세스&lt;/code&gt;를 의미한다. 화면이 없다는 점을 제외하면 액티비티처럼 하나의 &lt;code class=&quot;highlighter-rouge&quot;&gt;애플리케이션 구성 요소&lt;/code&gt;로 동작한다.&lt;br /&gt;&lt;br /&gt;
+서비스도 애플리케이션의 구성 요소이므로 시스템에서 관리한다. 따라서 새로 만든 서비스는 항상 매니페스트 파일에 등록해야 한다. 서비스를 실행 시킬 때는 메인 액티비티에서 &lt;code class=&quot;highlighter-rouge&quot;&gt;startService()&lt;/code&gt; 메소드를 호출하면 된다.&lt;br /&gt;&lt;br /&gt;
+서비스가 하는 중요한 역할은 단말이 항상 실행되어 있는 상태로 다른 단말과 데이터를 주고받거나 단말의 상태를 모니터링하는 것이다. 따라서 서비스를 한 번 실행해 두면 실행된 상태가 계속 유지되어야 한다. 이를 위해 서비스가 비정상적으로 종료되더라도 시스템이 자동으로 재실행된다.&lt;br /&gt;&lt;br /&gt;
+그런데 서비스가 한 번 실행된 후 종료되지 않고 계속 실행 중인 상태라면 &lt;code class=&quot;highlighter-rouge&quot;&gt;startService()&lt;/code&gt; 메소드를 여러 번 호출하더라도 서비스의 상태에는 변화가 없게된다. 따라서 &lt;code class=&quot;highlighter-rouge&quot;&gt;startService()&lt;/code&gt;는 서비스를 시작하는 목적보다는 &lt;code class=&quot;highlighter-rouge&quot;&gt;인텐트를 전달하는 목적&lt;/code&gt;으로 더 많이 사용된다.&lt;br /&gt;&lt;br /&gt;
+예를 들어, 액티비티에서 서비스 쪽으로 데이터를 전달하고 싶은 경우 인텐트 객체를 만들고 부가 데이터를 넣은 후 &lt;code class=&quot;highlighter-rouge&quot;&gt;startService() 메소드를 호출&lt;/code&gt;하면서 전달하면 된다. 이때 서비스 객체가 메모리에 만들어져 있으면 onCreate() 메소드가 호출되지 않으므로 &lt;code class=&quot;highlighter-rouge&quot;&gt;onStartCommand() 메소드를 사용해 전달 받은 인텐트를 처리&lt;/code&gt;하게 된다.&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;service-콜백-메서드&quot;&gt;Service 콜백 메서드&lt;/h2&gt;
+&lt;p&gt;서비스를 생성하려면 &lt;code class=&quot;highlighter-rouge&quot;&gt;Service&lt;/code&gt;의 서브클래스를 생성해야 한다. 구현에서는 서비스 수명 주기의 주요 측면ㅇ르 처리하는 콜백 메서드를 몇 가지 재정의해야 하며 서비스에 바인드할 구성 요소에 대한 메커니즘을 제공해야 한다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;onStartCommand()&lt;/strong&gt;
+시스템이 이 메서드를 호출하는 것은 또 다른 구성 요소가 서비스를 시작하도록 요청하는 경우이다. 이때 &lt;code class=&quot;highlighter-rouge&quot;&gt;startService()&lt;/code&gt;를 호출하는 방법을 사용한다. 이 메서드가 실행되면 서비스가 시작되고 백그라운드에서 무기한으로 실행될 수 있다. 이것을 구현하면 서비스의 작업이 완료되었을 때 해당 서비스를 중단하는 것은 개발자 본인의 책임이며, 이때 &lt;code class=&quot;highlighter-rouge&quot;&gt;stopSelf()&lt;/code&gt; 또는 &lt;code class=&quot;highlighter-rouge&quot;&gt;stopService()&lt;/code&gt; 를 호출하면 된다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;onBind()&lt;/strong&gt;
+시스템이 이 메서드를 호출하는 것은 또 다른 구성 요소가 해당 서비스에 바인드되고자 하는 경우이다. 이때 &lt;code class=&quot;highlighter-rouge&quot;&gt;bindService()&lt;/code&gt;를 호출하는 방법을 쓴다. 이 메서드를 구현할 때에는 클라이언트가 서비스와 통신을 주고받기 위해 사용할 인터페이스를 제공해야 한다. 이때 &lt;code class=&quot;highlighter-rouge&quot;&gt;IBinder&lt;/code&gt;를 리턴하면 된다. 이 메서드는 항상 구현해야 하지만, 바인딩을 허용하지 않고자 하면 null을 리턴하면 된다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;onCreate()&lt;/strong&gt;
+시스템이 이 메서드를 호출하는 것은 서비스가 처음 생성되어 일회성 설정 절차를 수행하는 경우이다. (&lt;code class=&quot;highlighter-rouge&quot;&gt;onStartCommand()&lt;/code&gt;또는&lt;code class=&quot;highlighter-rouge&quot;&gt;onBind()&lt;/code&gt;호출하기 전). 서비스가 이미 실행 중인 경우, 이 메소드는 호출되지 않는다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;onDestroy()&lt;/strong&gt;
+시스템이 이 메서드를 호출하는 것은 해당 서비스를 더 이상 사용하지 않고 소멸시키는 경우이다. 서비스에서 이를 구현해야 스레드, 리스너, 리시버 등 모든 리소스를 정리할 수 있다. 이는 서비스가 수신하는 마지막 호출이다.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;사용해보기&quot;&gt;사용해보기&lt;/h2&gt;
+&lt;h3 id=&quot;service&quot;&gt;Service&lt;/h3&gt;
+&lt;h4 id=&quot;onstartcommand-메서드의-리턴-값&quot;&gt;&lt;strong&gt;onStartCommand()&lt;/strong&gt; 메서드의 리턴 값&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;START_NOT_STICKY&lt;/code&gt;&lt;br /&gt;
+시스템이 서비스를 &lt;code class=&quot;highlighter-rouge&quot;&gt;onStartCommand()&lt;/code&gt; 리턴 후에 중단시키면 서비스는 재생성하면 안된다. 다만 전달할 인텐트가 있는 경우는 예외이다. 이는 서비스가 불필요하게 실행되는 일을 피할 수 있는 가장 안전한 옵션이며, 애플리케이션이 완료되지 않은 모든 작업을 단순히 재시작할 수 있을 때 좋다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;START_STICKY&lt;/code&gt;&lt;br /&gt;
+시스템이 서비스를 &lt;code class=&quot;highlighter-rouge&quot;&gt;onStartCommand()&lt;/code&gt; 반환 후에 중단시키는 경우, 서비스를 재생성하고 &lt;code class=&quot;highlighter-rouge&quot;&gt;onStartCommand()&lt;/code&gt;를 호출하되 마지막 인텐트를 다시 전달하지는 마세요. 그 대신, 시스템이 &lt;code class=&quot;highlighter-rouge&quot;&gt;null 인텐트&lt;/code&gt;로 &lt;code class=&quot;highlighter-rouge&quot;&gt;onStartCommand()&lt;/code&gt;를 호출합니다. 다만, 서비스를 시작할 보류 인텐트가 있는 경우만은 예외이며, 이 경우 이들 인텐트가 전달됩니다. 이것은 명령을 실행하지는 않지만 무기한으로 실행 중이며 작업을 기다리고 있는 미디어 플레이어(또는 그와 비슷한 서비스)에 적합합니다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;START_REDELIVER_INTENT&lt;/code&gt;&lt;br /&gt;
+시스템이 &lt;code class=&quot;highlighter-rouge&quot;&gt;onStartCommand()&lt;/code&gt; 반환 후에 서비스를 중단시키는 경우, 서비스를 재생성하고 이 서비스에 전달된 마지막 인텐트로 &lt;code class=&quot;highlighter-rouge&quot;&gt;onStartCommand()&lt;/code&gt;를 호출하세요. 모든 보류 &lt;code class=&quot;highlighter-rouge&quot;&gt;인텐트가 차례로 전달&lt;/code&gt;됩니다. 이것은 즉시 재개되어야 하는 작업을 능동적으로 수행 중인 서비스(예를 들어 파일 다운로드 등)에 적합합니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;서비스바인딩&quot;&gt;서비스바인딩?&lt;/h4&gt;
+&lt;p&gt;startService() 메소드 대신 &lt;code class=&quot;highlighter-rouge&quot;&gt;bindService()&lt;/code&gt;메소드를 통해 시작되는 서비스를 서비스 바인딩(&lt;code class=&quot;highlighter-rouge&quot;&gt;Service Bind&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;Bound Service&lt;/code&gt;)라고 한다.&lt;br /&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;이 서비스는 마치 클라이언트-서버 관계처럼 동작한다. 서비스가 서버 역할을 한다.&lt;/li&gt;
+  &lt;li&gt;액티비티는 서비스에 어떠한 요청을 할 수 있고, 서비스로부터 어떠한 결과를 받을 수 있다.&lt;/li&gt;
+  &lt;li&gt;프로세스간 통신에도 사용된다.&lt;/li&gt;
+  &lt;li&gt;서비스 바인딩은 연결된 액티비티가 사라지면 서비스도 소멸된다.(&lt;code class=&quot;highlighter-rouge&quot;&gt;백그라운드에서 무한히 실행되지 않는다.&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;하나의 서비스에 다수 액티비티를 연결할 수 있다.&lt;/li&gt;
+  &lt;li&gt;애플리케이션 안의 기능을 외부에 제공하는 경우에 많이 사용된다.&lt;br /&gt;&lt;br /&gt;
+&lt;strong&gt;구현 및 동작&lt;/strong&gt; &lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;서비스 바인딩 객체를 생성하려면 콜백 메소드인 onBind()를 구현해야 한다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;onBind()&lt;/code&gt;는 &lt;code class=&quot;highlighter-rouge&quot;&gt;IBinder&lt;/code&gt;를 반환하는데, 바로 이 객체가 서비스와 클라이언트 사이의 인터페이스 역할을 한다.&lt;/li&gt;
+  &lt;li&gt;클라이언트가 &lt;code class=&quot;highlighter-rouge&quot;&gt;bindService()&lt;/code&gt;를 호출하면, 클라이언트가 서비스에 연결되면서 &lt;code class=&quot;highlighter-rouge&quot;&gt;IBinder&lt;/code&gt;가 반환되고, 클라이언트가 IBinder를 받으면 이 인터페이스를 통해 주고 받는 것이 가능해진다.&lt;/li&gt;
+  &lt;li&gt;서비스가 제공하는 다른 메소드 호출가능하다.&lt;/li&gt;
+  &lt;li&gt;여러 클라이언트가 하나의 서비스에 동시 접속이 가능하다.&lt;/li&gt;
+  &lt;li&gt;클라이언트가 서비스와의 접속을 끝내려면 &lt;code class=&quot;highlighter-rouge&quot;&gt;unbindService()&lt;/code&gt;를 호출한다.&lt;/li&gt;
+  &lt;li&gt;서비스에 연결된 클라이언트가 하나도 남아있지 않으면 서비스를 소멸시킨다.&lt;br /&gt;
+&lt;img width=&quot;421&quot; src=&quot;https://user-images.githubusercontent.com/30828236/59193024-412d1a00-8bbf-11e9-998d-7c1783dbc2f1.png&quot; /&gt;
+&lt;strong&gt;서비스 생명주기. 왼쪽 다이어그램은 &lt;code class=&quot;highlighter-rouge&quot;&gt;startService()&lt;/code&gt;로 생성된 경우이고, 오른쪽 다이어그램은 서비스가 &lt;code class=&quot;highlighter-rouge&quot;&gt;bindService()&lt;/code&gt;로 생성된 경우의 수명주기를 나타낸다.&lt;/strong&gt;&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;서비스의 전체 수명 주기는 &lt;code class=&quot;highlighter-rouge&quot;&gt;onCreate()&lt;/code&gt;가 호출된 시점과 &lt;code class=&quot;highlighter-rouge&quot;&gt;onDestroy()&lt;/code&gt;가 반환된 시점 사이에 일어납니다. 액티비티와 마찬가지로 서비스는 &lt;code class=&quot;highlighter-rouge&quot;&gt;자신의 초기 설정을 onCreate()에서 수행&lt;/code&gt;하며, 남은 리소스를 모두 &lt;code class=&quot;highlighter-rouge&quot;&gt;onDestroy()&lt;/code&gt;에서 릴리스합니다. 예를 들어 음악 재생 서비스의 경우 음악이 재생될 스레드를 onCreate()에서 생성하고, 그럼 다음 onDestroy()에서 해당 스레드를 중단할 수 있습니다.
+&lt;code class=&quot;highlighter-rouge&quot;&gt;onCreate()&lt;/code&gt; 및 &lt;code class=&quot;highlighter-rouge&quot;&gt;onDestroy()&lt;/code&gt; 메서드는 모든 서비스에 대해 호출됩니다. 이는 서비스가 startService()로 생성되었든 bindService()로 생성되었든 상관없이 적용됩니다.&lt;/li&gt;
+  &lt;li&gt;서비스의 활성 수명 주기는 &lt;code class=&quot;highlighter-rouge&quot;&gt;onStartCommand()&lt;/code&gt; 또는 &lt;code class=&quot;highlighter-rouge&quot;&gt;onBind()&lt;/code&gt;에 대한 호출로 시작됩니다. 각 메서드에 Intent가 전달되며 이것은 각각 &lt;code class=&quot;highlighter-rouge&quot;&gt;startService()&lt;/code&gt; 또는 &lt;code class=&quot;highlighter-rouge&quot;&gt;bindService()&lt;/code&gt;에 전달된 것입니다.
+서비스가 시작되면 수명 주기 전체가 종료되는 것과 동시에 활성 수명 주기도 종료됩니다 (서비스는 onStartCommand()가 반환된 뒤에도 여전히 활성 상태입니다). 서비스가 바인드된 경우, &lt;code class=&quot;highlighter-rouge&quot;&gt;onUnbind()&lt;/code&gt;가 반환되면 활성 수명 주기가 종료됩니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;소스코드&quot;&gt;소스코드&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;서비스 파일 생성
+&lt;img width=&quot;437&quot; src=&quot;https://user-images.githubusercontent.com/30828236/59186409-bd1e6680-8bad-11e9-9c89-f86c5aeb4c7a.png&quot; /&gt;
+이후에 Manifest 에 추가됨&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;service&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;android:name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;.MyService&quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;android:enabled=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;android:exported=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/service&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;MainActivity&lt;br /&gt;
+두개의 버튼으로 서비스 시작과 서비스 중지기능을 추가한다.
+    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MainActivity&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AppCompatActivity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onCreate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bundle&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;savedInstanceState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;onCreate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;savedInstanceState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;setContentView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;layout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;activity_main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onStartService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;View&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;Intent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;intent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Intent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;startService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;intent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onStopService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;View&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;Intent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;intent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Intent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;stopService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;intent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;MyService
+    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyService&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Service&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MyService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;//startService() -&amp;gt; onStartCommand 호출됨&lt;/span&gt;
+  &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onStartCommand&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Intent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;intent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flags&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;mThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;My Thread&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+              &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+              &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                      &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                          &lt;span class=&quot;n&quot;&gt;mCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+                          &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+                          &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+                      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+                      &lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;My Service&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;서비스 동작 중&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+              &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;mThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;START_STICKY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;//서비스가 예기치않게 종료되어도 서비스가 자동으로 재시작함&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;//onStopService() -&amp;gt; onDestroy()호출됨&lt;/span&gt;
+  &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onDestroy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;onDestroy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;My Service&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;onDestroy() 서비스 중지&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;mThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;interrupt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;mThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;mCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IBinder&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onBind&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Intent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;intent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;// TODO: Return the communication channel to the service.&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;UnsupportedOperationException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Not yet implemented&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;intent-service&quot;&gt;Intent Service&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Intent Service&lt;/strong&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Service&lt;/code&gt;의 서브클래스로, Worker Thread를 사용하여 모든 시작 요청을 처리하되 한 번에 하나씩 처리한다. 서비스가 여러 개의 요청을 동시에 처리하지 않아도 되는 경우 Intent Service 를 사용하는 것이 좋다.
+    &lt;ul&gt;
+      &lt;li&gt;애플리케이션의 기본 스레드와는 별도로, &lt;code class=&quot;highlighter-rouge&quot;&gt;onStartCommand()&lt;/code&gt;에 전달된 모든 인텐트를 실행하는 기본 작업자 스레드를 생성한다.&lt;/li&gt;
+      &lt;li&gt;한 번에 인텐트를 하나씩 &lt;code class=&quot;highlighter-rouge&quot;&gt;onHandleIntent()&lt;/code&gt; 구현에 전달하는 작업 큐를 생성하므로, 다중 스레딩에 대해 걱정할 필요가 없다.&lt;/li&gt;
+      &lt;li&gt;시작 요청이 모두 처리된 후 서비스를 중단하므로 &lt;code class=&quot;highlighter-rouge&quot;&gt;stopSelf()&lt;/code&gt;를 호출할 필요가 없다.&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;onBind()&lt;/code&gt;의 기본 구현을 제공하여 null을 반환하도록 합니다.&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;onStartCommand()&lt;/code&gt;의 기본 구현을 제공하여, &lt;code class=&quot;highlighter-rouge&quot;&gt;Intent&lt;/code&gt;를 작업 큐로 보내고 그 다음은 &lt;code class=&quot;highlighter-rouge&quot;&gt;onHandleIntent()&lt;/code&gt;구현으로 보낸다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;소스코드-1&quot;&gt;소스코드&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;MainActivity &lt;br /&gt;
+버튼을 하나 추가하여 Intent Service 를 시작시키도록 한다.
+    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onStartIntentService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;View&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;//내부적으로 순서대로 동작한다. 스스로 자기 자신을 중지시킨다.&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;Intent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;intent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Intent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyIntentService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;startService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;intent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;MyIntentService &lt;br /&gt;
+    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyIntentService&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IntentService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MyIntentService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;MyIntentService&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+
+  &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onHandleIntent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Intent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;intent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+              &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+              &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;interrupt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;My Intent Service&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;인텐트 서비스 동작 중&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Sun, 09 Jun 2019 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/2019/06/09/android-service/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/06/09/android-service/</guid>
+        
+        <category>Android</category>
+        
+        <category>Mobile</category>
+        
+        <category>Study</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>[Android] Fragment 란</title>
+        <description>&lt;h1 id=&quot;fragment-란&quot;&gt;Fragment 란?&lt;/h1&gt;
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Fragment&lt;/code&gt;는 동작 또는 &lt;code class=&quot;highlighter-rouge&quot;&gt;Activity&lt;/code&gt; 내에서 UI의 일부를 나타낸다. 여러 개의 프래그먼트를 하나의 액티비티에 조합하여 창이 여러 개인 UI를 구축할 수 있으며, 하나의 프래그먼트를 여러 액티비티에서 재사용할 수 있다. 프래그먼트는 자체 수명 주기를 가지고, 자체 입력 이벤트를 받으며, 액티비티 실행 중에 추가 및 제거가 가능한 액티비티의 모듈식 섹션이라고 생각하면 된다.&lt;br /&gt;&lt;br /&gt;
 프래그먼트는 항상 액티비티 내에 포함되어 있어야 하며 해당 프래그먼트의 수명 주기는 호스트 액티비티의 수명 주기에 직접적으로 영향을 받는다.&lt;br /&gt;&lt;br /&gt;
 예를 들어 액티비티가 일시정지되는 경우, 그 안의 모든 프래그먼트도 일시정지되며 액티비티가 소멸되면 모든 프래그먼트도 마찬가지로 소멸된다.&lt;br /&gt;&lt;br /&gt;
 프래그먼트를 액티비티 레이아웃의 일부로 추가하는 경우, 이는 액티비티의 뷰 계층 내부의 &lt;code class=&quot;highlighter-rouge&quot;&gt;ViewGroup&lt;/code&gt;안에 있으며, 해당 프래그먼트가 자신의 뷰 레이아웃을 정의한다. 프래그먼트를 액티비티 레이아웃에 삽입하려면 해당 프래그먼트를 액티비티의 레이아웃 파일에서 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;fragment&amp;gt;&lt;/code&gt;요소로 선언하거나, 애플리케이션 코드에서 이를 기존의 &lt;code class=&quot;highlighter-rouge&quot;&gt;ViewGroup&lt;/code&gt;에 추가하면 된다.&lt;code class=&quot;highlighter-rouge&quot;&gt;그러나 프래그먼트가 액티비티 레이아웃의 일부분이어야만 하는 것은 아니다. 나름의 UI가 없는 프래그먼트도 액티비티를 위한 보이지 않는 작업자로 사용할 수 있다.&lt;/code&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;프래그먼트 사용 목적&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;분할된 화면들을 독립적으로 구성하기 위해 사용함&lt;/li&gt;
+  &lt;li&gt;분할된 화면들의 상태를 관리하기 위해 사용함&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;&lt;img width=&quot;300&quot; height=&quot;300&quot; src=&quot;https://user-images.githubusercontent.com/30828236/59144720-aa712980-8a15-11e9-8430-800b840957eb.png&quot; /&gt;&lt;/p&gt;
 
@@ -2934,97 +3254,6 @@ MVP와 같은 디자인 패턴은 앱을 구성하는 코드를 모듈화시킬 
         <pubDate>Mon, 20 May 2019 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/2019/05/20/ios-tableview/</link>
         <guid isPermaLink="true">http://localhost:4000/2019/05/20/ios-tableview/</guid>
-        
-        <category>Swift4</category>
-        
-        <category>Mobile</category>
-        
-        <category>iOS</category>
-        
-        <category>Study</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>[iOS] SideBar 만들기</title>
-        <description>&lt;p&gt;Sample : iOS SideBar SWRevelViewController&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;sidebar_ios&quot;&gt;SideBar_ios&lt;/h1&gt;
-
-&lt;h3 id=&quot;swrevelviewcontroller-라이브러리-사용&quot;&gt;SWRevelViewController 라이브러리 사용&lt;/h3&gt;
-&lt;h4 id=&quot;--httpsgithubcomjohn-lluchswrevealviewcontroller&quot;&gt;- https://github.com/John-Lluch/SWRevealViewController&lt;/h4&gt;
-&lt;h4 id=&quot;--swrevealviewcontrollerh--swrevealviewcontrollerm-추가&quot;&gt;- SWRevealViewController.h / SWRevealViewController.m 추가&lt;/h4&gt;
-&lt;div&gt;
-&lt;img width=&quot;600&quot; height=&quot;200&quot; src=&quot;https://user-images.githubusercontent.com/30828236/58068227-7b605880-7bcb-11e9-8053-56b1f192609c.png&quot; /&gt;
-&lt;/div&gt;
-
-&lt;h4 id=&quot;--브릿징-헤더란-&quot;&gt;- 브릿징 헤더란 ?&lt;/h4&gt;
-&lt;h4 id=&quot;-objective-c-라이브러리를-사용하기-위해서-브릿징-헤더-라는-파일이-필요-swift에게-objective-c-클래스의-존재를-알려준다&quot;&gt;–&amp;gt; Objective-c 라이브러리를 사용하기 위해서 브릿징 헤더 라는 파일이 필요 !(Swift에게 Objective-c 클래스의 존재를 알려준다)&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;- SampleSideBar_ios-Bridging-Header.h 파일에 import 해줌&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div&gt;
-&lt;img width=&quot;600&quot; height=&quot;130&quot; src=&quot;https://user-images.githubusercontent.com/30828236/54476914-075da900-4846-11e9-8336-6cdb1ea38d95.png&quot; /&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;- FrontViewController.swift&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-swift highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;FrontViewController&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;UIViewController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;@IBOutlet&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;sideBarButton&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;UIBarButtonItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;viewDidLoad&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;viewDidLoad&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-        
-    &lt;span class=&quot;c1&quot;&gt;//메인 컨트롤러의 참조 정보를 가져온다.&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;revealVC&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;revealViewController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//버튼이 클릭될 때 메인 컨트롤러에 정의된 revealToggle(_:)을 호출하도록 정의한다&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sideBarButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;revealVC&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sideBarButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;action&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;#selector(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;revealVC.revealToggle(_:)&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//제스처를 뷰에 추가한다!&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;addGestureRecognizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;revealVC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;panGestureRecognizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;스토리보드&quot;&gt;스토리보드&lt;/h3&gt;
-&lt;div&gt;
-  &lt;img width=&quot;600&quot; height=&quot;500&quot; src=&quot;https://user-images.githubusercontent.com/30828236/54477207-fd897500-4848-11e9-90ca-9e0b69ef160c.png&quot; /&gt;
-&lt;/div&gt;
-
-&lt;h4 id=&quot;-메인-뷰컨트롤러와-테이블-뷰---reveal-view-controller-set-controller-속성의-segue-로-연결--segue-identifiersw_rear&quot;&gt;* 메인 뷰컨트롤러와 테이블 뷰 -&amp;gt; reveal view controller set controller 속성의 segue 로 연결 / segue Identifier(sw_rear)&lt;/h4&gt;
-
-&lt;h4 id=&quot;-첫-화면과-연결되는-navigationviewcontroller---reveal-view-controller-set-controller-속성-segue--segue-identifiersw_front&quot;&gt;* 첫 화면과 연결되는 navigationviewcontroller -&amp;gt; reveal view controller set controller 속성 segue / segue Identifier(sw_front)&lt;/h4&gt;
-
-&lt;h5 id=&quot;사이드-바-커스텀&quot;&gt;사이드 바 커스텀&lt;/h5&gt;
-&lt;div&gt;
-  &lt;img width=&quot;300&quot; height=&quot;450&quot; src=&quot;https://user-images.githubusercontent.com/30828236/54486855-6ae0e880-48d1-11e9-8977-53dd0dcdce89.png&quot; /&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;소스코드링크github&quot;&gt;&lt;a href=&quot;https://github.com/Junghun0/SideBar_ios.git&quot;&gt;소스코드링크(github)&lt;/a&gt;&lt;/h3&gt;
-
-</description>
-        <pubDate>Mon, 20 May 2019 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/2019/05/20/ios-sidebar/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/05/20/ios-sidebar/</guid>
         
         <category>Swift4</category>
         
