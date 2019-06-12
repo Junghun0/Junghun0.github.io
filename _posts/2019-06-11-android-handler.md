@@ -86,6 +86,10 @@ Message what(ID) 를 사용할 경우 사용하는 메서드<br />
 - Handler.sendMessage(Message msg)<br />
 Message what, arg1, obj 등 ID와 정보 등을 같이 사용하는 메서드
 
+<img width="350" src="https://user-images.githubusercontent.com/30828236/59356923-d9183880-8d64-11e9-93b1-092479c51916.png">
+<img width="350" src="https://user-images.githubusercontent.com/30828236/59356924-d9183880-8d64-11e9-9224-4449ccae3936.png">
+
+
 
 
 
