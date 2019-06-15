@@ -5,8 +5,8 @@
     <description>Mobile Lover</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 15 Jun 2019 14:35:02 +0900</pubDate>
-    <lastBuildDate>Sat, 15 Jun 2019 14:35:02 +0900</lastBuildDate>
+    <pubDate>Sat, 15 Jun 2019 14:36:35 +0900</pubDate>
+    <lastBuildDate>Sat, 15 Jun 2019 14:36:35 +0900</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -754,7 +754,6 @@ Message what, arg1, obj 등 ID와 정보 등을 같이 사용하는 메서드&lt
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;MainActivity&lt;/code&gt;에서 &lt;code class=&quot;highlighter-rouge&quot;&gt;startForegroundService(intent);&lt;/code&gt;를 실행한 후에 서비스 클래스에서 &lt;code class=&quot;highlighter-rouge&quot;&gt;startForeground&lt;/code&gt;를 5초 이내에 실행하지 않으면 &lt;code class=&quot;highlighter-rouge&quot;&gt;ANR&lt;/code&gt;이 발생할 수 있다.&lt;/p&gt;
-
 </description>
         <pubDate>Sun, 09 Jun 2019 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/2019/06/09/android-service/</link>

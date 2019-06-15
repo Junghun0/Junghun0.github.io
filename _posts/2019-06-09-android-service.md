@@ -294,12 +294,3 @@ startForeground(1, builder.build());//id를 0으로 하면안된다.
 ~~~
 
 `MainActivity`에서 `startForegroundService(intent);`를 실행한 후에 서비스 클래스에서 `startForeground`를 5초 이내에 실행하지 않으면 `ANR`이 발생할 수 있다.
-
-
-
-
-
-
-
-
-
