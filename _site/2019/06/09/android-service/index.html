@@ -731,7 +731,240 @@
     <span class="o">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 
-<p><code class="highlighter-rouge">MainActivity</code>에서 <code class="highlighter-rouge">startForegroundService(intent);</code>를 실행한 후에 서비스 클래스에서 <code class="highlighter-rouge">startForeground</code>를 5초 이내에 실행하지 않으면 <code class="highlighter-rouge">ANR</code>이 발생할 수 있다.</p>
+<p><code class="highlighter-rouge">MainActivity</code>에서 <code class="highlighter-rouge">startForegroundService(intent);</code>를 실행한 후에 서비스 클래스에서 <code class="highlighter-rouge">startForeground</code>를 5초 이내에 실행하지 않으면 <code class="highlighter-rouge">ANR</code>이 발생할 수 있다.<br /></p>
+
+<h3 id="bind-service">Bind Service</h3>
+<p><code class="highlighter-rouge">BindService</code>는 <code class="highlighter-rouge">startService()</code>를 통해 시작되는 <code class="highlighter-rouge">UnBound Service</code>와는 다르게 액티비티 및 프래그먼트와 데이터를 주고 받을 수 있으며 프로세스간의 통신에도 사용된다.<br />
+서비스를 실행시켜두고 필요할 때마다 서비스의 메소드에 접근하여 통신을 할 수 있는 구조이다.</p>
+
+<p><strong>서비스 클래스</strong></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+</pre></td><td class="rouge-code"><pre>    <span class="kd">private</span> <span class="n">IBinder</span> <span class="n">mBinder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyBinder</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBinder</span> <span class="kd">extends</span> <span class="n">Binder</span><span class="o">{</span>
+        <span class="kd">public</span> <span class="n">MyService_Sample3</span> <span class="nf">getService</span><span class="o">(){</span>
+            <span class="k">return</span> <span class="n">MyService_Sample3</span><span class="o">.</span><span class="na">this</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="nf">MyService_Sample3</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">onStartCommand</span><span class="o">(</span><span class="n">Intent</span> <span class="n">intent</span><span class="o">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="o">,</span> <span class="kt">int</span> <span class="n">startId</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="s">"startForeground"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">intent</span><span class="o">.</span><span class="na">getAction</span><span class="o">())){</span>
+            <span class="n">startForegroundService</span><span class="o">();</span>
+        <span class="o">}</span><span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">mThread</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+            <span class="n">mThread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span><span class="s">"My Thread"</span><span class="o">){</span>
+                <span class="nd">@Override</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                        <span class="k">try</span> <span class="o">{</span>
+                            <span class="n">mCount</span><span class="o">++;</span>
+                            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+                        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">break</span><span class="o">;</span>
+                        <span class="o">}</span>
+                        <span class="n">Log</span><span class="o">.</span><span class="na">e</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span><span class="s">"서비스 동작 중 "</span><span class="o">+</span><span class="n">mCount</span><span class="o">);</span>
+                    <span class="o">}</span>
+                    <span class="kd">super</span><span class="o">.</span><span class="na">run</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">};</span>
+            <span class="n">mThread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">START_STICKY</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onDestroy</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onDestroy</span><span class="o">();</span>
+        <span class="n">Log</span><span class="o">.</span><span class="na">e</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span><span class="s">"onDestroy!"</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mThread</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+            <span class="n">mThread</span><span class="o">.</span><span class="na">interrupt</span><span class="o">();</span>
+            <span class="n">mThread</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="n">mCount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">IBinder</span> <span class="nf">onBind</span><span class="o">(</span><span class="n">Intent</span> <span class="n">intent</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">mBinder</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getCount</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="n">mCount</span><span class="o">;</span>
+    <span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><strong>MainActivity</strong></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Sample3Activity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="o">{</span>
+    <span class="c1">//액티비티에서 바인드할 서비스의 레퍼런스를 저장할 변수</span>
+    <span class="kd">private</span> <span class="n">MyService_Sample3</span> <span class="n">mService</span><span class="o">;</span>
+    <span class="c1">//bound 상태를 저장할 변수</span>
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">mBound</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_sample3</span><span class="o">);</span>
+
+        <span class="n">Intent</span> <span class="n">intent</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">MyService_Sample3</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+
+        <span class="n">Button</span> <span class="n">startForegroundService</span> <span class="o">=</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">start_foreground</span><span class="o">);</span>
+        <span class="n">startForegroundService</span><span class="o">.</span><span class="na">setOnClickListener</span><span class="o">(</span><span class="n">v</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="n">intent</span><span class="o">.</span><span class="na">setAction</span><span class="o">(</span><span class="s">"startForeground"</span><span class="o">);</span>
+            <span class="c1">//오레오 이상부터 동작하는 코드</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">Build</span><span class="o">.</span><span class="na">VERSION</span><span class="o">.</span><span class="na">SDK_INT</span> <span class="o">&gt;=</span> <span class="n">Build</span><span class="o">.</span><span class="na">VERSION_CODES</span><span class="o">.</span><span class="na">O</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">startForegroundService</span><span class="o">(</span><span class="n">intent</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">startService</span><span class="o">(</span><span class="n">intent</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onStart</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onStart</span><span class="o">();</span>
+        <span class="n">Intent</span> <span class="n">intent</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">MyService_Sample3</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">bindService</span><span class="o">(</span><span class="n">intent</span><span class="o">,</span> <span class="n">mConnection</span><span class="o">,</span> <span class="n">BIND_AUTO_CREATE</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onStop</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onStop</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mBound</span><span class="o">){</span>
+            <span class="n">unbindService</span><span class="o">(</span><span class="n">mConnection</span><span class="o">);</span>
+            <span class="n">mBound</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="n">ServiceConnection</span> <span class="n">mConnection</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ServiceConnection</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onServiceConnected</span><span class="o">(</span><span class="n">ComponentName</span> <span class="n">name</span><span class="o">,</span> <span class="n">IBinder</span> <span class="n">service</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">MyService_Sample3</span><span class="o">.</span><span class="na">MyBinder</span> <span class="n">binder</span> <span class="o">=</span> <span class="o">(</span><span class="n">MyService_Sample3</span><span class="o">.</span><span class="na">MyBinder</span><span class="o">)</span> <span class="n">service</span><span class="o">;</span>
+            <span class="n">mService</span> <span class="o">=</span> <span class="n">binder</span><span class="o">.</span><span class="na">getService</span><span class="o">();</span>
+            <span class="n">mBound</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onServiceDisconnected</span><span class="o">(</span><span class="n">ComponentName</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 예기치 않은 종료</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><code class="highlighter-rouge">mSerivce</code> 를 사용해 <code class="highlighter-rouge">ServiceClass</code> 에 있는 <code class="highlighter-rouge">getCount()</code>를 통해 <code class="highlighter-rouge">onStartCommand()</code>에서 동작하고 있는 <code class="highlighter-rouge">mCount 값을 MainActivity에서 사용</code>할 수 있다.</p>
+
 
 
                 <hr style="visibility: hidden;">

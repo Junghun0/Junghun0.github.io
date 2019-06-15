@@ -293,4 +293,131 @@ startForeground(1, builder.build());//id를 0으로 하면안된다.
     }
 ~~~
 
-`MainActivity`에서 `startForegroundService(intent);`를 실행한 후에 서비스 클래스에서 `startForeground`를 5초 이내에 실행하지 않으면 `ANR`이 발생할 수 있다.
+`MainActivity`에서 `startForegroundService(intent);`를 실행한 후에 서비스 클래스에서 `startForeground`를 5초 이내에 실행하지 않으면 `ANR`이 발생할 수 있다.<br />
+
+### Bind Service
+`BindService`는 `startService()`를 통해 시작되는 `UnBound Service`와는 다르게 액티비티 및 프래그먼트와 데이터를 주고 받을 수 있으며 프로세스간의 통신에도 사용된다.<br />
+서비스를 실행시켜두고 필요할 때마다 서비스의 메소드에 접근하여 통신을 할 수 있는 구조이다.
+
+**서비스 클래스**
+
+~~~java
+    private IBinder mBinder = new MyBinder();
+    public class MyBinder extends Binder{
+        public MyService_Sample3 getService(){
+            return MyService_Sample3.this;
+        }
+    }
+    public MyService_Sample3() {
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if ("startForeground".equals(intent.getAction())){
+            startForegroundService();
+        }else if (mThread == null){
+            mThread = new Thread("My Thread"){
+                @Override
+                public void run() {
+                    for (int i = 0; i < 5; i++) {
+                        try {
+                            mCount++;
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            break;
+                        }
+                        Log.e(TAG,"서비스 동작 중 "+mCount);
+                    }
+                    super.run();
+                }
+            };
+            mThread.start();
+        }
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG,"onDestroy!");
+        if (mThread != null){
+            mThread.interrupt();
+            mThread = null;
+            mCount = 0;
+        }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
+
+    public int getCount(){
+        return mCount;
+    }
+~~~
+**MainActivity**
+
+~~~java
+public class Sample3Activity extends AppCompatActivity {
+    //액티비티에서 바인드할 서비스의 레퍼런스를 저장할 변수
+    private MyService_Sample3 mService;
+    //bound 상태를 저장할 변수
+    private boolean mBound;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sample3);
+
+        Intent intent = new Intent(this, MyService_Sample3.class);
+
+
+        Button startForegroundService = findViewById(R.id.start_foreground);
+        startForegroundService.setOnClickListener(v -> {
+            intent.setAction("startForeground");
+            //오레오 이상부터 동작하는 코드
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent);
+            } else {
+                startService(intent);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, MyService_Sample3.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mBound){
+            unbindService(mConnection);
+            mBound = false;
+        }
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MyService_Sample3.MyBinder binder = (MyService_Sample3.MyBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            // 예기치 않은 종료
+        }
+    };
+}
+~~~
+`mSerivce` 를 사용해 `ServiceClass` 에 있는 `getCount()`를 통해 `onStartCommand()`에서 동작하고 있는 `mCount 값을 MainActivity에서 사용`할 수 있다.
+
+
+
