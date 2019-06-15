@@ -183,7 +183,6 @@ public class MyIntentService extends IntentService {
         super("MyIntentService");
     }
 
-
     @Override
     protected void onHandleIntent(Intent intent) {
         for (int i = 0; i < 5; i++) {
@@ -197,6 +196,105 @@ public class MyIntentService extends IntentService {
     }
 }
 ~~~
+
+### Foreground Service
+
+항상 서비스가 전면에 올라와있다. 서비스가 백그라운드에서 계속 동작할 때 서비스가 다른 앱에서 메모리를 더필요로 하거나 하는 상황이 오면 안드로이드 시스템에 의해 종료가 될 가능성이 있다.<br /> 지속적으로 강제종료되지 않는 안전한 서비스를 사용하기 위해서는 포그라운드 서비스를 사용해야한다. 하지만 `Foreground Service`를 남용하게 되면 안되기 때문에 몇가지 제약을 지켜야한다.<br /> `Notification` 함께 제공해야한다.(사용자가 이 것은 포그라운드 서비스로 동작하고 있음을 인지할 수 있도록) 알림 id 를 0이 아닌값을 주어야한다. startForeground 메서드를 서비스 내부에서 별도로 실행해서 foreground로 변경시켜주어야 한다.
+
+#### startForegroundService 사용해보기
+**서비스 클래스**
+~~~java
+private static final String TAG = "MyService_Sample3";
+private Thread mThread;
+private int mCount = 0;
+public MyService_Sample3() {
+}
+
+@Override
+public int onStartCommand(Intent intent, int flags, int startId) {
+if ("startForeground".equals(intent.getAction())){
+    startForegroundService();
+}else if (mThread == null){
+    mThread = new Thread("My Thread"){
+        @Override
+        public void run() {
+            for (int i = 0; i < 5; i++) {
+                try {
+                    mCount++;
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    break;
+                }
+                Log.e(TAG,"서비스 동작 중 "+mCount);
+            }
+            super.run();
+        }
+    };
+    mThread.start();
+}
+return START_STICKY;
+}
+
+@Override
+public void onDestroy() {
+super.onDestroy();
+Log.e(TAG,"onDestroy!");
+if (mThread != null){
+    mThread.interrupt();
+    mThread = null;
+    mCount = 0;
+}
+}
+
+@Override
+public IBinder onBind(Intent intent) {
+throw new UnsupportedOperationException("Not yet implemented");
+}
+
+private void startForegroundService(){
+NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default");//오레오 부터 channelId가 반드시 필요하다.
+builder.setSmallIcon(R.mipmap.ic_launcher);
+builder.setContentTitle("포그라운드 서비스");
+builder.setContentText("포그라운 서비스 실행중");
+
+Intent notificationIntent = new Intent(this, MainActivity.class);
+PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0 );
+builder.setContentIntent(pendingIntent);
+
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//오레오 이상부터 이 코드가 동작한다.
+    NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    manager.createNotificationChannel(new NotificationChannel("default", "기본 채널", NotificationManager.IMPORTANCE_DEFAULT));
+}
+startForeground(1, builder.build());//id를 0으로 하면안된다.
+}
+~~~
+
+**MainActivity**
+
+~~~java
+@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sample3);
+
+        Intent intent = new Intent(this, MyService_Sample3.class);
+
+
+        Button startForegroundService = findViewById(R.id.start_foreground);
+        startForegroundService.setOnClickListener(v -> {
+            intent.setAction("startForeground");
+            //오레오 이상부터 동작하는 코드
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent);
+            } else {
+                startService(intent);
+            }
+        });
+    }
+~~~
+
+`MainActivity`에서 `startForegroundService(intent);`를 실행한 후에 서비스 클래스에서 `startForeground`를 5초 이내에 실행하지 않으면 `ANR`이 발생할 수 있다.
+
 
 
 
