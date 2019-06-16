@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "[Android] Serializable & Parcel"
-subtitle: 'Android Serializable & Parcel Sample'
+title: "[Android] Serializable & Parcelable"
+subtitle: 'Android Serializable & Parcelable Sample'
 author: "JungHoon-Park"
 header-style: text
 header-mask: 0.3
@@ -13,7 +13,7 @@ tags:
   - Study
 ---
 
-Android Serializable & Parcel 사용해보기
+Android Serializable & Parcelable 사용해보기
 
 ---
 
