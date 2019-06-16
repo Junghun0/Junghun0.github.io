@@ -5,8 +5,8 @@
     <description>Mobile Lover</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 16 Jun 2019 11:44:00 +0900</pubDate>
-    <lastBuildDate>Sun, 16 Jun 2019 11:44:00 +0900</lastBuildDate>
+    <pubDate>Sun, 16 Jun 2019 11:46:26 +0900</pubDate>
+    <lastBuildDate>Sun, 16 Jun 2019 11:46:26 +0900</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -16,7 +16,7 @@
 &lt;hr /&gt;
 
 &lt;h1 id=&quot;직렬화란&quot;&gt;직렬화란?&lt;/h1&gt;
-&lt;p&gt;직렬화의 개념은 간단하다. 객체는 메모리에 존재하는 것이다. 이렇게 메모리에 존재하는 것을 파일 혹은 네트워크를 통해 저장 및 전송할 수 있을까. 객체 자체는 메서드와 변수들이 존재하고 함수와 변수는 메모리의 다른 영역에 저장도니다. 이것을 그대로 파일이나 네트워크 등으로 전송한다는 것은 쉽지않다. 직렬화는 메서드는 신경쓰지 않고 단지 변수를 직렬화 시킨다. 함수를 포함한 클래스는 데이터가 아니다. 단지 코드일 뿐이다. 하지만 변수는 데이터코드이므로 코드를 가질 수 없다. 즉, 직렬화 개념은 변수 데이터를 순차적으로 byte코드로 나열하는 것이다.&lt;/p&gt;
+&lt;p&gt;직렬화의 개념은 간단하다. 객체는 메모리에 존재하는 것이다. 이렇게 메모리에 존재하는 것을 파일 혹은 네트워크를 통해 저장 및 전송할 수 있을까. 객체 자체는 메서드와 변수들이 존재하고 함수와 변수는 메모리의 다른 영역에 저장된다. 이것을 그대로 파일이나 네트워크 등으로 전송한다는 것은 쉽지않다. 직렬화는 메서드는 신경쓰지 않고 단지 변수를 직렬화 시킨다. 함수를 포함한 클래스는 데이터가 아니다. 단지 코드일 뿐이다. 하지만 변수는 데이터코드이므로 코드를 가질 수 없다. 즉, 직렬화 개념은 &lt;code class=&quot;highlighter-rouge&quot;&gt;변수 데이터를 순차적으로 byte코드로 나열&lt;/code&gt;하는 것이다.&lt;/p&gt;
 
 &lt;h3 id=&quot;안드로이드에서-직렬화-사용해보기&quot;&gt;안드로이드에서 직렬화 사용해보기&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;전달할 데이터 준비&lt;/strong&gt;&lt;br /&gt;
