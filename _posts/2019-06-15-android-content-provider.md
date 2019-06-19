@@ -76,6 +76,7 @@ public class MyCursorAdapter extends CursorAdapter {
     }
 }
 ~~~
+이후에 권한 체크하는 부분이 필요하다. 추후에 추가예정
 
 
 
