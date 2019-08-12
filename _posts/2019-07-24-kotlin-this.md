@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "[Kotlin] Kotlin this 사용"
-subtitle: 'Kotlin this 사용'
+subtitle: 'Kotlin this'
 author: "JungHoon-Park"
 header-style: text
 header-mask: 0.3
