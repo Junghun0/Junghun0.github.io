@@ -191,6 +191,147 @@ while (i < items.size) {
     i++
 }
 ```
+- - -
+### 11. 접근 제한자
+자바에서 클래스 및 메서드, 필드의 가시성(visibility)을 제한하기 위해 접근 제한자를 사용하는 것처럼, 코틀린에서도 접근 제한자를 사용하여 클래스와 함수, 프로퍼티의 가시성을 제어한다.
+코틀린에서 접근 제한자를 사용하는 방법은 자바와 매우 유사하나, 일부 차이가 있다.
+#### java
+```java
+public class Foo {
+    public int a = 1;
+    protected int b = 2;
+    private int c = 3;
+
+    //패키지 단위 제한자(별도 표기 없음)
+    int d = 4;
+}
+```
+#### kotlin
+```kotlin
+class Foo {
+    //접근 제한자가 없으면 public 으로 간주
+    val a = 1
+    protected val b = 2
+    private val c = 3
+
+    //internal을 대신 사용한다.
+    internal val d = 4
+}
+```
+public 제한자는 코틀린에서도 동일하게 사용할 수 있으나, 제한자가 없으면 public 으로 간주하므로 이를 생략하는 것을 권장한다.
+자바에서는 접근 제한자를 생략하면 이에 대한 접근 범위를 패키지 단위로 제한한다. 즉, 동일한 패키지 내에 있는 클래스에서만 접근이 가능하다.
+하지만 해당 클래스가 포함된 모듈이 아닐지라도 패키지를 동일하게 맞추면 패키지 단위로 제한된 클래스, 필드 및 메서드에 접근할 수 있다. 이러한 단점을 보완하기 위해 코틀린에서는 `internal` 접근 제한자를 제공한다.<br/>
+단순히 같은 패키지에 있으면 접근이 가능했던 자바의 패키지 단위 제한과 달리, `internal` 접근 제한자는 동일한 모듈 내에 있는 클래스들로의 접근을 제한한다. 따라서 외부 모듈에서는 이 접근 제한자로 선언된 요소에 접근할 수 없다.<br/>
+__모듈의 범위__
+- IntelliJ IDEA 모듈
+- Maven/Gradle 프로젝트
+- 하나의 Ant 태스크 내에서 함께 컴파일되는 파일들
+- - -
+### 12. 생성자
+#### java
+```java
+public class Foo {
+    public Foo(){
+        //생성자에서 수행할 작업들
+        ...
+    }
+}
+```
+#### kotlin
+```kotlin
+class Foo {
+    init {
+        //생성자에서 수행할 작업들
+        ...
+    }
+}
+```
+코틀린에서는 init 블록을 사용하여 기본 생성자를 대체한다. 생성자에 인자가 필요한 경우는 다음과 같이 인자를 받을 수 있다. 코틀린에서는 이를 `주 생성자(primary constructor)`라 부르며, 여기에서 받은 인자는 init 블록에서도 사용할 수 있다.
+#### java
+```java
+public class Foo {
+    public Foo(int a){
+        //생성자에서 수행할 작업들
+        ...
+    }
+}
+```
+#### kotlin
+```kotlin
+class Foo(a: Int) {
+    init {
+        //생성자에서 수행할 작업들
+        ...
+    }
+}
+```
+코틀린에서도 생성자의 인자를 통해 바로 클래스 내부의 프로퍼티에 값을 할당할 수 있습니다. 이 경우 생성자의 인자를 통해 프로퍼티 선언을 대신하므로 추가로 프로퍼티를 선언하지 않아도 된다.
+다음은 인자로 받은 값을 사용하여 내부의 필드 및 프로퍼티에 값을 할당하는 생성자의 예이다.<br/>
+생성자의 인자에서 프로퍼티 선언이 함께 이루어지고, 값 할당 또한 생성자 호출과 동시에 수행되므로 자바에 비해 비약적으로 코드가 짧다.
+#### java
+```java
+public class Foo {
+    int a;
+    char b;
+    public Foo(int a, char b){
+        this.a = a;
+        this.b = b;
+    }
+}
+```
+#### kotlin
+```kotlin
+class Foo(val a: Int, var b: Char)
+```
+주 생성자 외에 다른 형태의 생성자가 필요한 경우 constructor 키워드를 사용하여 추가 생성자를 선언할 수 있다.
+#### java
+```java
+public class Foo {
+    int a;
+    char b;
+    public Foo(int a, char b){
+        this.a = a;
+        this.b = b;
+    }
+    //a의 값만 인자로 받는 추가 생성자
+    public Foo(int a){
+        this(a, 0);
+    }
+    //두 인자의 값을 모두 0으로 지정하는 생성자
+    public Foo(){
+        this(0, 0);
+    }
+}
+```
+#### kotlin
+```kotlin
+class Foo(val a: Int, var b: Char){
+    //a의 값만 인자로 받는 추가 생성자
+    //기본 생성자를 반드시 호출해야 한다.
+    constructor(a: Int) : this(a, 0)
+    //두 인자의 값을 모두 0으로 지정하는 생성자
+    constructor(): this(0, 0)
+}
+```
+주 생성자 개념이 없는 자바에서는, 새로운 생성자를 정의할 때 다른 생성자를 필요에 따라 선택적으로 호출할 수 있다. 하지만 코틀린에서는 추가 생성자를 정의 하는 경우 주 생성자를 반드시 호출해야 한다. 또한, 추가 생성자에서는 인자와 프로퍼티를 함께 선언할 수 없다. 따라서 프로퍼티 선언이 필요한 인자인 경우 반드시 주 생성자에서 이를 처리해야 한다.<br/>
+생성자의 가시성을 변경하려면 constructor 키워드 앞에 접근 제한자를 추가하면 된다. 주 생성자는 생략하였던 constructor 키워드를 추가하고 접근 제한자를 추가해야 한다.
+```kotlin
+//주 생성자의 가시성을 internal로 지정, constructor 키워드 표기 필요
+class Foo internal constructor(val a: Int, var b: Char) {
+    //추가 생성자의 가시성 지정
+    private constructor(a: Int) : this(a, 0)
+
+    //접근 제한자를 지정하지 않았으므로 public
+    constructor(): this(0, 0)
+}
+```
+
+
+
+
+
+
+
 
 
 
