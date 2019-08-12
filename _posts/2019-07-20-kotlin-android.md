@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[Kotlin] Kotlin & Java"
+title: "[Kotlin] Kotlin & Java 비교 및 기본문법정리"
 subtitle: 'Kotlin & Java 비교 및 기본문법'
 author: "JungHoon-Park"
 header-style: text
