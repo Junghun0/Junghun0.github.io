@@ -574,72 +574,72 @@
   <li>IntelliJ IDEA 모듈</li>
   <li>Maven/Gradle 프로젝트</li>
   <li>하나의 Ant 태스크 내에서 함께 컴파일되는 파일들</li>
-  <li>
-    <ul>
-      <li>-
-        <h3 id="12-생성자">12. 생성자</h3>
-        <h4 id="java-3">java</h4>
-        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</ul>
+
+<hr />
+<h3 id="12-생성자">12. 생성자</h3>
+<h4 id="java-3">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
 6
 </pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Foo</span> <span class="o">{</span>
-<span class="kd">public</span> <span class="nf">Foo</span><span class="o">(){</span>
-    <span class="c1">//생성자에서 수행할 작업들</span>
-    <span class="o">...</span>
+    <span class="kd">public</span> <span class="nf">Foo</span><span class="o">(){</span>
+        <span class="c1">//생성자에서 수행할 작업들</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
 <span class="o">}</span>
-<span class="o">}</span>
-</pre></td></tr></tbody></table></code></pre></div>        </div>
-        <h4 id="kotlin-3">kotlin</h4>
-        <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h4 id="kotlin-3">kotlin</h4>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
 6
 </pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="nc">Foo</span> <span class="p">{</span>
-<span class="n">init</span> <span class="p">{</span>
-    <span class="c1">//생성자에서 수행할 작업들</span>
-    <span class="o">..</span><span class="p">.</span>
+    <span class="n">init</span> <span class="p">{</span>
+        <span class="c1">//생성자에서 수행할 작업들</span>
+        <span class="o">..</span><span class="p">.</span>
+    <span class="p">}</span>
 <span class="p">}</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div>        </div>
-        <p>코틀린에서는 init 블록을 사용하여 기본 생성자를 대체한다. 생성자에 인자가 필요한 경우는 다음과 같이 인자를 받을 수 있다. 코틀린에서는 이를 <code class="highlighter-rouge">주 생성자(primary constructor)</code>라 부르며, 여기에서 받은 인자는 init 블록에서도 사용할 수 있다.</p>
-        <h4 id="java-4">java</h4>
-        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>코틀린에서는 init 블록을 사용하여 기본 생성자를 대체한다. 생성자에 인자가 필요한 경우는 다음과 같이 인자를 받을 수 있다. 코틀린에서는 이를 <code class="highlighter-rouge">주 생성자(primary constructor)</code>라 부르며, 여기에서 받은 인자는 init 블록에서도 사용할 수 있다.</p>
+<h4 id="java-4">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
 6
 </pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Foo</span> <span class="o">{</span>
-<span class="kd">public</span> <span class="nf">Foo</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">){</span>
-    <span class="c1">//생성자에서 수행할 작업들</span>
-    <span class="o">...</span>
+    <span class="kd">public</span> <span class="nf">Foo</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">){</span>
+        <span class="c1">//생성자에서 수행할 작업들</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
 <span class="o">}</span>
-<span class="o">}</span>
-</pre></td></tr></tbody></table></code></pre></div>        </div>
-        <h4 id="kotlin-4">kotlin</h4>
-        <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h4 id="kotlin-4">kotlin</h4>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
 6
 </pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="nv">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
-<span class="n">init</span> <span class="p">{</span>
-    <span class="c1">//생성자에서 수행할 작업들</span>
-    <span class="o">..</span><span class="p">.</span>
+    <span class="n">init</span> <span class="p">{</span>
+        <span class="c1">//생성자에서 수행할 작업들</span>
+        <span class="o">..</span><span class="p">.</span>
+    <span class="p">}</span>
 <span class="p">}</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div>        </div>
-        <p>코틀린에서도 생성자의 인자를 통해 바로 클래스 내부의 프로퍼티에 값을 할당할 수 있습니다. 이 경우 생성자의 인자를 통해 프로퍼티 선언을 대신하므로 추가로 프로퍼티를 선언하지 않아도 된다.
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>코틀린에서도 생성자의 인자를 통해 바로 클래스 내부의 프로퍼티에 값을 할당할 수 있습니다. 이 경우 생성자의 인자를 통해 프로퍼티 선언을 대신하므로 추가로 프로퍼티를 선언하지 않아도 된다.
 다음은 인자로 받은 값을 사용하여 내부의 필드 및 프로퍼티에 값을 할당하는 생성자의 예이다.<br />
 생성자의 인자에서 프로퍼티 선언이 함께 이루어지고, 값 할당 또한 생성자 호출과 동시에 수행되므로 자바에 비해 비약적으로 코드가 짧다.</p>
-        <h4 id="java-5">java</h4>
-        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<h4 id="java-5">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -648,21 +648,21 @@
 7
 8
 </pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Foo</span> <span class="o">{</span>
-<span class="kt">int</span> <span class="n">a</span><span class="o">;</span>
-<span class="kt">char</span> <span class="n">b</span><span class="o">;</span>
-<span class="kd">public</span> <span class="nf">Foo</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">char</span> <span class="n">b</span><span class="o">){</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">a</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">b</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="o">;</span>
+    <span class="kt">char</span> <span class="n">b</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Foo</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">char</span> <span class="n">b</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">a</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">b</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
+    <span class="o">}</span>
 <span class="o">}</span>
-<span class="o">}</span>
-</pre></td></tr></tbody></table></code></pre></div>        </div>
-        <h4 id="kotlin-5">kotlin</h4>
-        <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h4 id="kotlin-5">kotlin</h4>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="n">Int</span><span class="p">,</span> <span class="kd">var</span> <span class="py">b</span><span class="p">:</span> <span class="n">Char</span><span class="p">)</span>
-</pre></td></tr></tbody></table></code></pre></div>        </div>
-        <p>주 생성자 외에 다른 형태의 생성자가 필요한 경우 constructor 키워드를 사용하여 추가 생성자를 선언할 수 있다.</p>
-        <h4 id="java-6">java</h4>
-        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>주 생성자 외에 다른 형태의 생성자가 필요한 경우 constructor 키워드를 사용하여 추가 생성자를 선언할 수 있다.</p>
+<h4 id="java-6">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -679,24 +679,24 @@
 15
 16
 </pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Foo</span> <span class="o">{</span>
-<span class="kt">int</span> <span class="n">a</span><span class="o">;</span>
-<span class="kt">char</span> <span class="n">b</span><span class="o">;</span>
-<span class="kd">public</span> <span class="nf">Foo</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">char</span> <span class="n">b</span><span class="o">){</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">a</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">b</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="o">;</span>
+    <span class="kt">char</span> <span class="n">b</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Foo</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">char</span> <span class="n">b</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">a</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">b</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="c1">//a의 값만 인자로 받는 추가 생성자</span>
+    <span class="kd">public</span> <span class="nf">Foo</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="c1">//두 인자의 값을 모두 0으로 지정하는 생성자</span>
+    <span class="kd">public</span> <span class="nf">Foo</span><span class="o">(){</span>
+        <span class="k">this</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+    <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">//a의 값만 인자로 받는 추가 생성자</span>
-<span class="kd">public</span> <span class="nf">Foo</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">){</span>
-    <span class="k">this</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
-<span class="o">}</span>
-<span class="c1">//두 인자의 값을 모두 0으로 지정하는 생성자</span>
-<span class="kd">public</span> <span class="nf">Foo</span><span class="o">(){</span>
-    <span class="k">this</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
-<span class="o">}</span>
-<span class="o">}</span>
-</pre></td></tr></tbody></table></code></pre></div>        </div>
-        <h4 id="kotlin-6">kotlin</h4>
-        <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h4 id="kotlin-6">kotlin</h4>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -704,16 +704,16 @@
 6
 7
 </pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="n">Int</span><span class="p">,</span> <span class="kd">var</span> <span class="py">b</span><span class="p">:</span> <span class="n">Char</span><span class="p">){</span>
-<span class="c1">//a의 값만 인자로 받는 추가 생성자</span>
-<span class="c1">//기본 생성자를 반드시 호출해야 한다.</span>
-<span class="k">constructor</span><span class="p">(</span><span class="nv">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">:</span> <span class="nc">this</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
-<span class="c1">//두 인자의 값을 모두 0으로 지정하는 생성자</span>
-<span class="k">constructor</span><span class="p">():</span> <span class="nc">this</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="c1">//a의 값만 인자로 받는 추가 생성자</span>
+    <span class="c1">//기본 생성자를 반드시 호출해야 한다.</span>
+    <span class="k">constructor</span><span class="p">(</span><span class="nv">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">:</span> <span class="nc">this</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="c1">//두 인자의 값을 모두 0으로 지정하는 생성자</span>
+    <span class="k">constructor</span><span class="p">():</span> <span class="nc">this</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
 <span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div>        </div>
-        <p>주 생성자 개념이 없는 자바에서는, 새로운 생성자를 정의할 때 다른 생성자를 필요에 따라 선택적으로 호출할 수 있다. 하지만 코틀린에서는 추가 생성자를 정의 하는 경우 주 생성자를 반드시 호출해야 한다. 또한, 추가 생성자에서는 인자와 프로퍼티를 함께 선언할 수 없다. 따라서 프로퍼티 선언이 필요한 인자인 경우 반드시 주 생성자에서 이를 처리해야 한다.<br />
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>주 생성자 개념이 없는 자바에서는, 새로운 생성자를 정의할 때 다른 생성자를 필요에 따라 선택적으로 호출할 수 있다. 하지만 코틀린에서는 추가 생성자를 정의 하는 경우 주 생성자를 반드시 호출해야 한다. 또한, 추가 생성자에서는 인자와 프로퍼티를 함께 선언할 수 없다. 따라서 프로퍼티 선언이 필요한 인자인 경우 반드시 주 생성자에서 이를 처리해야 한다.<br />
 생성자의 가시성을 변경하려면 constructor 키워드 앞에 접근 제한자를 추가하면 된다. 주 생성자는 생략하였던 constructor 키워드를 추가하고 접근 제한자를 추가해야 한다.</p>
-        <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -723,17 +723,13 @@
 8
 </pre></td><td class="rouge-code"><pre><span class="c1">//주 생성자의 가시성을 internal로 지정, constructor 키워드 표기 필요</span>
 <span class="kd">class</span> <span class="nc">Foo</span> <span class="k">internal</span> <span class="k">constructor</span><span class="p">(</span><span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="n">Int</span><span class="p">,</span> <span class="kd">var</span> <span class="py">b</span><span class="p">:</span> <span class="n">Char</span><span class="p">)</span> <span class="p">{</span>
-<span class="c1">//추가 생성자의 가시성 지정</span>
-<span class="k">private</span> <span class="k">constructor</span><span class="p">(</span><span class="nv">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">:</span> <span class="nc">this</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="c1">//추가 생성자의 가시성 지정</span>
+    <span class="k">private</span> <span class="k">constructor</span><span class="p">(</span><span class="nv">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">:</span> <span class="nc">this</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
 
-<span class="c1">//접근 제한자를 지정하지 않았으므로 public</span>
-<span class="k">constructor</span><span class="p">():</span> <span class="nc">this</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="c1">//접근 제한자를 지정하지 않았으므로 public</span>
+    <span class="k">constructor</span><span class="p">():</span> <span class="nc">this</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
 <span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div>        </div>
-      </li>
-    </ul>
-  </li>
-</ul>
+</pre></td></tr></tbody></table></code></pre></div></div>
 
 
 
@@ -747,6 +743,13 @@
                         </a>
                     </li>
                     
+                    
+                    <li class="next">
+                        <a href="/2019/07/22/kotlin-interface/" data-toggle="tooltip" data-placement="top" title="[Kotlin] Kotlin 상속 및 인터페이스">
+                        Next<br>
+                        <span>[Kotlin] Kotlin 상속 및 인터페이스</span>
+                        </a>
+                    </li>
                     
                 </ul>
                 <hr style="visibility: hidden;">
@@ -801,7 +804,7 @@
         </a>
         
         
-                <a data-sort="0014" 
+                <a data-sort="0015" 
                     href="/archive/?tag=Swift4"
                     title="Swift4"
                     rel="7">Swift4</a>
@@ -809,9 +812,9 @@
                 <a data-sort="0000" 
                     href="/archive/?tag=Study"
                     title="Study"
-                    rel="21">Study</a>
+                    rel="22">Study</a>
         
-                <a data-sort="0003" 
+                <a data-sort="0004" 
                     href="/archive/?tag=Mobile"
                     title="Mobile"
                     rel="18">Mobile</a>
@@ -819,17 +822,22 @@
                 <a data-sort="0008" 
                     href="/archive/?tag=Android"
                     title="Android"
-                    rel="13">Android</a>
+                    rel="14">Android</a>
         
-                <a data-sort="0014" 
+                <a data-sort="0015" 
                     href="/archive/?tag=iOS"
                     title="iOS"
                     rel="7">iOS</a>
         
-                <a data-sort="0019" 
+                <a data-sort="0020" 
                     href="/archive/?tag=Architecture"
                     title="Architecture"
-                    rel="2">Architecture
+                    rel="2">Architecture</a>
+        
+                <a data-sort="0020" 
+                    href="/archive/?tag=Kotlin"
+                    title="Kotlin"
+                    rel="2">Kotlin
     </div>
 </section>
 
