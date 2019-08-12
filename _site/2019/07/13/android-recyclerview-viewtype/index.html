@@ -11,14 +11,14 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="[Android] Content Provider 사용해보기 - Junghoon's Blog">
+    <meta property="og:title" content="[Android] RecyclerView에 아이템이 두가지 타입 - Junghoon's Blog">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="Android Content Provider 사용해보기
+    <meta property="og:description" content="Android RecyclerView ViewType
 
 ">
     
-    <meta property="article:published_time" content="2019-06-15T00:00:00Z">
+    <meta property="article:published_time" content="2019-07-13T00:00:00Z">
     
     
     <meta property="article:author" content="JungHoon-Park">
@@ -26,16 +26,14 @@
     
     <meta property="article:tag" content="Android">
     
-    <meta property="article:tag" content="Mobile">
-    
     <meta property="article:tag" content="Study">
     
     
     <meta property="og:image" content="http://localhost:4000">
-    <meta property="og:url" content="http://localhost:4000/2019/06/15/android-content-provider/">
+    <meta property="og:url" content="http://localhost:4000/2019/07/13/android-recyclerview-viewtype/">
     <meta property="og:site_name" content="Junghoon's Blog">
     
-    <title>[Android] Content Provider 사용해보기 - Junghoon's Blog</title>
+    <title>[Android] RecyclerView에 아이템이 두가지 타입 - Junghoon's Blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -44,7 +42,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2019/06/15/android-content-provider/">
+    <link rel="canonical" href="http://localhost:4000/2019/07/13/android-recyclerview-viewtype/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -227,15 +225,13 @@
                         
                         <a class="tag" href="/archive/?tag=Android" title="Android">Android</a>
                         
-                        <a class="tag" href="/archive/?tag=Mobile" title="Mobile">Mobile</a>
-                        
                         <a class="tag" href="/archive/?tag=Study" title="Study">Study</a>
                         
                     </div>
-                    <h1>[Android] Content Provider 사용해보기</h1>
+                    <h1>[Android] RecyclerView에 아이템이 두가지 타입</h1>
                     
-                    <h2 class="subheading">Android Content Provider Sample</h2>
-                    <span class="meta">Posted by JungHoon-Park on June 15, 2019</span>
+                    <h2 class="subheading">Android RecyclerView ViewType</h2>
+                    <span class="meta">Posted by JungHoon-Park on July 13, 2019</span>
                 </div>
             </div>
         </div>
@@ -261,18 +257,37 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>Android Content Provider 사용해보기</p>
+				<p>Android RecyclerView ViewType</p>
 
 <hr />
 
-<h1 id="content-provider-란">Content Provider 란</h1>
+<h2 id="리사이클러뷰에서-아이템의-타입이-두가지-이상일-때">리사이클러뷰에서 아이템의 타입이 두가지 이상일 때</h2>
+<h3>Item.class 생성</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Item</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">T</span> <span class="n">item</span><span class="o">;</span>
 
-<p>안드로이드는 기본적으로 SQLite를 사용할 수 있도록 다양한 API를 제공해주고 있다. 다시 말해 어플리케이션 내에서 사용하는 데이터를 공유하기 위한 컴포넌트이다. <code class="highlighter-rouge">Content Provider</code>는 여러 앱 간에 데이터를 공유할 필요가 있을 때 사용한다.<br />
-<code class="highlighter-rouge">ContentProvider</code>에 접근하는 것은 <code class="highlighter-rouge">ContentResolver</code>를 통해서만 가능하다. 그리고 <code class="highlighter-rouge">ContentResolver</code>는 <code class="highlighter-rouge">Context</code>의 <code class="highlighter-rouge">getContentResolver()</code> 메서드로 구할 수 있다. <code class="highlighter-rouge">ContentResolver</code>는 추상 클래스이고 실제 구현체는 <code class="highlighter-rouge">ContextImpl</code>의 내부 클래스인 <code class="highlighter-rouge">ApplicationContentResolver</code>이다.<br /><br />
-예제는 에뮬레이터의 이미지를 불러와 GridView에 보여주는 예제이다.<br /></p>
+    <span class="kd">public</span> <span class="nf">Item</span><span class="o">(</span><span class="n">T</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">item</span> <span class="o">=</span> <span class="n">item</span><span class="o">;</span>
+    <span class="o">}</span>
 
-<h3 id="소스코드">소스코드</h3>
-<p><strong>MainActivity</strong></p>
+    <span class="kd">public</span> <span class="n">T</span> <span class="nf">getItem</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">item</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3>RecyclerView Adapter</h3>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -298,94 +313,138 @@
 23
 24
 25
-</pre></td><td class="rouge-code"><pre><span class="nd">@Override</span>
-<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-    <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_sample5</span><span class="o">);</span>
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RecyclerViewAdapter</span> <span class="kd">extends</span> <span class="n">RecyclerView</span><span class="o">.</span><span class="na">Adapter</span><span class="o">&lt;</span><span class="n">RecyclerView</span><span class="o">.</span><span class="na">ViewHolder</span><span class="o">&gt;</span> <span class="o">{</span>
 
-    <span class="n">GridView</span> <span class="n">gridView</span> <span class="o">=</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">photo_list</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">TYPE_PAGER</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">TYPE_NORMAL</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
 
-    <span class="n">Cursor</span> <span class="n">cursor</span> <span class="o">=</span> <span class="n">getContentResolver</span><span class="o">().</span><span class="na">query</span><span class="o">(</span>
-            <span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">Media</span><span class="o">.</span><span class="na">EXTERNAL_CONTENT_URI</span><span class="o">,</span>
-            <span class="kc">null</span><span class="o">,</span>
-            <span class="kc">null</span><span class="o">,</span>
-            <span class="kc">null</span><span class="o">,</span>
-            <span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">ImageColumns</span><span class="o">.</span><span class="na">DATE_TAKEN</span> <span class="o">+</span> <span class="s">"DESC"</span>
-    <span class="o">);</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">FragmentManager</span> <span class="n">mFragmentManager</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">mItems</span><span class="o">;</span>
 
-    <span class="n">MyCursorAdapter</span> <span class="n">adapter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyCursorAdapter</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">cursor</span><span class="o">);</span>
-    <span class="n">gridView</span><span class="o">.</span><span class="na">setAdapter</span><span class="o">(</span><span class="n">adapter</span><span class="o">);</span>
-    
-    <span class="n">gridView</span><span class="o">.</span><span class="na">setOnItemClickListener</span><span class="o">((</span><span class="n">parent</span><span class="o">,</span> <span class="n">view</span><span class="o">,</span> <span class="n">position</span><span class="o">,</span> <span class="n">id</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
-        <span class="n">Cursor</span> <span class="n">cursor1</span> <span class="o">=</span> <span class="o">(</span><span class="n">Cursor</span><span class="o">)</span> <span class="n">parent</span><span class="o">.</span><span class="na">getAdapter</span><span class="o">().</span><span class="na">getItem</span><span class="o">(</span><span class="n">position</span><span class="o">);</span>
-        <span class="n">String</span> <span class="n">uri</span> <span class="o">=</span> <span class="n">cursor1</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">cursor1</span><span class="o">.</span><span class="na">getColumnIndexOrThrow</span><span class="o">(</span><span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">Media</span><span class="o">.</span><span class="na">DATA</span><span class="o">));</span>
-        <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">Sample5Activity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="s">"사진 경로: "</span><span class="o">+</span><span class="n">uri</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
-        
-    <span class="o">});</span>
-<span class="o">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
+    <span class="kd">public</span> <span class="nf">RecyclerViewAdapter</span><span class="o">(</span><span class="n">FragmentManager</span> <span class="n">fm</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Item</span><span class="o">&gt;</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mFragmentManager</span> <span class="o">=</span> <span class="n">fm</span><span class="o">;</span>
+        <span class="n">mItems</span> <span class="o">=</span> <span class="n">items</span><span class="o">;</span>
+    <span class="o">}</span>
 
-<p><strong>CursorAdapter</strong></p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyCursorAdapter</span> <span class="kd">extends</span> <span class="n">CursorAdapter</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="nf">MyCursorAdapter</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">Cursor</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">c</span><span class="o">);</span>
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">PagerViewHolder</span> <span class="kd">extends</span> <span class="n">RecyclerView</span><span class="o">.</span><span class="na">ViewHolder</span> <span class="o">{</span>
+        <span class="n">ViewPager</span> <span class="n">viewPager</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="nf">PagerViewHolder</span><span class="o">(</span><span class="n">View</span> <span class="n">itemView</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">(</span><span class="n">itemView</span><span class="o">);</span>
+            <span class="n">viewPager</span> <span class="o">=</span> <span class="o">(</span><span class="n">ViewPager</span><span class="o">)</span> <span class="n">itemView</span><span class="o">.</span><span class="na">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">view_pager</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ItemViewHolder</span> <span class="kd">extends</span> <span class="n">RecyclerView</span><span class="o">.</span><span class="na">ViewHolder</span> <span class="o">{</span>
+        <span class="n">TextView</span> <span class="n">textView</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="nf">ItemViewHolder</span><span class="o">(</span><span class="n">View</span> <span class="n">itemView</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">(</span><span class="n">itemView</span><span class="o">);</span>
+            <span class="n">textView</span> <span class="o">=</span> <span class="o">(</span><span class="n">TextView</span><span class="o">)</span> <span class="n">itemView</span><span class="o">.</span><span class="na">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">text_view</span><span class="o">);</span>
+        <span class="o">}</span>
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">View</span> <span class="nf">newView</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">Cursor</span> <span class="n">cursor</span><span class="o">,</span> <span class="n">ViewGroup</span> <span class="n">viewGroup</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">LayoutInflater</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">context</span><span class="o">).</span><span class="na">inflate</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">item_photo</span><span class="o">,</span> <span class="n">viewGroup</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getItemViewType</span><span class="o">(</span><span class="kt">int</span> <span class="n">position</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">position</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">TYPE_PAGER</span> <span class="o">:</span> <span class="n">TYPE_NORMAL</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">bindView</span><span class="o">(</span><span class="n">View</span> <span class="n">view</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">Cursor</span> <span class="n">cursor</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">ImageView</span> <span class="n">imageView</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="na">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">photo_image</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="n">RecyclerView</span><span class="o">.</span><span class="na">ViewHolder</span> <span class="nf">onCreateViewHolder</span><span class="o">(</span><span class="n">ViewGroup</span> <span class="n">parent</span><span class="o">,</span> <span class="kt">int</span> <span class="n">viewType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">switch</span> <span class="o">(</span><span class="n">viewType</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">case</span> <span class="nl">TYPE_PAGER:</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="nf">PagerViewHolder</span><span class="o">(</span><span class="n">LayoutInflater</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">parent</span><span class="o">.</span><span class="na">getContext</span><span class="o">()).</span><span class="na">inflate</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">item_pager</span><span class="o">,</span> <span class="n">parent</span><span class="o">,</span> <span class="kc">false</span><span class="o">));</span>
+            <span class="k">case</span> <span class="nl">TYPE_NORMAL:</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="nf">ItemViewHolder</span><span class="o">(</span><span class="n">LayoutInflater</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">parent</span><span class="o">.</span><span class="na">getContext</span><span class="o">()).</span><span class="na">inflate</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">item_recyler</span><span class="o">,</span> <span class="n">parent</span><span class="o">,</span> <span class="kc">false</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
 
-        <span class="cm">/*String uri = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
-        imageView.setImageURI(Uri.parse(uri));*/</span>
-        <span class="n">String</span> <span class="n">uri</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">cursor</span><span class="o">.</span><span class="na">getColumnIndexOrThrow</span><span class="o">(</span><span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">Media</span><span class="o">.</span><span class="na">DATA</span><span class="o">));</span>
-        <span class="n">Glide</span><span class="o">.</span><span class="na">with</span><span class="o">(</span><span class="n">context</span><span class="o">).</span><span class="na">load</span><span class="o">(</span><span class="n">uri</span><span class="o">).</span><span class="na">into</span><span class="o">(</span><span class="n">imageView</span><span class="o">);</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onBindViewHolder</span><span class="o">(</span><span class="n">RecyclerView</span><span class="o">.</span><span class="na">ViewHolder</span> <span class="n">holder</span><span class="o">,</span> <span class="kt">int</span> <span class="n">position</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">switch</span> <span class="o">(</span><span class="n">holder</span><span class="o">.</span><span class="na">getItemViewType</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">case</span> <span class="nl">TYPE_PAGER:</span>
+                <span class="n">List</span><span class="o">&lt;</span><span class="n">Fragment</span><span class="o">&gt;</span> <span class="n">item</span> <span class="o">=</span> <span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Fragment</span><span class="o">&gt;)</span> <span class="n">mItems</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">position</span><span class="o">).</span><span class="na">getItem</span><span class="o">();</span>
+                <span class="n">PagerViewHolder</span> <span class="n">holder1</span> <span class="o">=</span> <span class="o">(</span><span class="n">PagerViewHolder</span><span class="o">)</span> <span class="n">holder</span><span class="o">;</span>
+                <span class="n">ViewPagerAdapter</span> <span class="n">adapter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ViewPagerAdapter</span><span class="o">(</span><span class="n">mFragmentManager</span><span class="o">,</span><span class="n">item</span><span class="o">);</span>
+                <span class="n">holder1</span><span class="o">.</span><span class="na">viewPager</span><span class="o">.</span><span class="na">setAdapter</span><span class="o">(</span><span class="n">adapter</span><span class="o">);</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="k">case</span> <span class="nl">TYPE_NORMAL:</span>
+                <span class="n">String</span> <span class="n">item1</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">mItems</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">position</span><span class="o">).</span><span class="na">getItem</span><span class="o">();</span>
+                <span class="n">ItemViewHolder</span> <span class="n">holder2</span> <span class="o">=</span> <span class="o">(</span><span class="n">ItemViewHolder</span><span class="o">)</span> <span class="n">holder</span><span class="o">;</span>
+                <span class="n">holder2</span><span class="o">.</span><span class="na">textView</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">item1</span><span class="o">);</span>
+                <span class="k">break</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getItemCount</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">mItems</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p>이후에 권한 체크하는 부분이 필요하다. 추후에 추가예정</p>
-
+<p>Item 타입으로 데이터를 생성자를 통해 받고, onBindViewHolder에서 viewType에 따라 데이터를 set 해주면 된다.</p>
 
 
                 <hr style="visibility: hidden;">
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2019/06/15/android-broadcastreceiver_sample/" data-toggle="tooltip" data-placement="top" title="[Android] BroadCastReceiver 사용해보기">
+                        <a href="/2019/06/16/android-parcel/" data-toggle="tooltip" data-placement="top" title="[Android] Serializable & Parcelable">
                         Previous<br>
-                        <span>[Android] BroadCastReceiver 사용해보기</span>
+                        <span>[Android] Serializable & Parcelable</span>
                         </a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2019/06/16/android-parcel/" data-toggle="tooltip" data-placement="top" title="[Android] Serializable & Parcelable">
+                        <a href="/2019/07/20/kotlin-android/" data-toggle="tooltip" data-placement="top" title="[Kotlin] Kotlin & Java">
                         Next<br>
-                        <span>[Android] Serializable & Parcelable</span>
+                        <span>[Kotlin] Kotlin & Java</span>
                         </a>
                     </li>
                     
@@ -503,8 +562,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "junghoon-github-io";
-    var disqus_identifier = "/2019/06/15/android-content-provider";
-    var disqus_url = "http://localhost:4000/2019/06/15/android-content-provider/";
+    var disqus_identifier = "/2019/07/13/android-recyclerview-viewtype";
+    var disqus_url = "http://localhost:4000/2019/07/13/android-recyclerview-viewtype/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="Mobile Lover">
+    <meta name="keywords"  content="Mobile">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="[Kotlin] Kotlin & Java - Junghoon's Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="Kotlin &amp; Java 비교해보기
+
+">
+    
+    <meta property="article:published_time" content="2019-07-20T00:00:00Z">
+    
+    
+    <meta property="article:author" content="JungHoon-Park">
+    
+    
+    <meta property="article:tag" content="Android">
+    
+    <meta property="article:tag" content="Kotlin">
+    
+    <meta property="article:tag" content="Study">
+    
+    
+    <meta property="og:image" content="http://localhost:4000">
+    <meta property="og:url" content="http://localhost:4000/2019/07/20/kotlin-android/">
+    <meta property="og:site_name" content="Junghoon's Blog">
+    
+    <title>[Kotlin] Kotlin & Java - Junghoon's Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2019/07/20/kotlin-android/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Junghoon's Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="/archive/">Archive</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/portfolio/">Portfolio</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg.jpg');
+        background: ;
+    }
+
+    
+    header.intro-header .header-mask{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: rgba(0,0,0, 0.3);
+    }
+    
+</style>
+
+<header class="intro-header style-text" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=Android" title="Android">Android</a>
+                        
+                        <a class="tag" href="/archive/?tag=Kotlin" title="Kotlin">Kotlin</a>
+                        
+                        <a class="tag" href="/archive/?tag=Study" title="Study">Study</a>
+                        
+                    </div>
+                    <h1>[Kotlin] Kotlin & Java</h1>
+                    
+                    <h2 class="subheading">Kotlin & Java 비교 및 기본문법</h2>
+                    <span class="meta">Posted by JungHoon-Park on July 20, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<p>Kotlin &amp; Java 비교해보기</p>
+
+<hr />
+
+<h1 id="kotlin-이란">Kotlin 이란?</h1>
+<p>Kotlin은 JetBrains 에서 만든 언어로, 2011년 최초로 공개된 후 오랜 시간 개발을 거쳐 2016년 2월 1.0 정식 버전이 출시되었습니다. Kotlin은 간결한 문법과 풍부한 기능, 높은 안정성을 토대로 높은 생산성을 보장하는 것을 목표로 개발되었다. 코틀린은 구글의 연례 개발자 행사인 Google I/O 2017에서 안드로이드의 공식 지원 언어로 채택되었다.</p>
+
+<h2 id="주요특징">주요특징</h2>
+<ul>
+  <li>문장 끝에 세미콜론(;)을 쓰지 않아도 된다.</li>
+  <li>new 키워드를 쓰지 않고 객체를 생성한다.</li>
+  <li>타입 추론을 지원하므로 일반적인 경우 타입을 적지 않아도 된다.</li>
+</ul>
+
+<h3 id="1-간결한-문법">1. 간결한 문법</h3>
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="c1">//타입을 항상 명시해 주어야 한다</span>
+<span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="s">"Junghoon"</span><span class="o">;</span>
+<span class="c1">//객체 생성시 new 키워드를 사용한다.</span>
+<span class="n">Person</span> <span class="n">person</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Person</span><span class="o">(</span><span class="n">name</span><span class="o">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h4 id="kotlin">kotlin</h4>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="c1">//타입을 적지 않아도 타입추론을 통해 String 타입으로 지정한다.</span>
+<span class="kd">val</span> <span class="py">name</span> <span class="p">=</span> <span class="s">"Junghoon"</span>
+<span class="c1">//객체 생성 시 new 키워드를 사용하지 않는다.</span>
+<span class="kd">val</span> <span class="py">person</span> <span class="p">=</span> <span class="n">Person</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<hr />
+<h3 id="2-null-안전성">2. Null 안전성</h3>
+<p>객체 타입의 변수에서 널(null) 값의 허용 여부를 구분하지 않던 자바와 달리, 코틀린은 이를 명확히 구분한다. 또한, 널 값의 허용 여부를 컴파일 단계에서 검사하므로 런타임에서 발생하는 오류를 대폭 줄일 수 있다. swift에서 옵셔널 타입을 생각하면 이해하기 쉽다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="c1">//널 값을 허용하는 문자열 타입(String?)</span>
+<span class="kd">val</span> <span class="py">foo</span><span class="p">:</span> <span class="n">String</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span>
+<span class="c1">//널 값을 허용하지 않는 문자열 타입(String)</span>
+<span class="kd">val</span> <span class="py">bar</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">"bar"</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<hr />
+<h3 id="3-가변불변-구분">3. 가변/불변 구분</h3>
+<p>널 값의 허용 여부를 구분하는 것과 유사하게, 코틀린에서는 변수 및 변수 내 할당된 값의 불변 여부를 구분한다. 변수의 불변 여부, 즉 최초 생성 시 할당된 값을 이후에도 변경할 수 있는지 여부는 변수 선언 시 사용하는 키워드인 <code class="highlighter-rouge">val</code>과 <code class="highlighter-rouge">var</code>로 구분한다. 값을 한번 할당하고 나면 그 후에 변경할 수 없는 변수는 <code class="highlighter-rouge">val</code>을 사용하여 선언하며, 이는 자바에서 <code class="highlighter-rouge">final</code> 키워드를 붙인 변수와 동일하다.
+이와 달리 할당된 값을 자유자재로 바꿀 수 있는 변수는 <code class="highlighter-rouge">var</code>로 선언하며, 이는 자바에서 <code class="highlighter-rouge">final</code>키워드 없이 선언하는 변수와 동일하다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="c1">//자바의 final String name = "Junghoon"; 과 동일</span>
+<span class="kd">val</span> <span class="py">name</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">"Junghoon"</span>
+<span class="c1">//컴파일 에러: 값이 한번 할당되면 다른 값을 할당할 수 없다.</span>
+<span class="n">name</span> <span class="p">=</span> <span class="s">"ParkJungHoon"</span>
+
+<span class="c1">//자바의 String name = "Junghoon"; 과 동일</span>
+<span class="kd">var</span> <span class="py">name</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">"Junghoon"</span>
+<span class="c1">//성공: var 로 선언되었기 때문에 다른 값을 할당할 수 있다.</span>
+<span class="n">name</span> <span class="p">=</span> <span class="s">"ParkJungHoon"</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>변수의 가변/불변과 유사하게, 컬렉션 자료형에 대해서도 가변/불변 여부를 구분한다. 객체에 할당된 값이 아닌 컬렉션 내 포함된 자료들을 추가하거나 삭제할 수 있는지 여부를 구분한다. 자료의 가변/불변 여부는 인터페이스로 구분하며, 불변 인터페이스의 경우 삽입/삭제/수정을 위한 함수가 없다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="c1">//자료를 변경할 수 없는 리스트 생성</span>
+<span class="kd">val</span> <span class="py">immutable</span><span class="p">:</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"foo"</span><span class="p">,</span><span class="s">"test"</span><span class="p">,</span><span class="s">"sample"</span><span class="p">)</span>
+<span class="c1">//컴파일 에러 : add() 함수가 정의되어 있지 않다.</span>
+<span class="n">immutable</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">"fail"</span><span class="p">)</span>
+
+<span class="c1">//자료를 변경할 수 있는 리스트 생성</span>
+<span class="kd">val</span> <span class="py">mutable</span><span class="p">:</span> <span class="n">MutableList</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">mutableListOf</span><span class="p">(</span><span class="s">"foo"</span><span class="p">,</span><span class="s">"test"</span><span class="p">,</span><span class="s">"sample"</span><span class="p">)</span>
+<span class="c1">//성공 : MutableList에는 자료를 수정할 수 있는 함수가 정의되어 있다.</span>
+<span class="n">mutable</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">"success"</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<hr />
+<h3 id="4-람다-표현식-지원">4. 람다 표현식 지원</h3>
+<p>람다 표현식은 대부분의 언어에서 지원하는 기능이지만, 안드로이드에서는 개발 환경의 제약으로 람다 표현식을 사용하기 위해서는 별도의 설정이 필요했다. 코틀린에서는 람다 표현식을 기본으로 지원하므로 특별한 제약 없이 코드를 더 간소화 할 수 있습니다. 또한, 자바로 작성된 인터페이스에 한해 SAM(Single Abstract Method) 변환을 지원하여 함수의 인자로 전달되는 인터페이스의 인스턴스를 람다식으로 표현할 수 있다.</p>
+<h4 id="java-1">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="n">view</span><span class="o">.</span><span class="na">setOnClickListener</span><span class="o">(</span><span class="k">new</span>
+ <span class="n">View</span><span class="o">.</span><span class="na">OnClickListener</span><span class="o">(){</span>
+     <span class="nd">@Override</span>
+     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onClick</span><span class="o">(</span><span class="n">View</span> <span class="n">view</span><span class="o">){</span>
+         <span class="o">...</span>
+     <span class="o">}</span>
+ <span class="o">});</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h4 id="kotlin-1">kotlin</h4>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="c1">//SAM 변환을 통해 OnClickListener 인터페이스의 인스턴스를 람다식으로 표현한다.</span>
+<span class="n">view</span><span class="p">.</span><span class="n">setOnClickListener</span><span class="p">{</span>
+    <span class="o">..</span><span class="p">.</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<hr />
+<h3 id="5-스트림-api-지원">5. 스트림 API 지원</h3>
+<p>자바8은 컬렉션 내 자료를 다루는 데 유용한 스트림(stream) API를 지원한다. 하지만 안드로이드 버전 6.0이상을 사용하는 플랫폼에서만 이 API를 사용할 수 있어 제약이 컸다.
+코틀린에서는 이와 유사한 역할을 하는 함수들을 코틀린 표준 라이브러리를 통해 제공하며, 안드로이드 플랫폼 버전과 상관없이 사용할 수 있어 매우 유용하다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">6</span><span class="p">)</span>
+<span class="c1">//리스트 내 항목 중 짝수의 합을 구한다</span>
+<span class="kd">val</span> <span class="py">sumOfEvens</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">filter</span><span class="p">{</span> <span class="n">it</span> <span class="p">%</span> <span class="m">2</span> <span class="p">==</span> <span class="m">0</span> <span class="p">}.</span><span class="n">sum</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>filter 외의 여러가지 함수가 존재하지만 여기서는 filter 예제만 적었다.</p>
+<hr />
+<h3 id="6-값-및-변수-선언">6. 값 및 변수 선언</h3>
+<p>타입을 먼저 적고 그 다음 이름을 적는 자바와 달리, 코틀린에서는 이름을 먼저 적고 타입을 적는다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">"foo"</span>
+<span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="s">"bar"</span>
+
+<span class="c1">//선언 시 자료를 할당하지 않으면 타입을 꼭 붙여야한다.</span>
+<span class="kd">val</span> <span class="py">c</span><span class="p">:</span> <span class="n">String</span>
+<span class="c1">//자료 할당</span>
+<span class="n">c</span> <span class="p">=</span> <span class="s">"abc"</span>
+
+<span class="kd">var</span> <span class="py">d</span><span class="p">:</span> <span class="n">Int</span> <span class="p">=</span> <span class="m">0</span>
+<span class="n">d</span> <span class="p">+=</span> <span class="m">1</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<hr />
+<h3 id="7-함수-선언">7. 함수 선언</h3>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="k">fun</span> <span class="nf">greet</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">:</span> <span class="nc">Unit</span> <span class="p">{</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"Hello, $name!"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">fun</span> <span class="nf">sum</span><span class="p">(</span><span class="nv">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span> <span class="nv">b</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">:</span> <span class="nc">Int</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="p">+</span> <span class="n">b</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>함수의 반환값에 사용하는 Unit은 자바의 void 와 유사하게 사용하며 Unit을 반환하는 함수는 다음과 같이 반환형을 생략할 수 있다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="k">fun</span> <span class="nf">greet</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"Hello, $name!"</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<hr />
+<h3 id="8-클래스-및-인터페이스-선언">8. 클래스 및 인터페이스 선언</h3>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="nc">Foo</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">foo</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">"foo"</span>
+
+    <span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
+        <span class="o">..</span><span class="p">.</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">interface</span> <span class="nc">Bar</span><span class="p">{</span>
+    <span class="k">fun</span> <span class="nf">bar</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<hr />
+<h3 id="9-조건문">9. 조건문</h3>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="k">fun</span> <span class="nf">max</span><span class="p">(</span><span class="nv">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span> <span class="nv">b</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">:</span> <span class="nc">Int</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="p">&gt;</span> <span class="n">b</span><span class="p">){</span>
+        <span class="k">return</span> <span class="n">a</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="k">return</span> <span class="n">b</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>when 문은 자바의 swith와 동일한 역할을 한다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="k">fun</span> <span class="nf">countItems</span><span class="p">(</span><span class="nv">count</span><span class="p">:</span> <span class="nc">Int</span><span class="p">){</span>
+    <span class="k">when</span><span class="p">(</span><span class="n">count</span><span class="p">){</span>
+        <span class="m">1</span> <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"There is $count item."</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"There are $count item."</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<hr />
+<h3 id="10-반복문">10. 반복문</h3>
+<p>인덱스 기반 for 문과 for-each 문을 모두 지원하는 자바와 달리 코틀린은 for-each문만 지원한다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"foo"</span><span class="p">,</span> <span class="s">"bar"</span><span class="p">,</span> <span class="s">"baz"</span><span class="p">)</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">item</span> <span class="k">in</span> <span class="n">items</span><span class="p">){</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"item: $item"</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>while 문 사용방법은 자바와 동일하다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"foo"</span><span class="p">,</span> <span class="s">"bar"</span><span class="p">,</span> <span class="s">"baz"</span><span class="p">)</span>
+<span class="kd">val</span> <span class="py">i</span> <span class="p">=</span> <span class="m">0</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="p">&lt;</span> <span class="n">items</span><span class="p">.</span><span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"item: ${items[i]}"</span><span class="p">)</span>
+    <span class="n">i</span><span class="p">++</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/07/13/android-recyclerview-viewtype/" data-toggle="tooltip" data-placement="top" title="[Android] RecyclerView에 아이템이 두가지 타입">
+                        Previous<br>
+                        <span>[Android] RecyclerView에 아이템이 두가지 타입</span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        </a>
+        
+        
+                <a data-sort="0014" 
+                    href="/archive/?tag=Swift4"
+                    title="Swift4"
+                    rel="7">Swift4</a>
+        
+                <a data-sort="0000" 
+                    href="/archive/?tag=Study"
+                    title="Study"
+                    rel="21">Study</a>
+        
+                <a data-sort="0003" 
+                    href="/archive/?tag=Mobile"
+                    title="Mobile"
+                    rel="18">Mobile</a>
+        
+                <a data-sort="0008" 
+                    href="/archive/?tag=Android"
+                    title="Android"
+                    rel="13">Android</a>
+        
+                <a data-sort="0014" 
+                    href="/archive/?tag=iOS"
+                    title="iOS"
+                    rel="7">iOS</a>
+        
+                <a data-sort="0019" 
+                    href="/archive/?tag=Architecture"
+                    title="Architecture"
+                    rel="2">Architecture
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="https://dydtjr1128.github.io">dydtjr1128</a></li>
+  
+  <li><a href="https://seongmun-hong.github.io/">SeongMun-Hong</a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "junghoon-github-io";
+    var disqus_identifier = "/2019/07/20/kotlin-android";
+    var disqus_url = "http://localhost:4000/2019/07/20/kotlin-android/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: ''
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/Junghun0">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    All Contents Copyright &copy; Junghoon's Blog 2019
+                    <br>
+                    Powered by <a href="http://Junghun0.github.io">JungHoon's Blog</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=Junghun0&repo=Junghun0.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-140397414-1';
+    var _gaDomain = '';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
