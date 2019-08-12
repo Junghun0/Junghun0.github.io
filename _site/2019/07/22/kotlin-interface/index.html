@@ -265,6 +265,156 @@
 
 <hr />
 
+<h1 id="kotlin-상속과-인터페이스-구현해보기">kotlin 상속과 인터페이스 구현해보기</h1>
+<p>자바에서는 클래스의 상속과 인터페이스의 구현을 <code class="highlighter-rouge">extends</code> 와 <code class="highlighter-rouge">implements</code>로 구분하지만, 코틀린에서는 이를 구분하지 않고 콜론(:) 뒤에 상속한 클래스나 구현한 인터페이스를 표기합니다.</p>
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MainActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">View</span><span class="o">.</span><span class="na">OnClickListener</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h4 id="kotlin">kotlin</h4>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="nc">MainActivity</span><span class="p">:</span> <span class="n">AppCompatActivity</span><span class="p">(),</span> <span class="n">View</span><span class="p">.</span><span class="n">OnClickListener</span> <span class="p">{</span>
+    <span class="o">..</span><span class="p">.</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><code class="highlighter-rouge">클래스를 상속하는 경우 반드시 부모 클래스의 생성자를 호출해야 한다. 위에서는 AppCompatActivity의 기본 생성자를 호출하는 것을 확인할 수 있다.</code><br />
+부모 클래스의 생성자가 여러 형태일 경우, 클래스 선언부에서 부모 클래스의 생성자를 호출하는 대신 별도의 생성자 선언에서 부모 클래스의 생성자를 호출하도록 구현할 수 있다.<br />
+다음은 안드로이드 커스텀 뷰를 만들기 위해 View 클래스를 상속하는 예이다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="nc">MyView</span> <span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+    <span class="k">constructor</span><span class="p">(</span><span class="nv">context</span><span class="p">:</span> <span class="nc">Context</span><span class="p">)</span> <span class="p">:</span> <span class="nc">super</span><span class="p">(</span><span class="n">context</span><span class="p">){</span>
+        <span class="c1">//뷰 초기화</span>
+    <span class="p">}</span>
+    
+    <span class="k">constructor</span><span class="p">(</span><span class="nv">context</span><span class="p">:</span> <span class="nc">Context</span><span class="p">,</span> <span class="nv">attrs</span><span class="p">:</span> <span class="nc">AttributeSet</span><span class="p">?)</span> <span class="p">:</span> <span class="nc">super</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">attrs</span><span class="p">){</span>
+        <span class="c1">//뷰 초기화</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><code class="highlighter-rouge">생성자가 여럿인 경우 this 키워드를 사용하여 자기 자신의 생성자를 호출할 수 있다.</code></p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="nc">MyView</span> <span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+    <span class="k">constructor</span><span class="p">(</span><span class="nv">context</span><span class="p">:</span> <span class="nc">Context</span><span class="p">)</span> <span class="p">:</span> <span class="nc">this</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="k">null</span><span class="p">)</span>
+
+    <span class="k">constructor</span><span class="p">(</span><span class="nv">context</span><span class="p">:</span> <span class="nc">Context</span><span class="p">,</span> <span class="nv">attrs</span><span class="p">:</span> <span class="nc">AttributeSet</span><span class="p">?)</span> <span class="p">:</span> <span class="nc">super</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">attrs</span><span class="p">){</span>
+        <span class="c1">//뷰초기화</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>자바에서는 부모 클래스의 메서드를 재정의하거나 인터페이스를 구현한 메서드를 @Override 어노테이션으로 구분한다. 하지만 @Override 어노테이션 추가는 선택 사항이기 때문에 해당 메서드의 유형을 코드만으로 구분하기는 어렵다.<br />
+이러한 모호함을 없애기 위해, <code class="highlighter-rouge">코틀린에서는 상속받거나 구현한 함수의 앞에 무조건 override 키워드를 붙이도록 강제한다.</code></p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="nc">MyActivity</span><span class="p">:</span> <span class="n">AppCompatActivity</span><span class="p">(),</span> <span class="n">View</span><span class="p">.</span><span class="n">OnClickListener</span> <span class="p">{</span>
+    <span class="c1">//AppCompatActivity의 onCreate() 메서드 상속</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(</span><span class="nv">saveInstanceState</span><span class="p">:</span> <span class="nc">Bundle</span><span class="p">?)</span> <span class="p">{</span>
+        <span class="k">super</span><span class="p">.</span><span class="n">oncreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c1">//View.OnClickListener 인터페이스 구현</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onClick</span><span class="p">(</span><span class="nv">v</span><span class="p">:</span> <span class="nc">View</span><span class="p">){</span>
+
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><br />
+자바에서는 클래스나 메서드에 final 키워드를 붙여 클래스를 더 이상 상속받지 못하게 하거나, 메서드를 재정의하지 못하게 할 수 있다. <br />
+하지만 코틀린에서는 그와 반대로 <code class="highlighter-rouge">open</code>키워드를 붙인 클래스나 함수가 아니라면 클래스를 상속하거나 함수를 재정의할 수 없다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="c1">//open 키워드를 사용하여 클래스를 상속받을 수 있도록 한다.</span>
+<span class="k">open</span> <span class="kd">class</span> <span class="nc">OpenClass</span> <span class="p">{</span>
+    <span class="c1">//프로퍼티의 값을 상속한 클래스에서 재정의할 수 있도록 한다.</span>
+    <span class="k">open</span> <span class="kd">val</span> <span class="py">openProperty</span> <span class="p">=</span> <span class="s">"foo"</span>
+
+    <span class="c1">//open 키워드가 없다면, 상속한 클래스에서 프로퍼티 값을 재정의할 수 없다.</span>
+    <span class="kd">val</span> <span class="py">finalProperty</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+
+    <span class="c1">//open 키워드가 없다면, 상속한 클래스에서 함수를 재정의 할 수 없다.</span>
+    <span class="k">fun</span> <span class="nf">finalFunc</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="rouge-code"><pre><span class="c1">//성공 : openClasss는 상속 가능한 클래스이다.</span>
+<span class="kd">class</span> <span class="nc">FinalClass</span> <span class="p">:</span> <span class="n">OpenClass</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">//성공 : openProperty는 재정의 가능한 프로퍼티이다.</span>
+    <span class="k">override</span> <span class="kd">val</span> <span class="py">openProperty</span> <span class="p">=</span> <span class="s">"FOO"</span>
+
+    <span class="c1">//오류 : finalProperty는 재정의 가능하도록 설정되지 않았다.</span>
+    <span class="k">override</span> <span class="kd">val</span> <span class="py">finalProperty</span> <span class="p">=</span> <span class="s">"BAR"</span>
+
+    <span class="c1">//성공 : openFunc 함수는 재정의 가능한 함수이다.</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">openFunc</span><span class="p">(){</span>
+        <span class="n">Log</span><span class="p">.</span><span class="n">d</span><span class="p">(</span><span class="s">"Log"</span><span class="p">,</span><span class="s">"openFunc()"</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c1">//오류 : finalFunc는 재정의 가능하도록 설정되지 않았다.</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">finalFunc</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Log</span><span class="p">.</span><span class="n">d</span><span class="p">(</span><span class="s">"Log"</span><span class="p">,</span><span class="s">"finalFunc()"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="c1">//실패 : FinalClass 는 상속 가능하도록 설정되지 않았습니다.</span>
+<span class="kd">class</span> <span class="nc">Foo</span> <span class="p">:</span> <span class="n">FinalClass</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
 
 
                 <hr style="visibility: hidden;">
