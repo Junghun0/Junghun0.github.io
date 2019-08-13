@@ -11,33 +11,31 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="[iOS] 간단한 화면전환 방식 - Junghoon's Blog">
+    <meta property="og:title" content="[Kotlin] Kotlin Collection - Junghoon's Blog">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="Sample : iOS Screen Change
+    <meta property="og:description" content="Kotlin 의 컬렉션에 대해
 
 ">
     
-    <meta property="article:published_time" content="2019-05-20T00:00:00Z">
+    <meta property="article:published_time" content="2019-08-01T00:00:00Z">
     
     
     <meta property="article:author" content="JungHoon-Park">
     
     
-    <meta property="article:tag" content="Swift4">
+    <meta property="article:tag" content="Android">
     
-    <meta property="article:tag" content="Mobile">
-    
-    <meta property="article:tag" content="iOS">
+    <meta property="article:tag" content="Kotlin">
     
     <meta property="article:tag" content="Study">
     
     
     <meta property="og:image" content="http://localhost:4000">
-    <meta property="og:url" content="http://localhost:4000/2019/05/20/ios-screen-change/">
+    <meta property="og:url" content="http://localhost:4000/2019/08/01/kotlin-collection/">
     <meta property="og:site_name" content="Junghoon's Blog">
     
-    <title>[iOS] 간단한 화면전환 방식 - Junghoon's Blog</title>
+    <title>[Kotlin] Kotlin Collection - Junghoon's Blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -46,7 +44,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2019/05/20/ios-screen-change/">
+    <link rel="canonical" href="http://localhost:4000/2019/08/01/kotlin-collection/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -77,7 +75,7 @@
 
     <!-- Navigation -->
 
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
 
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -194,7 +192,7 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/post-bg-halting.jpg" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 
@@ -203,7 +201,7 @@
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/post-bg-halting.jpg');
+        background-image: url('/img/home-bg.jpg');
         background: ;
     }
 
@@ -217,7 +215,7 @@
     
 </style>
 
-<header class="intro-header" >
+<header class="intro-header style-text" >
 
     <div class="header-mask"></div>
     
@@ -227,19 +225,17 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/archive/?tag=Swift4" title="Swift4">Swift4</a>
+                        <a class="tag" href="/archive/?tag=Android" title="Android">Android</a>
                         
-                        <a class="tag" href="/archive/?tag=Mobile" title="Mobile">Mobile</a>
-                        
-                        <a class="tag" href="/archive/?tag=iOS" title="iOS">iOS</a>
+                        <a class="tag" href="/archive/?tag=Kotlin" title="Kotlin">Kotlin</a>
                         
                         <a class="tag" href="/archive/?tag=Study" title="Study">Study</a>
                         
                     </div>
-                    <h1>[iOS] 간단한 화면전환 방식</h1>
+                    <h1>[Kotlin] Kotlin Collection</h1>
                     
-                    <h2 class="subheading">Using screen change</h2>
-                    <span class="meta">Posted by JungHoon-Park on May 20, 2019</span>
+                    <h2 class="subheading">Kotlin Collection</h2>
+                    <span class="meta">Posted by JungHoon-Park on August 1, 2019</span>
                 </div>
             </div>
         </div>
@@ -265,95 +261,143 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>Sample : iOS Screen Change</p>
+				<p>Kotlin 의 컬렉션에 대해</p>
 
 <hr />
 
-<h3 id="1-뷰-컨트롤러에서-다른-뷰-컨트롤러를-호출하여-화면-전환하기present">1. <strong>뷰 컨트롤러에서 다른 뷰 컨트롤러를 호출하여 화면 전환하기(present)</strong></h3>
-
-<h3 id="2-내비게이션-컨트롤러를-사용하여-화면-전환하기">2. <strong>내비게이션 컨트롤러를 사용하여 화면 전환하기</strong></h3>
-
-<h3 id="3-화면-전환용-객체-세그웨이segueway를-사용하여-화면-전환하기">3. <strong>화면 전환용 객체 세그웨이(Segueway)를 사용하여 화면 전환하기</strong></h3>
-
+<h2 id="배열">배열</h2>
+<p>특정 원소를 담고 있는 배열을 생성하려면 <code class="highlighter-rouge">arrayOf()</code> 함수를 사용해야한다. 빈 배열을 생성하고 싶은 경우 <code class="highlighter-rouge">emptyArrayOf()</code> 함수를 대신 사용할 수 있다.</p>
 <ul>
-  <li>뷰 컨트롤러의 뷰 위에 다른 뷰를 가져와 바꿔치기 하기 ( 하나의 뷰 컨트롤러가 두 개 이상의 루트 뷰를 관리해야 하므로 좋은방법은 아님,
-iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관리하는 MVC 패턴을 기본으로 함)</li>
+  <li><strong>fun &lt; T &gt; arrayOf(vararg elements: T): Array&lt; T &gt;</strong> <br />
+함수의 인자로 받은 값으로 구성된 배열을 반환한다.<br /><br /></li>
+  <li><strong>fun &lt; T &gt; emptyArray(): Array&lt; T &gt;</strong><br />
+특정 타입을 갖는 빈 배열을 반환한다.
+널 값을 포함할 수 있는 배열을 생성하고 싶은 경우, <code class="highlighter-rouge">arrayOfNulls()</code> 함수를 사용하여 배열을 생성한 후 이 배열에 값을 따로 채워넣을 수 있다.<br /><br /></li>
+  <li><strong>fun &lt; T &gt; arrayOfNulls(size: Int): Array&lt; T? &gt;</strong><br />
+배열 내 각 값들이 모두 널 값으로 초기화 되어 있고, 인자로 받은 size 만큼의 크기를 갖는 배열을 반환한다.</li>
 </ul>
 
-<hr />
-
-<h4 id="소스코드">소스코드</h4>
-
-<p><strong>1_1. 화면이동</strong></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
 6
 7
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">presentSecondView</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">guard</span> <span class="k">let</span> <span class="nv">secondViewInstance</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">storyboard</span><span class="p">?</span><span class="o">.</span><span class="nf">instantiateViewController</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"SecondViewController"</span><span class="p">)</span> <span class="k">else</span><span class="p">{</span>
-        <span class="k">return</span>
-    <span class="p">}</span>
-    <span class="n">secondViewInstance</span><span class="o">.</span><span class="n">modalTransitionStyle</span> <span class="o">=</span> <span class="kt">UIModalTransitionStyle</span><span class="o">.</span><span class="n">flipHorizontal</span>
-    <span class="k">self</span><span class="o">.</span><span class="nf">present</span><span class="p">(</span><span class="n">secondViewInstance</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>1_2. 뒤로이동</strong></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">presentBackPressed</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">presentingViewController</span><span class="p">?</span><span class="o">.</span><span class="nf">dismiss</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="c1">// 인자로 전달된 문자열을 포함하는 배열을 생성한다.</span>
+<span class="c1">// 배열의 타입은 인자를 통해 추론되므로 별도로 표기하지 않아도 된다.</span>
+<span class="kd">val</span> <span class="py">cities</span> <span class="p">=</span> <span class="n">arrayOf</span><span class="p">(</span><span class="s">"Seoul"</span><span class="p">,</span> <span class="s">"Tokyo"</span><span class="p">,</span> <span class="s">"San Francisco"</span><span class="p">)</span>
 
-<p><strong>2_1. 화면이동</strong></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">naviGoSecond</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">guard</span> <span class="k">let</span> <span class="nv">naviSecondview</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">storyboard</span><span class="p">?</span><span class="o">.</span><span class="nf">instantiateViewController</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"NavigationSecondView"</span><span class="p">)</span> <span class="k">else</span><span class="p">{</span>
-        <span class="k">return</span>
-    <span class="p">}</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="nf">pushViewController</span><span class="p">(</span><span class="n">naviSecondview</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
-<span class="p">}</span>
+<span class="c1">// String 타입의 빈 배열을 생성한다.</span>
+<span class="c1">// 전달되는 인자가 없어 타입 추론이 불가하므로 함수 호출 시 타입을 지정해 주어야 한다.</span>
+<span class="kd">val</span> <span class="py">emptyStringArray</span> <span class="p">=</span> <span class="n">emptyArray</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;()</span>
+
+<span class="c1">// 크기가 3이고 널 값을 포함할 수 있는 배열을 생성한다.</span>
+<span class="c1">// 전달되는 인자가 없어 타입 추론이 불가하므로 함수 호출 시 타입을 지정해 주어야한다.</span>
+<span class="kd">val</span> <span class="py">nullStoreableArray</span> <span class="p">=</span> <span class="n">arrayOfNulls</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="m">3</span><span class="p">)</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>2_2. 뒤로이동</strong></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">popNavigationVIew</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="nf">popViewController</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>3_1. 화면이동</strong></p>
+<p><strong>자바의 원시 타입을 포함하는 배열은 코틀린의 배열과 다른 타입으로 취급되므로, 위의 함수가 아닌 각 타입에 맞는 함수를 사용해야한다.</strong>
+다음은 자바 원시 타입을 포함하는 배열을 생성하는 함수들의 정의이다.</p>
 <ul>
-  <li>Storyboard 에서 다른 ViewController 와 연결 -&gt; Action Segue</li>
-  <li>출발점이 뷰 컨트롤러 자체인 경우 -&gt; Manual Segue
-    <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">manualSegueBtn</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
- <span class="k">self</span><span class="o">.</span><span class="nf">performSegue</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"ManualSegue"</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div>    </div>
+  <li><strong>fun booleanArrayOf(vararg elements: Boolean): BooleanArray</strong><br />
+Boolean 타입을 갖는 배열을 생성한다. 이 배열은 자바의 boolean[] 배열과 호환된다.<br /><br /></li>
+  <li><strong>fun byteArrayOf(vararg elements: Byte): ByteArray</strong><br />
+Byte 타입을 갖는 배열을 생성한다. 이 배열은 자바의 byte[] 배열과 호환된다.<br /><br /></li>
+  <li><strong>fun charArrayOf(vararg elements: Char): CharArray</strong><br />
+Char 타입을 갖는 배열을 생성한다. 이 배열은 자바의 char[] 배열과 호환된다.<br /><br /></li>
+  <li><strong>fun doubleArrayOf(vararg elements: Double): DoubleArray</strong><br />
+Double 타입을 갖는 배열을 생성한다. 이 배열은 자바의 double[] 배열과 호환된다.<br /><br /></li>
+  <li><strong>fun floatArrayOf(vararg elements: Float): FloatArray</strong><br />
+Float 타입을 갖는 배열을 생성한다. 이 배열은 자바의 float[] 배열과 호환된다.<br /><br /></li>
+  <li><strong>fun intArrayOf(vararg elements: Int): IntArray</strong><br />
+Int 타입을 갖는 배열을 생성한다. 이 배열은 자바의 int[] 배열과 호환된다.<br /><br /></li>
+  <li><strong>fun longArrayOf(vararg elements: Long): LongArray</strong><br />
+Long 타입을 갖는 배열을 생성한다. 이 배열은 자바의 long[] 배열과 호환된다.<br /><br /></li>
+  <li><strong>fun shortArrayOf(vararg elements: Short): ShortArray</strong><br />
+Short 타입을 갖는 배열을 생성한다. 이 배열은 자바의 short[] 배열과 호환된다.<br /></li>
+</ul>
+
+<h2 id="리스트">리스트</h2>
+<p>포함하는 요소를 읽을 수만 있고 수정할 수 없는 읽기 전용 리스트는 listOf() 함수를 사용하여 생성할 수 있다. 읽기 전용 리스트를 생성하는 함수들의 정의는 다음과 같다.<br /></p>
+
+<ul>
+  <li>
+    <p><strong>fun &lt; T &gt; listOf(vararg elements: T): List&lt; T &gt;</strong><br />
+인자로 받은 elements를 포함하는 읽기 전용 리스트를 반환한다.<br /><br /></p>
   </li>
   <li>
-    <p>UIStoryboardSegue 클래스를 서브클래싱항 새로운 가능을 갖춘 세그웨이 객체정의 -&gt; CustomSegue
- Storyboard 에서 segue 클릭 후 StoryboardSegue 탭에 class 를 새로 정의한 클래스로 설정</p>
-
-    <ul>
-      <li>custom segue 정의</li>
-    </ul>
+    <p><strong>fun &lt; T &gt; listOf(element: T): List&lt; T &gt;</strong><br />
+인자로 받은 element 하나만을 요소로 갖는 읽기 전용 리스트를 반환한다.<br /><br /></p>
+  </li>
+  <li>
+    <p><strong>fun &lt; T &gt; listOf(): List&lt; T &gt;</strong><br />
+비어있는 읽기 전용 리스트를 반환한다.<br /><br /></p>
   </li>
 </ul>
 
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<p>인자로 받는 값 중, 널 값은 무시하고 널이 아닌 값으로만 리스트를 구성하고 싶은 경우 listOfNotNull() 함수를 사용하면 편리하다</p>
+<ul>
+  <li><strong>fun &lt; T : Any &gt; listOfNotNull(vararg elements: T?): List&lt; T &gt;</strong><br />
+인자로 받은 elements 중 널이 아닌 값들로만 구성된 읽기 전용 리스트를 반환한다. 만약 인자로 전달된 모든 값이 널 값이라면 빈 리스트를 반환한다.<br /><br /></li>
+  <li><strong>fun &lt; T : Any &gt; listOfNotNull(elements: T?): List&lt; T &gt;</strong><br />
+인자로 받은 element의 값이 널이 아닌 경우 이 요소 하나만을 갖는 리스트를 반환하며, 널 값인 경우에는 빈 리스트를 반환한다.</li>
+</ul>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="c1">// 널 값이 아닌 인자가 아무것도 없으므로, listOfCountries에는 빈 리스트가 생성된다.</span>
+<span class="kd">val</span> <span class="py">listOfCountries</span> <span class="p">=</span> <span class="n">listOfNotNull</span><span class="p">(</span><span class="k">null</span><span class="p">)</span>
+
+<span class="c1">// 널 값인 인자는 무시하므로, "Seoul", "San Francisco" 만을 요소로 갖는 리스트가 생성된다.</span>
+<span class="kd">val</span> <span class="py">listOfCities</span> <span class="p">=</span> <span class="n">listOfNotNull</span><span class="p">(</span><span class="s">"Seoul"</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="s">"San Francisco"</span><span class="p">,</span> <span class="k">null</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>리스트에 포함된 요소를 수정할 수 있는 리스트는 mutableListOf() 함수를 사용하여 생성한다.</p>
+
+<ul>
+  <li><strong>fun &lt; T &gt; mutableListOf(vararg elements: T): MutableList&lt; T &gt;</strong><br />
+인자로 받은 elements를 요소로 가지며 수정 가능한 리스트를 반환한다.<br /><br /></li>
+  <li><strong>fun &lt; T &gt; mutableListOf(): MutableList&lt; T &gt;</strong>
+비어있는 수정 가능한 리스트를 반환한다.<br /></li>
+</ul>
+
+<p>안드로이드 앱 개발시 자주 사용하는 자료구조 중 하나인 ArrayList 또한 표준 라이브러리에서 제공하는 함수인 arrayListOf()를 사용하여 쉽게 생성할 수 있다.</p>
+<ul>
+  <li><strong>fun &lt; T &gt; arrayListOf(vararg elements: T): ArrayList&lt; T &gt;</strong><br />
+인자로 받은 elements를 요소로 하는 ArrayList를 반환한다.<br /><br /></li>
+  <li><strong>fun &lt; T &gt; arrayListOf(): ArrayList&lt; T &gt;</strong><br />
+비어있는 ArrayList를 반환한다.</li>
+</ul>
+
+<h2 id="맵">맵</h2>
+<p>포함하는 요소를 읽을 수만 있고, 수정할 수 없는 읽기 전용 맵(map)은 mapOf() 함수를 사용하여 생성할 수 있다.</p>
+<ul>
+  <li><strong>fun &lt; K, V &gt; mapOf(vararg pairs: Pair&lt; K, V &gt;): Map&lt; K, V &gt;</strong><br />
+Pair 형태로 받은 인자들을 포함하는 읽기 전용 맵을 반환한다.<br /><br /></li>
+  <li><strong>fun &lt; K, V &gt; mapOf(pairs: Pair&lt; K, V &gt;): Map&lt; K, V &gt;</strong><br />
+인자로 받은 pair 하나만을 요소로 갖는 읽기 전용 맵을 반환한다.<br /><br /></li>
+  <li><strong>fun &lt; K, V &gt; mapOf(): Map&lt; K, V &gt;</strong><br />
+비어있는 읽기 전용 맵을 반환한다.<br /></li>
+</ul>
+
+<p>리스트와 유사하게 맵이 포함하고 있는 요소를 수정할 수 있는 맵은 mutableMapOf() 함수로 생성할 수 있다.</p>
+<ul>
+  <li><strong>fun &lt; K, V &gt; mutableMapOf(vararg pairs: Pair&lt; K, V &gt;): MutableMap&lt; K, V &gt;</strong><br />
+Pair 형태로 받은 인자들을 포함하는 수정 가능한 맵을 반환.<br /><br /></li>
+  <li><strong>fun &lt; K, V &gt; mutableMapOf(): MutableMap&lt; K, V &gt;</strong><br />
+비어있는 수정 가능한 맵을 반환한다.<br /></li>
+</ul>
+
+<p>mapOf() 함수나 mutableMapOf() 함수는 맵에 들어갈 요소를 모두 Pair 형태로 받는데, Pair를 만들 때 사용할 수 있는 표준 라이브러리 내 함수인 to()를 사용하면 이를 직관적으로 표현할 수 있다.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -362,90 +406,56 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
 7
 8
 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-</pre></td><td class="rouge-code"><pre><span class="kd">import</span> <span class="kt">UIKit</span>
+</pre></td><td class="rouge-code"><pre><span class="c1">// Pair를 직접 사용하는 예</span>
+<span class="kd">val</span> <span class="py">cities1</span> <span class="p">=</span> <span class="n">mapOf</span> <span class="p">(</span>
+    <span class="n">Pair</span><span class="p">(</span><span class="s">"SEO"</span><span class="p">,</span> <span class="s">"Seoul"</span><span class="p">),</span> <span class="n">Pair</span><span class="p">(</span><span class="s">"TOK"</span><span class="p">,</span> <span class="s">"Tokyo"</span><span class="p">),</span> <span class="n">Pair</span><span class="p">(</span><span class="s">"MTV"</span><span class="p">,</span> <span class="s">"Mountain View"</span><span class="p">))</span>
+<span class="p">)</span>
 
-<span class="kd">class</span> <span class="kt">NewSegue</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">{</span>
-    
-<span class="k">override</span> <span class="kd">func</span> <span class="nf">perform</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">//세그웨이의 출발지 뷰 컨트롤러</span>
-    <span class="k">let</span> <span class="nv">srcUVC</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">source</span>
-        
-    <span class="c1">//세그웨이의 목적지 뷰 컨트롤러</span>
-    <span class="k">let</span> <span class="nv">destUVC</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">destination</span>
-        
-    <span class="c1">//fromView 에서 toView 로 뷰를 전환한다</span>
-    <span class="kt">UIView</span><span class="o">.</span><span class="nf">transition</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="n">srcUVC</span><span class="o">.</span><span class="n">view</span><span class="p">,</span>
-                    <span class="nv">to</span><span class="p">:</span> <span class="n">destUVC</span><span class="o">.</span><span class="n">view</span><span class="p">,</span>
-                    <span class="nv">duration</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-                    <span class="nv">options</span><span class="p">:</span> <span class="o">.</span><span class="n">transitionCurlDown</span><span class="p">,</span>
-                    <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="c1">//표준 라이브러리 내 함수 to를 사용하여 Pair를 직관적으로 표현한 예</span>
+<span class="kd">val</span> <span class="py">cities2</span> <span class="p">=</span> <span class="n">mapOf</span><span class="p">(</span>
+    <span class="s">"SEO"</span> <span class="n">to</span> <span class="s">"Seoul"</span><span class="p">,</span> <span class="s">"TOK"</span> <span class="n">to</span> <span class="s">"Tokyo"</span><span class="p">,</span> <span class="s">"MTV"</span> <span class="n">to</span> <span class="s">"Mountain View"</span>
+<span class="p">)</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>3_2. 뒤로이동</strong></p>
+<p>보다 명시적인 타입의 맵을 생성해야 하는 경우 hashMapOf(), linkedMapOf(), sortedMapOf() 함수를 사용할 수 있다.</p>
+<ul>
+  <li><strong>fun &lt; K, V &gt; hashMapOf(vararg paris: Pair&lt; K, V &gt;): HashMap&lt; K, V &gt;</strong><br />
+Pair 형태로 받은 인자들을 포함하는 HashMap 형태의 맵을 반환한다.<br /><br /></li>
+  <li><strong>fun &lt; K, V &gt; hashMapOf(): HashMap&lt; K, V &gt;</strong><br />
+비어있는 HashMap 형태의 맵을 반환한다.<br /><br /></li>
+  <li><strong>fun &lt; K, V &gt; linkedMapOf(vararg paris: Pair&lt; K, V &gt;): LinkedHashMap&lt; K, V &gt;</strong><br />
+Pair 형태로 받은 인자들을 포함하는 LinkedHashMap 형태의 맵을 반환한다.<br /><br /></li>
+  <li><strong>fun &lt; K, V &gt; linkedMapOf(): LinkedHashMap&lt; K, V &gt;</strong><br />
+비어있는 LinkedHashMap 형태의 맵을 반환한다.<br /><br /></li>
+  <li><strong>fun &lt; K, V &gt; sortedMapOf(vararg paris: Pair&lt; K, V &gt;): SortedMap&lt; K, V &gt;</strong><br />
+Pair 형태로 받은 인자들을 포함하는 SortedMap 형태의 맵을 반환한다.<br /><br /></li>
+</ul>
 
-<p><em>Storyboard 에서 상단의 Exit 아이콘과 연결(Action Segue, Manual Segue, Custom Segue)</em></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre><span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">goBackSegue</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">){}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
+<h2 id="집합">집합</h2>
+<p>집합(set)은 중복되지 않는 요소들로 구성된 자료구조이다. 포함하는 요소를 읽을 수만 있고, 수정할 수 없는 읽기 전용 집합은 setOf() 함수를 사용하여 생성할 수 있다.</p>
+<ul>
+  <li><strong>fun &lt; T &gt; setOf(vararg elements: T): Set&lt; T &gt;</strong><br />
+인자로 받은 elements를 요소로 하는 읽기 전용 집합을 반환한다.<br /><br /></li>
+  <li><strong>fun &lt; T &gt; setOf(vararg elements: T): Set&lt; T &gt;</strong><br />
+인자로 받은 elements를 요소로 하는 읽기 전용 집합을 반환한다.<br /><br /></li>
+  <li><strong>fun &lt; T &gt; setOf(elements: T): Set&lt; T &gt;</strong><br />
+인자로 받은 element 하나만을 요소로 하는 읽기 전용 집합을 반환한다.<br /><br /></li>
+  <li><strong>fun &lt; T &gt; setOf(): Set&lt; T &gt;</strong><br />
+비어있는 읽기 전용 집합을 반환한다.<br />
+포함하고 있는 요소를 수정할 수 있는 집합은 mutableSetOf() 함수로 생성할 수 있다.</li>
+</ul>
 
-<p><strong>3_3. Segue 전처리 메소드</strong></p>
-
-<p><em>Segue 실행하기 전에 값을 저장해둘 필요가 있거나, 경고창을 띄워주는 등의 처리를 해야 할 경우 전처리 메소드 사용 - Segue 실행되기 전에 자동으로 실행됨</em></p>
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="rouge-code"><pre><span class="k">override</span> <span class="kd">func</span> <span class="nf">prepare</span><span class="p">(</span><span class="k">for</span> <span class="nv">segue</span><span class="p">:</span> <span class="kt">UIStoryboardSegue</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?)</span> <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"ActionSegue"</span><span class="p">){</span>
-        <span class="kt">NSLog</span><span class="p">(</span><span class="s">"action segue 실행!"</span><span class="p">)</span>
-    <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"ManualSegue"</span><span class="p">){</span>
-        <span class="kt">NSLog</span><span class="p">(</span><span class="s">"Manual segue 실행!"</span><span class="p">)</span>
-    <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">segue</span><span class="o">.</span><span class="n">identifier</span> <span class="o">==</span> <span class="s">"CustomSegue"</span><span class="p">){</span>
-        <span class="kt">NSLog</span><span class="p">(</span><span class="s">"Custom segue 실행!"</span><span class="p">)</span>
-    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-        <span class="kt">NSLog</span><span class="p">(</span><span class="s">"알수없는 segue 입니다."</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-
-<h3 id="소스코드링크github"><a href="https://github.com/Junghun0/SampleScreenChange_ios.git">소스코드링크(github)</a></h3>
 
 
                 <hr style="visibility: hidden;">
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2019/05/20/ios-data-deliver/" data-toggle="tooltip" data-placement="top" title="[iOS] 화면간 데이터 전달 방식">
+                        <a href="/2019/07/24/kotlin-this/" data-toggle="tooltip" data-placement="top" title="[Kotlin] Kotlin this">
                         Previous<br>
-                        <span>[iOS] 화면간 데이터 전달 방식</span>
+                        <span>[Kotlin] Kotlin this</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2019/05/20/ios-sidebar/" data-toggle="tooltip" data-placement="top" title="[iOS] SideBar 만들기">
-                        Next<br>
-                        <span>[iOS] SideBar 만들기</span>
-                        </a>
-                    </li>
                     
                 </ul>
                 <hr style="visibility: hidden;">
@@ -566,8 +576,8 @@ iOS 에서는 하나의 뷰 컨트롤러 아래에 하나의 루트 뷰를 관�
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "junghoon-github-io";
-    var disqus_identifier = "/2019/05/20/ios-screen-change";
-    var disqus_url = "http://localhost:4000/2019/05/20/ios-screen-change/";
+    var disqus_identifier = "/2019/08/01/kotlin-collection";
+    var disqus_url = "http://localhost:4000/2019/08/01/kotlin-collection/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

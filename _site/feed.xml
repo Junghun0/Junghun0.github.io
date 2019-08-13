@@ -5,9 +5,208 @@
     <description>Mobile Lover</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 12 Aug 2019 20:10:42 +0900</pubDate>
-    <lastBuildDate>Mon, 12 Aug 2019 20:10:42 +0900</lastBuildDate>
+    <pubDate>Tue, 13 Aug 2019 15:03:17 +0900</pubDate>
+    <lastBuildDate>Tue, 13 Aug 2019 15:03:17 +0900</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>[Kotlin] Kotlin Collection</title>
+        <description>&lt;p&gt;Kotlin 의 컬렉션에 대해&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;배열&quot;&gt;배열&lt;/h2&gt;
+&lt;p&gt;특정 원소를 담고 있는 배열을 생성하려면 &lt;code class=&quot;highlighter-rouge&quot;&gt;arrayOf()&lt;/code&gt; 함수를 사용해야한다. 빈 배열을 생성하고 싶은 경우 &lt;code class=&quot;highlighter-rouge&quot;&gt;emptyArrayOf()&lt;/code&gt; 함수를 대신 사용할 수 있다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; arrayOf(vararg elements: T): Array&amp;lt; T &amp;gt;&lt;/strong&gt; &lt;br /&gt;
+함수의 인자로 받은 값으로 구성된 배열을 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; emptyArray(): Array&amp;lt; T &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+특정 타입을 갖는 빈 배열을 반환한다.
+널 값을 포함할 수 있는 배열을 생성하고 싶은 경우, &lt;code class=&quot;highlighter-rouge&quot;&gt;arrayOfNulls()&lt;/code&gt; 함수를 사용하여 배열을 생성한 후 이 배열에 값을 따로 채워넣을 수 있다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; arrayOfNulls(size: Int): Array&amp;lt; T? &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+배열 내 각 값들이 모두 널 값으로 초기화 되어 있고, 인자로 받은 size 만큼의 크기를 갖는 배열을 반환한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;// 인자로 전달된 문자열을 포함하는 배열을 생성한다.&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 배열의 타입은 인자를 통해 추론되므로 별도로 표기하지 않아도 된다.&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;cities&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arrayOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Seoul&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Tokyo&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;San Francisco&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// String 타입의 빈 배열을 생성한다.&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 전달되는 인자가 없어 타입 추론이 불가하므로 함수 호출 시 타입을 지정해 주어야 한다.&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;emptyStringArray&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emptyArray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;()&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// 크기가 3이고 널 값을 포함할 수 있는 배열을 생성한다.&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 전달되는 인자가 없어 타입 추론이 불가하므로 함수 호출 시 타입을 지정해 주어야한다.&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;nullStoreableArray&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arrayOfNulls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;자바의 원시 타입을 포함하는 배열은 코틀린의 배열과 다른 타입으로 취급되므로, 위의 함수가 아닌 각 타입에 맞는 함수를 사용해야한다.&lt;/strong&gt;
+다음은 자바 원시 타입을 포함하는 배열을 생성하는 함수들의 정의이다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;fun booleanArrayOf(vararg elements: Boolean): BooleanArray&lt;/strong&gt;&lt;br /&gt;
+Boolean 타입을 갖는 배열을 생성한다. 이 배열은 자바의 boolean[] 배열과 호환된다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun byteArrayOf(vararg elements: Byte): ByteArray&lt;/strong&gt;&lt;br /&gt;
+Byte 타입을 갖는 배열을 생성한다. 이 배열은 자바의 byte[] 배열과 호환된다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun charArrayOf(vararg elements: Char): CharArray&lt;/strong&gt;&lt;br /&gt;
+Char 타입을 갖는 배열을 생성한다. 이 배열은 자바의 char[] 배열과 호환된다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun doubleArrayOf(vararg elements: Double): DoubleArray&lt;/strong&gt;&lt;br /&gt;
+Double 타입을 갖는 배열을 생성한다. 이 배열은 자바의 double[] 배열과 호환된다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun floatArrayOf(vararg elements: Float): FloatArray&lt;/strong&gt;&lt;br /&gt;
+Float 타입을 갖는 배열을 생성한다. 이 배열은 자바의 float[] 배열과 호환된다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun intArrayOf(vararg elements: Int): IntArray&lt;/strong&gt;&lt;br /&gt;
+Int 타입을 갖는 배열을 생성한다. 이 배열은 자바의 int[] 배열과 호환된다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun longArrayOf(vararg elements: Long): LongArray&lt;/strong&gt;&lt;br /&gt;
+Long 타입을 갖는 배열을 생성한다. 이 배열은 자바의 long[] 배열과 호환된다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun shortArrayOf(vararg elements: Short): ShortArray&lt;/strong&gt;&lt;br /&gt;
+Short 타입을 갖는 배열을 생성한다. 이 배열은 자바의 short[] 배열과 호환된다.&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;리스트&quot;&gt;리스트&lt;/h2&gt;
+&lt;p&gt;포함하는 요소를 읽을 수만 있고 수정할 수 없는 읽기 전용 리스트는 listOf() 함수를 사용하여 생성할 수 있다. 읽기 전용 리스트를 생성하는 함수들의 정의는 다음과 같다.&lt;br /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; listOf(vararg elements: T): List&amp;lt; T &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+인자로 받은 elements를 포함하는 읽기 전용 리스트를 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; listOf(element: T): List&amp;lt; T &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+인자로 받은 element 하나만을 요소로 갖는 읽기 전용 리스트를 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; listOf(): List&amp;lt; T &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+비어있는 읽기 전용 리스트를 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;인자로 받는 값 중, 널 값은 무시하고 널이 아닌 값으로만 리스트를 구성하고 싶은 경우 listOfNotNull() 함수를 사용하면 편리하다&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; T : Any &amp;gt; listOfNotNull(vararg elements: T?): List&amp;lt; T &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+인자로 받은 elements 중 널이 아닌 값들로만 구성된 읽기 전용 리스트를 반환한다. 만약 인자로 전달된 모든 값이 널 값이라면 빈 리스트를 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; T : Any &amp;gt; listOfNotNull(elements: T?): List&amp;lt; T &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+인자로 받은 element의 값이 널이 아닌 경우 이 요소 하나만을 갖는 리스트를 반환하며, 널 값인 경우에는 빈 리스트를 반환한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;// 널 값이 아닌 인자가 아무것도 없으므로, listOfCountries에는 빈 리스트가 생성된다.&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;listOfCountries&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;listOfNotNull&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// 널 값인 인자는 무시하므로, &quot;Seoul&quot;, &quot;San Francisco&quot; 만을 요소로 갖는 리스트가 생성된다.&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;listOfCities&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;listOfNotNull&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Seoul&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;San Francisco&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;리스트에 포함된 요소를 수정할 수 있는 리스트는 mutableListOf() 함수를 사용하여 생성한다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; mutableListOf(vararg elements: T): MutableList&amp;lt; T &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+인자로 받은 elements를 요소로 가지며 수정 가능한 리스트를 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; mutableListOf(): MutableList&amp;lt; T &amp;gt;&lt;/strong&gt;
+비어있는 수정 가능한 리스트를 반환한다.&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;안드로이드 앱 개발시 자주 사용하는 자료구조 중 하나인 ArrayList 또한 표준 라이브러리에서 제공하는 함수인 arrayListOf()를 사용하여 쉽게 생성할 수 있다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; arrayListOf(vararg elements: T): ArrayList&amp;lt; T &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+인자로 받은 elements를 요소로 하는 ArrayList를 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; arrayListOf(): ArrayList&amp;lt; T &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+비어있는 ArrayList를 반환한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;맵&quot;&gt;맵&lt;/h2&gt;
+&lt;p&gt;포함하는 요소를 읽을 수만 있고, 수정할 수 없는 읽기 전용 맵(map)은 mapOf() 함수를 사용하여 생성할 수 있다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; K, V &amp;gt; mapOf(vararg pairs: Pair&amp;lt; K, V &amp;gt;): Map&amp;lt; K, V &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+Pair 형태로 받은 인자들을 포함하는 읽기 전용 맵을 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; K, V &amp;gt; mapOf(pairs: Pair&amp;lt; K, V &amp;gt;): Map&amp;lt; K, V &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+인자로 받은 pair 하나만을 요소로 갖는 읽기 전용 맵을 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; K, V &amp;gt; mapOf(): Map&amp;lt; K, V &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+비어있는 읽기 전용 맵을 반환한다.&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;리스트와 유사하게 맵이 포함하고 있는 요소를 수정할 수 있는 맵은 mutableMapOf() 함수로 생성할 수 있다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; K, V &amp;gt; mutableMapOf(vararg pairs: Pair&amp;lt; K, V &amp;gt;): MutableMap&amp;lt; K, V &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+Pair 형태로 받은 인자들을 포함하는 수정 가능한 맵을 반환.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; K, V &amp;gt; mutableMapOf(): MutableMap&amp;lt; K, V &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+비어있는 수정 가능한 맵을 반환한다.&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;mapOf() 함수나 mutableMapOf() 함수는 맵에 들어갈 요소를 모두 Pair 형태로 받는데, Pair를 만들 때 사용할 수 있는 표준 라이브러리 내 함수인 to()를 사용하면 이를 직관적으로 표현할 수 있다.&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;// Pair를 직접 사용하는 예&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;cities1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapOf&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Pair&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;SEO&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Seoul&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Pair&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;TOK&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Tokyo&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Pair&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;MTV&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Mountain View&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;//표준 라이브러리 내 함수 to를 사용하여 Pair를 직관적으로 표현한 예&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;cities2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;SEO&quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Seoul&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;TOK&quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Tokyo&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;MTV&quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Mountain View&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;보다 명시적인 타입의 맵을 생성해야 하는 경우 hashMapOf(), linkedMapOf(), sortedMapOf() 함수를 사용할 수 있다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; K, V &amp;gt; hashMapOf(vararg paris: Pair&amp;lt; K, V &amp;gt;): HashMap&amp;lt; K, V &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+Pair 형태로 받은 인자들을 포함하는 HashMap 형태의 맵을 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; K, V &amp;gt; hashMapOf(): HashMap&amp;lt; K, V &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+비어있는 HashMap 형태의 맵을 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; K, V &amp;gt; linkedMapOf(vararg paris: Pair&amp;lt; K, V &amp;gt;): LinkedHashMap&amp;lt; K, V &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+Pair 형태로 받은 인자들을 포함하는 LinkedHashMap 형태의 맵을 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; K, V &amp;gt; linkedMapOf(): LinkedHashMap&amp;lt; K, V &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+비어있는 LinkedHashMap 형태의 맵을 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; K, V &amp;gt; sortedMapOf(vararg paris: Pair&amp;lt; K, V &amp;gt;): SortedMap&amp;lt; K, V &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+Pair 형태로 받은 인자들을 포함하는 SortedMap 형태의 맵을 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;집합&quot;&gt;집합&lt;/h2&gt;
+&lt;p&gt;집합(set)은 중복되지 않는 요소들로 구성된 자료구조이다. 포함하는 요소를 읽을 수만 있고, 수정할 수 없는 읽기 전용 집합은 setOf() 함수를 사용하여 생성할 수 있다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; setOf(vararg elements: T): Set&amp;lt; T &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+인자로 받은 elements를 요소로 하는 읽기 전용 집합을 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; setOf(vararg elements: T): Set&amp;lt; T &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+인자로 받은 elements를 요소로 하는 읽기 전용 집합을 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; setOf(elements: T): Set&amp;lt; T &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+인자로 받은 element 하나만을 요소로 하는 읽기 전용 집합을 반환한다.&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;fun &amp;lt; T &amp;gt; setOf(): Set&amp;lt; T &amp;gt;&lt;/strong&gt;&lt;br /&gt;
+비어있는 읽기 전용 집합을 반환한다.&lt;br /&gt;
+포함하고 있는 요소를 수정할 수 있는 집합은 mutableSetOf() 함수로 생성할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Thu, 01 Aug 2019 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/2019/08/01/kotlin-collection/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/08/01/kotlin-collection/</guid>
+        
+        <category>Android</category>
+        
+        <category>Kotlin</category>
+        
+        <category>Study</category>
+        
+        
+      </item>
     
       <item>
         <title>[Kotlin] Kotlin this</title>
@@ -2453,86 +2652,6 @@ Message what, arg1, obj 등 ID와 정보 등을 같이 사용하는 메서드&lt
         <pubDate>Sun, 09 Jun 2019 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/2019/06/09/android-service/</link>
         <guid isPermaLink="true">http://localhost:4000/2019/06/09/android-service/</guid>
-        
-        <category>Android</category>
-        
-        <category>Mobile</category>
-        
-        <category>Study</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>[Android] Fragment 란</title>
-        <description>&lt;h1 id=&quot;fragment-란&quot;&gt;Fragment 란?&lt;/h1&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Fragment&lt;/code&gt;는 동작 또는 &lt;code class=&quot;highlighter-rouge&quot;&gt;Activity&lt;/code&gt; 내에서 UI의 일부를 나타낸다. 여러 개의 프래그먼트를 하나의 액티비티에 조합하여 창이 여러 개인 UI를 구축할 수 있으며, 하나의 프래그먼트를 여러 액티비티에서 재사용할 수 있다. 프래그먼트는 자체 수명 주기를 가지고, 자체 입력 이벤트를 받으며, 액티비티 실행 중에 추가 및 제거가 가능한 액티비티의 모듈식 섹션이라고 생각하면 된다.&lt;br /&gt;&lt;br /&gt;
-프래그먼트는 항상 액티비티 내에 포함되어 있어야 하며 해당 프래그먼트의 수명 주기는 호스트 액티비티의 수명 주기에 직접적으로 영향을 받는다.&lt;br /&gt;&lt;br /&gt;
-예를 들어 액티비티가 일시정지되는 경우, 그 안의 모든 프래그먼트도 일시정지되며 액티비티가 소멸되면 모든 프래그먼트도 마찬가지로 소멸된다.&lt;br /&gt;&lt;br /&gt;
-프래그먼트를 액티비티 레이아웃의 일부로 추가하는 경우, 이는 액티비티의 뷰 계층 내부의 &lt;code class=&quot;highlighter-rouge&quot;&gt;ViewGroup&lt;/code&gt;안에 있으며, 해당 프래그먼트가 자신의 뷰 레이아웃을 정의한다. 프래그먼트를 액티비티 레이아웃에 삽입하려면 해당 프래그먼트를 액티비티의 레이아웃 파일에서 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;fragment&amp;gt;&lt;/code&gt;요소로 선언하거나, 애플리케이션 코드에서 이를 기존의 &lt;code class=&quot;highlighter-rouge&quot;&gt;ViewGroup&lt;/code&gt;에 추가하면 된다.&lt;code class=&quot;highlighter-rouge&quot;&gt;그러나 프래그먼트가 액티비티 레이아웃의 일부분이어야만 하는 것은 아니다. 나름의 UI가 없는 프래그먼트도 액티비티를 위한 보이지 않는 작업자로 사용할 수 있다.&lt;/code&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;프래그먼트 사용 목적&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;분할된 화면들을 독립적으로 구성하기 위해 사용함&lt;/li&gt;
-  &lt;li&gt;분할된 화면들의 상태를 관리하기 위해 사용함&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img width=&quot;300&quot; height=&quot;300&quot; src=&quot;https://user-images.githubusercontent.com/30828236/59144720-aa712980-8a15-11e9-8430-800b840957eb.png&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;fragment-생명주기&quot;&gt;Fragment 생명주기&lt;/h2&gt;
-
-&lt;h3 id=&quot;onattach&quot;&gt;onAttach()&lt;/h3&gt;
-&lt;p&gt;프래그먼트가 액티비티에 attach 될 때 호출된다. 호출되면서 인자로 Context가 있는대 이 Context를 가지고 부모 액티비티에 listener interface를 implement했다면 형변환을 통해 가져올 수 있다.&lt;/p&gt;
-
-&lt;h3 id=&quot;oncreate&quot;&gt;onCreate()&lt;/h3&gt;
-&lt;p&gt;시스템은 프래그먼트를 생성할때 &lt;code class=&quot;highlighter-rouge&quot;&gt;onCreate()&lt;/code&gt;를 호출한다. 구현 내에서 프래그먼트의 기본 요소 중 프래그먼트가 일시정지되거나 중단되었다가 재개되었을 때 유지하고자 하는 것을 초기화해야 한다.&lt;/p&gt;
-
-&lt;h3 id=&quot;oncreateview&quot;&gt;onCreateView()&lt;/h3&gt;
-&lt;p&gt;시스템은 프래그먼트가 자신의 UI를 처음으로 그릴 시간이 되면 호출한다. 프래그먼트에 맞는 UI를 그리려면 메서드에서 &lt;code class=&quot;highlighter-rouge&quot;&gt;View&lt;/code&gt;를 리턴해야 한다. 이 메서드는 프래그먼트 레이아웃의 루트이다. 프래그먼트가 UI를 제공하지 않는 경우 null을 반환하면 된다.&lt;/p&gt;
-
-&lt;h3 id=&quot;onactivitycreated&quot;&gt;onActivityCreated()&lt;/h3&gt;
-&lt;p&gt;액티비티에서 프래그먼트를 모두 생성하고 난 다음 호출된다. 액티비티의 onCreate()에서 setContentView()한 다음과 유사하다. 이후에 UI 변경 작업이 가능하다.&lt;/p&gt;
-
-&lt;h3 id=&quot;onstart&quot;&gt;onStart()&lt;/h3&gt;
-&lt;p&gt;액티비티에서의 역할과 비슷하다. 유저에게 프래그먼트가 보이도록 하는 역할이다.&lt;/p&gt;
-
-&lt;h3 id=&quot;onresume&quot;&gt;onResume()&lt;/h3&gt;
-&lt;p&gt;프래그먼트가 비로소 화면에 보여지는 단계, 사용자에게 포커스를 잡은 상태. 사용자와의 상호작용이 가능하다.&lt;/p&gt;
-
-&lt;h4 id=&quot;다른-프래그먼트가-add-되는-경우&quot;&gt;다른 프래그먼트가 add 되는 경우&lt;/h4&gt;
-
-&lt;h3 id=&quot;onpause&quot;&gt;onPause()&lt;/h3&gt;
-&lt;p&gt;시스템이 이 메서드를 호출하는 것은 사용자가 프래그먼트를 떠난다는 첫 번째 신호이다.(프래그먼트가 소멸 중이라는 뜻은 아니다). 현재 사용자가 세션을 넘어서 지속되어야 하는 변경 사항을 적용하려면 이곳에서 해야 한다.&lt;/p&gt;
-
-&lt;h3 id=&quot;onstop&quot;&gt;onStop()&lt;/h3&gt;
-&lt;p&gt;프래그먼트는 더이상 보여지지 않게되며, 프래그먼트는 기능을 할 수 없다.&lt;/p&gt;
-
-&lt;h3 id=&quot;ondestroyview&quot;&gt;onDestroyView()&lt;/h3&gt;
-&lt;p&gt;프래그먼트에 &lt;code class=&quot;highlighter-rouge&quot;&gt;View&lt;/code&gt;들을 제거한다. 만약 &lt;code class=&quot;highlighter-rouge&quot;&gt;add 할 때 backstack 을 사용했다면, 다시 해당 프래그먼트로 돌아 올때 onCreateView() 가 호출된다.&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;ondestroy&quot;&gt;onDestroy()&lt;/h3&gt;
-&lt;p&gt;프래그먼트를 제거하기 직전에 호출된다.&lt;/p&gt;
-
-&lt;h3 id=&quot;ondetach&quot;&gt;onDetach()&lt;/h3&gt;
-&lt;p&gt;프래그먼트 &lt;code class=&quot;highlighter-rouge&quot;&gt;제거를 완료&lt;/code&gt;하고 액티비티와의 &lt;code class=&quot;highlighter-rouge&quot;&gt;연결도 해제&lt;/code&gt; 시킨다.&lt;/p&gt;
-
-&lt;h2 id=&quot;액티비티의-생명주기와-프래그먼트의-생명주기&quot;&gt;액티비티의 생명주기와 프래그먼트의 생명주기&lt;/h2&gt;
-&lt;p&gt;액티비티의 각 상태가 성공적으로 전이되었을 때, 프래그먼트가 호출 받을 수 있는 콜백함수의 범위이다.
-&lt;img width=&quot;300&quot; height=&quot;300&quot; src=&quot;https://user-images.githubusercontent.com/30828236/59145088-44d36c00-8a1a-11e9-9304-2977557fe312.png&quot; /&gt;&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;activity가 onCreate() 호출을 받아서 생성되었으면, fragment는 onActivityCreated() 함수까지 진행가능&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;onCreate()&lt;/strong&gt; : fragment가 처음 만들어질때 호출한다. &lt;code class=&quot;highlighter-rouge&quot;&gt;데이터를 초기화 시키거나 onPause(), onStop() 단계에 갔다가 다시 데이터 복원할 정보를 여기서 처리한다.&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;onCreateView()&lt;/strong&gt; : fragment UI 초기화 할 때 호출한다.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;onPause()&lt;/strong&gt; : 사용자가 fragment를 떠날 때 호출한다. 포커스를 가지고 있지는 않지만 back stack에 있을 수 있으므로 완전히 사라지는 것은 아니다. &lt;code class=&quot;highlighter-rouge&quot;&gt;여기서 데이터를 저장하는 것이 좋다.&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;onDestroy()&lt;/strong&gt; : activity가 destroy 될 때 같이 destory 된다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://developer.android.com/guide/components/fragments?hl=ko#EventCallbacks&quot;&gt;안드로이드 공식 문서 링크&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sat, 08 Jun 2019 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/2019/06/08/android-fragment/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/06/08/android-fragment/</guid>
         
         <category>Android</category>
         
