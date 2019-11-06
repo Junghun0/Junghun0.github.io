@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/hux-blog.min.css">
+    <link rel="stylesheet" href="/css/hux-blog.css">
 
     <!-- Custom Fonts -->
     <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
@@ -214,6 +214,87 @@
                 postlist-container
             ">
     			
+<div class="post-preview">
+    <a href="/2019/08/24/android-service2/">
+        <h2 class="post-title">
+            [Android] Service 란(2)
+        </h2>
+        
+        <h3 class="post-subtitle">
+             About Service 
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                백그라운드 스레드에서 작업을 오래 하는 문제
+먼저 예제 코드를 보자. 일반적으로는 이처럼 코드를 작성하지 않는다.
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+public class LifecycleApplication extends Application {
+    private...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by JungHoon-Park on August 24, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2019/08/04/kotlin-let-apply-with/">
+        <h2 class="post-title">
+            [Kotlin] Kotlin 범위지정함수
+        </h2>
+        
+        <h3 class="post-subtitle">
+            Kotlin let(), apply(), with(), run()
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                Kotlin 의 범위지정함수
+
+
+
+범위 지정 함수
+개발을 하다 보면 특정 객체에 있는 함수를 연속해서 사용하거나, 다른 함수의 인자로 전달하기 위해 변수를 선언하고 이를 다른 곳에서는 사용하지 않는 경우가 있다.
+이런 경우 유용하게 사용할 수 있는 함수를 코틀린에서는 표준 라이브러리를 통해 제공해준다.
+
+let()
+let() 함수는 이 함수를 호출한 ...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by JungHoon-Park on August 4, 2019
+    </p>
+</div>
+<hr>
+
 <div class="post-preview">
     <a href="/2019/08/02/kotlin-stream/">
         <h2 class="post-title">
@@ -479,62 +560,6 @@ Content Provider 란
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2019/06/15/android-broadcastreceiver_sample/">
-        <h2 class="post-title">
-            [Android] BroadCastReceiver 사용해보기
-        </h2>
-        
-        <h3 class="post-subtitle">
-            Android BroadCastReceiver Sample
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                Android BroadCastReceiver 사용해보기
-
-
-
-BroadCastReceiver 란
-- 4대 컴포넌트 중 하나이다 
-- 각종 앱에서 발생하는 방송(이벤트)을 캐치 후 리시버로 처리할 수 있도록 해준다 
-- 방송하기 -&gt; 수신하기 » 두 개가 하나의 사이클로 동작된다. 
-- 정적리시버 와 동적리시버 두가지 종류가 있다. 
-
-정적리시버...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by JungHoon-Park on June 15, 2019
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2019/06/11/android-handler/">
-        <h2 class="post-title">
-            [Android] Handler 사용해보기
-        </h2>
-        
-        <h3 class="post-subtitle">
-             About Handler 
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                Handler?
-
-안드로이드는 백그라운드에서 실행되어야 하는 기능을 서비스라는 애플리케이션 구성요소로 정의한다. 하지만 별도의 프로세스가 아닌 동일한 프로세스 내에서 위의 문제를 해결하려면 하나의 프로세스 안에서 여러 개의 작업이 동시 수행되는 멀티 스레드 방식을 사용할 수 있다. 스레드는 동시 수행이 가능한 작업 단위이며, 현재 수행되는 작업 이외의...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by JungHoon-Park on June 11, 2019
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -571,7 +596,7 @@ BroadCastReceiver 란
         </a>
         
         
-                <a data-sort="0018" 
+                <a data-sort="0020" 
                     href="/archive/?tag=Swift4"
                     title="Swift4"
                     rel="7">Swift4</a>
@@ -579,29 +604,29 @@ BroadCastReceiver 란
                 <a data-sort="0000" 
                     href="/archive/?tag=Study"
                     title="Study"
-                    rel="25">Study</a>
-        
-                <a data-sort="0007" 
-                    href="/archive/?tag=Mobile"
-                    title="Mobile"
-                    rel="18">Mobile</a>
+                    rel="27">Study</a>
         
                 <a data-sort="0008" 
                     href="/archive/?tag=Android"
                     title="Android"
-                    rel="17">Android</a>
+                    rel="19">Android</a>
         
-                <a data-sort="0018" 
+                <a data-sort="0008" 
+                    href="/archive/?tag=Mobile"
+                    title="Mobile"
+                    rel="19">Mobile</a>
+        
+                <a data-sort="0020" 
                     href="/archive/?tag=iOS"
                     title="iOS"
                     rel="7">iOS</a>
         
-                <a data-sort="0020" 
+                <a data-sort="0021" 
                     href="/archive/?tag=Kotlin"
                     title="Kotlin"
-                    rel="5">Kotlin</a>
+                    rel="6">Kotlin</a>
         
-                <a data-sort="0023" 
+                <a data-sort="0025" 
                     href="/archive/?tag=Architecture"
                     title="Architecture"
                     rel="2">Architecture
