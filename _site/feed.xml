@@ -5,9 +5,204 @@
     <description>Mobile Lover</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 07 Nov 2019 14:35:53 +0900</pubDate>
-    <lastBuildDate>Thu, 07 Nov 2019 14:35:53 +0900</lastBuildDate>
+    <pubDate>Thu, 07 Nov 2019 15:55:44 +0900</pubDate>
+    <lastBuildDate>Thu, 07 Nov 2019 15:55:44 +0900</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>[Android] 메인 스레드 &amp; Handler 이해하기</title>
+        <description>&lt;h1 id=&quot;ui-처리를-위한-메인-스레드&quot;&gt;UI 처리를 위한 메인 스레드&lt;/h1&gt;
+&lt;p&gt;애플리케이션은 성능을 위해 멀티 스레드를 많이 활용하지만, &lt;code class=&quot;highlighter-rouge&quot;&gt;UI를 업데이트하는 데는 단일 스레드 모델(해당 변수나 메서드를 사용하는 시점에는 하나의 스레드만 실행된다.)이 적용&lt;/code&gt;된다.
+멀티 스레드로 UI를 업데이트하면 동일한 UI 자원을 사용할 때 교착상태(deadlock), 경합상태(race condition) 등 여러 문제가 발생할 수 있다.
+따라서 &lt;code class=&quot;highlighter-rouge&quot;&gt;UI 업데이트를 메인 스레드에서만 허용&lt;/code&gt;한다.&lt;br /&gt;
+앱 프로세스가 시작되면서 메인 스레드가 생성된다. &lt;code class=&quot;highlighter-rouge&quot;&gt;컴포넌트(액티비티, 서비스, 브로드캐스트 리시버, Application)의 생명주기 메서드와 그 안의 메서드 호출은 기본적으로 메인 스레드에서 실행&lt;/code&gt;된다.&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;메인 스레드는 UI를 변경할 수 있는 유일한 스레드이기 때문에 메인 스레드를 UI 스레드로 부르기도 한다&lt;/code&gt;.
+서비스, 브로드캐스트 리시버, Application은 사용자 인터페이스(UI)가 아니기 때문에, UI 스레드에서 실행된다고 하면 개념을 혼동하기 쉽다.
+UI를 변경하는 유일한 수단이라는 의미를 강조하기 위해서 UI 스레드를 쓴다고 이해하자.&lt;/p&gt;
+
+&lt;h2 id=&quot;안드로이드-애플리케이션에서-메인-스레드&quot;&gt;안드로이드 애플리케이션에서 메인 스레드&lt;/h2&gt;
+&lt;p&gt;안드로이드 애플리케이션의 메인 스레드는 뭔가 특별한 것일까? 그렇지 않다. 안드로이드 프레임워크 내부 클래스인 &lt;code class=&quot;highlighter-rouge&quot;&gt;android.app.ActivityThread&lt;/code&gt;가 바로 애플리케이션의 메인 클래스(실제로는 ZygoteInit 이 시작점이지만 ActivityThread가 시작점이라고 이해하면 된다.)이고, ActivityThread의 main() 메서드가 애플리케이션의 시작 지점이다.
+ActivityThread는 클래스명 때문에 Thread를 상속한 것이라고 생각할 수 있지만, 어떤 것도 상속하지 않은 클래스이다. 클래스명의 앞부분이 Activity라서 액티비티와 관련된 것으로 오해할 수도 있다. ActivityThread는 액티비티만 관련되어 있는 것도 아니고 모든 컴포넌트들이 다 관련되어 있다.
+여기서 ‘Activity’라는 이름은 앱의 ‘활동’으로 이해하는 것이 낫다.&lt;br /&gt;&lt;br /&gt;
+&lt;strong&gt;ActivityThread.java&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;SamplingProfilerIntegration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;CloseGuard&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setEnabled&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Environment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;initForCurrentUser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;EventLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setReporter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EventLoggingReporter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Process&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setArgV0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&amp;lt;pre-initialized&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;Looper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;prepareMainLooper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//1&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;ActivityThread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ActivityThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;attach&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sMainThreadHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sMainThreadHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;AsyncTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;Looper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//2&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RuntimeException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Main thread loop unexpectedly exited&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol&gt;
+  &lt;li&gt;메인 Looper를 준비한다.&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;제일 중요한 라인으로 여기서 &lt;code class=&quot;highlighter-rouge&quot;&gt;UI Message를 처리&lt;/code&gt;한다. Looper.loop() 메서드에 무한 반복문이 있기 때문에 main() 메서드는 프로세스가 종료될 때까지 끝나지 않는다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;looper-클래스&quot;&gt;Looper 클래스&lt;/h1&gt;
+&lt;p&gt;메인 스레드의 동작을 이해하기 위해서는 &lt;code class=&quot;highlighter-rouge&quot;&gt;ActivityThread의 main() 메서드에서 중심이 되는 Looper를 이해하는 것이 필요&lt;/code&gt;하다. 이 부분에서는 Looper에 대해 알아보자.&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;스레드-별로-looper-생성&quot;&gt;스레드 별로 Looper 생성&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Looper는 TLS(Thread Local Storage)에 저장되고 꺼내어진다&lt;/code&gt;. 그 과정을 구체적으로 살펴보자&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&amp;lt;Looper&amp;gt;에 set()&lt;/code&gt; 메서드로 새로운 &lt;code class=&quot;highlighter-rouge&quot;&gt;Looper를 추가&lt;/code&gt;하고, &lt;code class=&quot;highlighter-rouge&quot;&gt;get() 메서드로 Looper를 가져올 때 스레드별로 다른 Looper가 반환된다.&lt;/code&gt;&lt;br /&gt;
+그리고 &lt;code class=&quot;highlighter-rouge&quot;&gt;Looper.prepare() 에서 스레드별로 Looper를 생성한다.&lt;/code&gt; 특히 메인 스레드의 &lt;code class=&quot;highlighter-rouge&quot;&gt;메인 Looper&lt;/code&gt;는 &lt;code class=&quot;highlighter-rouge&quot;&gt;ActivityThread의 main() 메서드에서 Looper.prepareMainLooper() 를 호출하여 생성&lt;/code&gt;한다.&lt;br /&gt;
+Looper.getMainLooper()를 사용하면 어디서든 메인 Looper를 가져올 수 있다.&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;looper별로-messagequeue-가짐&quot;&gt;Looper별로 MessageQueue 가짐&lt;/h2&gt;
+&lt;p&gt;Looper는 각각의 MessageQueue를 가진다. &lt;code class=&quot;highlighter-rouge&quot;&gt;특히 메인 스레드에서는 이 MessageQueue를 통해서 UI 작업에서 경합 상태를 해결&lt;/code&gt;한다. 개발 중에 큐 구조가 필요할 때 java.util.Queue의 여러 구현체를 사용할 수도 있지만 Looper를 사용하는 것도 고려해 보자. 특히 스레드별로 다른 큐를 사용할 때는, Looper를 대신 사용하는 게 더 단순해질 수 있다.&lt;/p&gt;
+
+&lt;h2 id=&quot;looperloop-메서드의-주요-코드&quot;&gt;Looper.loop() 메서드의 주요 코드&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Looper.java&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Looper&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;me&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myLooper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;me&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RuntimeException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;s&quot;&gt;&quot;No Looper; Looper.prepare() wasn't called on this thread.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MessageQueue&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;mQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(;;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Message&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//1&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//2&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;dispatchMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//3&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;recycle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;quit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;mQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;quit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;quitSafely&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;mQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;quit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; MessageQueue 에서 다음 Message를 꺼낸다.&lt;br /&gt;
+&lt;strong&gt;2.&lt;/strong&gt; Message가 null 이라면 리턴한다.&lt;br /&gt;
+&lt;strong&gt;3.&lt;/strong&gt; Message를 처리한다. target은 Handler 인스턴스이고 결과적으로 Handler의 dispatchMessage() 메서드가 Message를 처리한다.&lt;br /&gt;
+&lt;strong&gt;2.&lt;/strong&gt; 에서 MessageQueue 에서 꺼낸 Message가 언제 null이 될까? 바로 Looper가 종료될 때이다. Looper를 종료하는 메서드가 quit(), quitSafely()이다. 두 메서드는 구체적으로 MessageQueue의 quit(boolean safe) 메서드를 호출하고, 그 결과 &lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt;의 queue.next()에서 null을 리턴하고 &lt;code class=&quot;highlighter-rouge&quot;&gt;2&lt;/code&gt;에서 for 반복문이 종료된다.&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;quit과-quitsafely-메서드-차이&quot;&gt;quit()과 quitSafely() 메서드 차이&lt;/h2&gt;
+&lt;p&gt;Looper API 문서에서 quit()과 quitSafely() 메서드의 차이도 확인하자. &lt;code class=&quot;highlighter-rouge&quot;&gt;quit() 메서드는 아직 처리되지 않은 Message를 모두 제거&lt;/code&gt;한다. &lt;code class=&quot;highlighter-rouge&quot;&gt;quitSafely() 메서드는 sendMessageDelayed() 등을 써서 실행 타임스탬프를 뒤로 미룬 지연 Message를 처리하는데, quitSafely() 메서드를 실행하는 시점에 현재 시간보다 타임스탬프가 뒤에 있는 Message를 제거하고 그 앞에 있는 Message는 계속해서 처리&lt;/code&gt;한다. quitSafely() 메서드는 젤리빈 API 레벨 18 이상에서 쓸 수 있다.&lt;/p&gt;
+
+&lt;h1 id=&quot;message-와-messagequeue&quot;&gt;Message 와 MessageQueue&lt;/h1&gt;
+&lt;p&gt;MessageQueue는 Message를 담는 자료구조이다. &lt;code class=&quot;highlighter-rouge&quot;&gt;MessageQueue의 구조&lt;/code&gt;는 java.util.Queue의 구현체 가운데서 ArrayBlockingQueue보다는 &lt;code class=&quot;highlighter-rouge&quot;&gt;LinkedBlockingQueue에 가깝다&lt;/code&gt;.&lt;br /&gt;
+ArrayBlockingQueue와 LinkedBlockingQueue를 비교해 보면, ArrayBlockingQueue는 배열에 노드를 추가하는 방식이고 LinkedBlockingQueue는 변수에 다음 노드에 대한 링크를 가지는 방식이다. 배열 구조에 비해서 &lt;code class=&quot;highlighter-rouge&quot;&gt;링크 구조는 일반적으로 개수 제한이 없고 삽입 속도가 빠르다&lt;/code&gt;. 대신 &lt;code class=&quot;highlighter-rouge&quot;&gt;배열 구조는 랜덤 인덱스 접근이 가능&lt;/code&gt;하고 &lt;code class=&quot;highlighter-rouge&quot;&gt;링크 구조는 순차 접근&lt;/code&gt;을 해야 한다. &lt;code class=&quot;highlighter-rouge&quot;&gt;MessageQueue에는 Message가 실행 타임스탬프순으로 삽입되고 링크로 연결되어, 실행 시간이 빠른 것부터 순차적으로 꺼내어 진다&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;message-클래스&quot;&gt;Message 클래스&lt;/h2&gt;
+&lt;p&gt;먼저 MessageQueue에 담기는 Message를 살펴보자. Message 클래스 내용을 보면 Message에 어떤 데이터가 전달되는지 알 수 있고, 이 데이터가 이후에 어떻게 사용되는지 이해하는 데도 도움이 된다.&lt;br /&gt;
+&lt;strong&gt;Message.java&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Message&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Parcelable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;what&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arg1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arg2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Messenger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;replyTo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;MessageQueue에 들어가는 Message에는 퍼블릭 변수에 int, arg1, arg2, obj, replyTo, what 5개가 있다. Message를 만들 때 이 변수에 값을 넣는다.&lt;br /&gt;
+Message에는 패키지 프라이빗 변수도 여러 개 있다. &lt;code class=&quot;highlighter-rouge&quot;&gt;android.os 패키지 아래에 Looper, Message, MessageQueue, Handler도 있는데, 이들 클래스에서 Message의 패키지 프라이빗 변수에 직접 접근&lt;/code&gt;한다. &lt;code class=&quot;highlighter-rouge&quot;&gt;target 이나 callback 같은 것들이 Handler에서 postXxx(), sendXxx() 메서드를 호출할 때 Message에 담겨서 MessageQueue에 들어간다&lt;/code&gt;.&lt;br /&gt;
+postXxx(), sendXxx() 메서드에서 실행 시간(what)이 전달되고, &lt;code class=&quot;highlighter-rouge&quot;&gt;나중에 호출한 것이라도 타임스탬프가 앞서면 큐 중간에 삽입&lt;/code&gt;된다. 이것이 &lt;code class=&quot;highlighter-rouge&quot;&gt;삽입이 쉬운 링크 구조를 사용한 이유&lt;/code&gt;이다.&lt;/p&gt;
+
+&lt;h2 id=&quot;obtain-메서드를-통한-message-생성&quot;&gt;obtain() 메서드를 통한 Message 생성&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Message를 생성할 때는 오브젝트 풀(Object Pool)에서 가져오는 Message.obtain()&lt;/code&gt; 메서드나 &lt;code class=&quot;highlighter-rouge&quot;&gt;Handler의 obtainMessage() 메서드 사용을 권장&lt;/code&gt;한다.&lt;br /&gt;
+내부적으로 Handler의 obtainMessage()는 Message.obtain()을 다시 호출한다. 오브젝트 풀은 Message에 정적 변수로 있고(여기서도 링크로 연결됨) Message를 최대 50개까지 저장한다.&lt;br /&gt;
+그리고 Looper.loop() 메서드에서 Message를 처리하고 나서 recycleUnChecked() 메서드를 통해 Message를 다시 초기화해서 재사용한다. 오브젝트 풀이 최대 개수에 도달하지 않았다면 오브젝트 풀에 Message를 추가한다. new Message()와 같이 기본 생성자로 생성해서 값을 채워도 동작에는 문제가 없어 보이지만 Message 처리가 끝나면 불필요하게 풀에 Message를 추가하면서 금방 풀의 최대 개수에 이른다. &lt;br /&gt;
+Message를 풀에서 가져와서(여분이 없으면 새로 생성) 풀에 돌려줘야지 따로 생성해서 풀에 돌려주면 자원이 낭비된다.(&lt;code class=&quot;highlighter-rouge&quot;&gt;Handler 에서 Message를 처리하는게 아니라, 값을 전달하기 위한 용도로 Message를 대신 사용해서 주고받는 경우에만 Message 기본 생성자를 사용하자.&lt;/code&gt;)&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 07 Sep 2019 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/2019/09/07/android-thread-handler/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/09/07/android-thread-handler/</guid>
+        
+        <category>Android</category>
+        
+        <category>Mobile</category>
+        
+        <category>Study</category>
+        
+        
+      </item>
     
       <item>
         <title>[Android] Service 란(2)</title>
@@ -2672,130 +2867,6 @@ Parcel.createTypeArray()를 호출했을 때 불리며 new T[size]로 반환해�
         <pubDate>Sun, 16 Jun 2019 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/2019/06/16/android-parcel/</link>
         <guid isPermaLink="true">http://localhost:4000/2019/06/16/android-parcel/</guid>
-        
-        <category>Android</category>
-        
-        <category>Mobile</category>
-        
-        <category>Study</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>[Android] Content Provider 사용해보기</title>
-        <description>&lt;p&gt;Android Content Provider 사용해보기&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;content-provider-란&quot;&gt;Content Provider 란&lt;/h1&gt;
-
-&lt;p&gt;안드로이드는 기본적으로 SQLite를 사용할 수 있도록 다양한 API를 제공해주고 있다. 다시 말해 어플리케이션 내에서 사용하는 데이터를 공유하기 위한 컴포넌트이다. &lt;code class=&quot;highlighter-rouge&quot;&gt;Content Provider&lt;/code&gt;는 여러 앱 간에 데이터를 공유할 필요가 있을 때 사용한다.&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;ContentProvider&lt;/code&gt;에 접근하는 것은 &lt;code class=&quot;highlighter-rouge&quot;&gt;ContentResolver&lt;/code&gt;를 통해서만 가능하다. 그리고 &lt;code class=&quot;highlighter-rouge&quot;&gt;ContentResolver&lt;/code&gt;는 &lt;code class=&quot;highlighter-rouge&quot;&gt;Context&lt;/code&gt;의 &lt;code class=&quot;highlighter-rouge&quot;&gt;getContentResolver()&lt;/code&gt; 메서드로 구할 수 있다. &lt;code class=&quot;highlighter-rouge&quot;&gt;ContentResolver&lt;/code&gt;는 추상 클래스이고 실제 구현체는 &lt;code class=&quot;highlighter-rouge&quot;&gt;ContextImpl&lt;/code&gt;의 내부 클래스인 &lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContentResolver&lt;/code&gt;이다.&lt;br /&gt;&lt;br /&gt;
-예제는 에뮬레이터의 이미지를 불러와 GridView에 보여주는 예제이다.&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;소스코드&quot;&gt;소스코드&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;MainActivity&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onCreate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bundle&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;savedInstanceState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;onCreate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;savedInstanceState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;setContentView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;layout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;activity_sample5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;GridView&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gridView&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;findViewById&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;photo_list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;Cursor&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getContentResolver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;MediaStore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Images&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Media&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;EXTERNAL_CONTENT_URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;MediaStore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Images&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ImageColumns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;DATE_TAKEN&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;DESC&quot;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;MyCursorAdapter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyCursorAdapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;gridView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setAdapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    
-    &lt;span class=&quot;n&quot;&gt;gridView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setOnItemClickListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;position&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Cursor&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cursor1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Cursor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAdapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getItem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;position&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;uri&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cursor1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cursor1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getColumnIndexOrThrow&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MediaStore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Images&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Media&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;DATA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Toast&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;makeText&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Sample5Activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;사진 경로: &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;uri&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Toast&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;LENGTH_SHORT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        
-    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;CursorAdapter&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyCursorAdapter&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CursorAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MyCursorAdapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Context&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Cursor&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;View&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;newView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Context&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Cursor&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ViewGroup&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;viewGroup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LayoutInflater&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;from&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;inflate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;layout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;item_photo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;viewGroup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;bindView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;View&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Context&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Cursor&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ImageView&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageView&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;findViewById&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;photo_image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;cm&quot;&gt;/*String uri = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
-        imageView.setImageURI(Uri.parse(uri));*/&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;uri&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getColumnIndexOrThrow&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MediaStore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Images&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Media&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;DATA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Glide&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;uri&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;into&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;imageView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;이후에 권한 체크하는 부분이 필요하다. 추후에 추가예정&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 15 Jun 2019 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/2019/06/15/android-content-provider/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/06/15/android-content-provider/</guid>
         
         <category>Android</category>
         
