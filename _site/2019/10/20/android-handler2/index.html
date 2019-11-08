@@ -11,14 +11,15 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="[Kotlin] Kotlin 범위지정함수 - Junghoon's Blog">
+    <meta property="og:title" content="[Android] Handler 용도 정리 - Junghoon's Blog">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="Kotlin 의 범위지정함수
+    <meta property="og:description" content="Handler 용도 정리
+Handler는 일반적으로 UI 갱신을 위해 사용한다.
 
 ">
     
-    <meta property="article:published_time" content="2019-08-04T00:00:00Z">
+    <meta property="article:published_time" content="2019-10-20T00:00:00Z">
     
     
     <meta property="article:author" content="JungHoon-Park">
@@ -26,16 +27,16 @@
     
     <meta property="article:tag" content="Android">
     
-    <meta property="article:tag" content="Kotlin">
+    <meta property="article:tag" content="Mobile">
     
     <meta property="article:tag" content="Study">
     
     
     <meta property="og:image" content="http://localhost:4000">
-    <meta property="og:url" content="http://localhost:4000/2019/08/04/kotlin-let-apply-with/">
+    <meta property="og:url" content="http://localhost:4000/2019/10/20/android-handler2/">
     <meta property="og:site_name" content="Junghoon's Blog">
     
-    <title>[Kotlin] Kotlin 범위지정함수 - Junghoon's Blog</title>
+    <title>[Android] Handler 용도 정리 - Junghoon's Blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -44,7 +45,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2019/08/04/kotlin-let-apply-with/">
+    <link rel="canonical" href="http://localhost:4000/2019/10/20/android-handler2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -227,15 +228,15 @@
                         
                         <a class="tag" href="/archive/?tag=Android" title="Android">Android</a>
                         
-                        <a class="tag" href="/archive/?tag=Kotlin" title="Kotlin">Kotlin</a>
+                        <a class="tag" href="/archive/?tag=Mobile" title="Mobile">Mobile</a>
                         
                         <a class="tag" href="/archive/?tag=Study" title="Study">Study</a>
                         
                     </div>
-                    <h1>[Kotlin] Kotlin 범위지정함수</h1>
+                    <h1>[Android] Handler 용도 정리</h1>
                     
-                    <h2 class="subheading">Kotlin let(), apply(), with(), run()</h2>
-                    <span class="meta">Posted by JungHoon-Park on August 4, 2019</span>
+                    <h2 class="subheading"> About Handler Use </h2>
+                    <span class="meta">Posted by JungHoon-Park on October 20, 2019</span>
                 </div>
             </div>
         </div>
@@ -261,154 +262,18 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>Kotlin 의 범위지정함수</p>
+				<h1 id="handler-용도-정리">Handler 용도 정리</h1>
+<p>Handler는 일반적으로 UI 갱신을 위해 사용한다.</p>
 
-<hr />
+<h2 id="백그라운드-스레드에서-ui-업데이트">백그라운드 스레드에서 UI 업데이트</h2>
+<p>백그라운드 스레드에서 네트워크나 DB 작업 등을 하는 도중에 UI를 업데이트 한다. AsyncTask에서도 내부적으로 Handler를 이용해서 onPostExecute() 메서드를 실행해서 UI를 업데이트한다.</p>
 
-<h2 id="범위-지정-함수">범위 지정 함수</h2>
-<p>개발을 하다 보면 특정 객체에 있는 함수를 연속해서 사용하거나, 다른 함수의 인자로 전달하기 위해 변수를 선언하고 이를 다른 곳에서는 사용하지 않는 경우가 있다.<br />
-이런 경우 유용하게 사용할 수 있는 함수를 코틀린에서는 표준 라이브러리를 통해 제공해준다.</p>
+<h2 id="메인-스레드에서-다음-작업-예약">메인 스레드에서 다음 작업 예약</h2>
+<p>UI 작업 중에 다음 UI 갱신 작업을 MessageQueue에 넣어 예약한다. 작업 예약이 필요한 경우가 있는데, 예를 들어 Activity의 onCreate() 메서드에서 하지 못하는 일들이 있다. 소프트 키보드를 띄우는 것이나, ListView의 setSelection() 메서드를 호출하는 작업은 onCreate() 메서드에서는 잘 동작하지 않는다. 이 때 Handler에 Message를 보내면 현재 작업이 끝난 이후의 다음 타이밍에 Message를 처리한다.</p>
 
-<h3 id="let">let()</h3>
-<p><code class="highlighter-rouge">let()</code> 함수는 이 함수를 호출한 객체를 이어지는 함수 블록의 인자로 전달한다.</p>
-<ul>
-  <li><strong>fun &lt; T, R &gt; T.let(block: (T) -&gt; R ) : R</strong><br />
-이 함수를 호출하는 객체를 이어지는 함수형 인자 block 의 인자로 전달하며 block 함수의 결과를 반환한다.</li>
-</ul>
-
-<p><code class="highlighter-rouge">let()</code>함수를 사용하면 불필요한 변수 선언을 방지할 수 있다.<br />
-커스텀 뷰를 작성하다 보면 길이를 계산한 값을 변수에 저장해 두고, 이를 함수 호출 시 인자로 전달하는 경우가 흔하다.</p>
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-</pre></td><td class="rouge-code"><pre><span class="c1">//단말기 환경에 맞게 패딩 값을 계산한다.</span>
-<span class="kd">val</span> <span class="py">padding</span> <span class="p">=</span> <span class="n">TypedValue</span><span class="p">.</span><span class="n">applyDimension</span><span class="p">(</span>
-    <span class="n">TypedValue</span><span class="p">.</span><span class="n">COMPLEX_UNIT_DIP</span><span class="p">,</span> <span class="m">16f</span><span class="p">,</span> <span class="n">resources</span><span class="p">.</span><span class="n">displayMetrics</span><span class="p">).</span><span class="n">toInt</span><span class="p">()</span>
-
-<span class="c1">//패딩 값을 설정한다.</span>
-<span class="n">setPadding</span><span class="p">(</span><span class="n">padding</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p>위의 경우에는 <code class="highlighter-rouge">let()</code> 함수를 사용하면 값 padding 의 선언 없이 계산된 패딩 값을 함수의 각 인자로 전달할 수 있다.</p>
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-</pre></td><td class="rouge-code"><pre><span class="n">TypedValue</span><span class="p">.</span><span class="n">applyDimension</span><span class="p">(</span><span class="n">TypedValue</span><span class="p">.</span><span class="n">COMPLEX_UNIT_DIP</span><span class="p">,</span> <span class="m">16f</span><span class="p">,</span> <span class="n">resources</span><span class="p">.</span><span class="n">displayMetrics</span><span class="p">).</span><span class="n">toInt</span><span class="p">().</span><span class="n">let</span><span class="p">{</span>
-    <span class="c1">//계산된 값을 인자로 받으므로, 함수에 바로 대입할 수 있다.</span>
-    <span class="n">setPadding</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">it</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p>이 외에도 널 값이 아닌 경우를 체크한 후 특정 작업을 수행하는 코드에도 <code class="highlighter-rouge">let()</code> 함수를 사용할 수 있다.</p>
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-</pre></td><td class="rouge-code"><pre><span class="k">fun</span> <span class="nf">doSomething</span><span class="p">(</span><span class="nv">message</span><span class="p">:</span> <span class="nc">String</span><span class="p">?)</span> <span class="p">{</span>
-    <span class="c1">//message가 널이 아닌 경우에만 let 함수를 호출한다.</span>
-    <span class="n">message</span><span class="o">?.</span><span class="n">let</span> <span class="p">{</span>
-        <span class="n">Toast</span><span class="p">.</span><span class="n">makeText</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">it</span><span class="p">,</span> <span class="n">Toast</span><span class="p">.</span><span class="n">LENGTH_SHORT</span><span class="p">).</span><span class="n">show</span><span class="p">()</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<hr />
-<h3 id="apply-함수">apply() 함수</h3>
-<p><code class="highlighter-rouge">apply()</code> 함수는 이 함수를 호출한 객체를, 이어지는 함수 블록의 리시버로 전달한다.</p>
-<ul>
-  <li><strong>fun &lt; T &gt; T.apply(block: T.() -&gt; Unit): T</strong><br />
-이 함수를 호출하는 객체를 이어지는 함수형 인자 block의 리시버로 전달하며, 함수를 호출한 객체를 반환한다.</li>
-</ul>
-
-<p>함수를 호출한 객체를 함수형 인자 block의 리시버로 전달하므로, 이 블록 내에서는 해당 객체 내의 프로퍼티나 함수를 직접 호출할 수 있다.<br />
-따라서 객체 이름을 일일이 명시하지 않아도 되므로 코드를 간략하게 만드는 데 도움이 된다.</p>
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-</pre></td><td class="rouge-code"><pre><span class="kd">val</span> <span class="py">param</span> <span class="p">=</span> <span class="n">LinearLayout</span><span class="p">.</span><span class="n">LayoutParams</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">LinearLayout</span><span class="p">.</span><span class="n">LayoutParams</span><span class="p">.</span><span class="n">WRAP_CONTENT</span><span class="p">)</span>
-<span class="n">param</span><span class="p">.</span><span class="n">gravity</span> <span class="p">=</span> <span class="n">Gravity</span><span class="p">.</span><span class="n">CENTER_VERTICAL</span>
-<span class="n">param</span><span class="p">.</span><span class="n">weight</span> <span class="p">=</span> <span class="m">1f</span>
-<span class="n">param</span><span class="p">.</span><span class="n">topMargin</span> <span class="p">=</span> <span class="m">100</span>
-<span class="n">param</span><span class="p">.</span><span class="n">bottomMargin</span> <span class="p">=</span> <span class="m">100</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><code class="highlighter-rouge">apply()</code> 함수에 이어지는 블록에 param 객체를 리시버로 전달하므로, 객체 이름 없이 직접 해당 객체 내부의 속성에 접근할 수 있다.</p>
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-</pre></td><td class="rouge-code"><pre><span class="kd">val</span> <span class="py">param</span> <span class="p">=</span> <span class="n">LinearLayout</span><span class="p">.</span><span class="n">LayoutParams</span><span class="p">(</span>
-    <span class="n">LinearLayout</span><span class="p">.</span><span class="n">LayoutParams</span><span class="p">.</span><span class="n">WRAP_CONTENT</span><span class="p">,</span>
-    <span class="n">LinearLayout</span><span class="p">.</span><span class="n">LayoutParams</span><span class="p">.</span><span class="n">WRAP_CONTENT</span><span class="p">).</span><span class="n">apply</span><span class="p">{</span>
-        <span class="n">gravity</span> <span class="p">=</span> <span class="n">Gravity</span><span class="p">.</span><span class="n">CENTER_VERTICAL</span>
-        <span class="n">weight</span> <span class="p">=</span> <span class="m">1f</span>
-        <span class="n">topMargin</span> <span class="p">=</span> <span class="m">100</span>
-        <span class="n">bottomMargin</span> <span class="p">=</span> <span class="m">100</span>
-    <span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<hr />
-<h3 id="with-함수">with() 함수</h3>
-<p><code class="highlighter-rouge">with()</code> 함수는 인자로 받은 객체를 이어지는 함수 블록의 리시버로 전달한다.</p>
-<ul>
-  <li><strong>fun &lt; T, R &gt; with(receiver: T, block: T.() -&gt; R): R</strong><br />
-인자로 받은 객체 receiver를 이어지는 함수형 인자 block의 리시버로 전달하며, block 함수의 결과를 반환한다.</li>
-</ul>
-
-<p><code class="highlighter-rouge">with()</code> 함수는 let(), apply() 함수와 달리 이 함수에서 사용할 객체를 매개변수를 통해 받는다. 따라서 안전한 호출을 사용하여 인자로 전달되는 객체가 널 값이 아닌 경우 함수의 호출 자체를 막는 방법을 사용할 수 없으므로 널 값이 아닌 것으로 확인된 객체에 이 함수를 사용하는 것을 권장한다.</p>
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="rouge-code"><pre><span class="k">fun</span> <span class="nf">manipulateView</span><span class="p">(</span><span class="nv">messageView</span><span class="p">:</span> <span class="nc">TextView</span><span class="p">){</span>
-    <span class="c1">// 인자로 받은 messageView의 여러 속성을 변경한다.</span>
-    <span class="n">with</span><span class="p">(</span><span class="n">messageView</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">text</span> <span class="p">=</span> <span class="s">"Hello, World"</span>
-        <span class="n">gravity</span> <span class="p">=</span> <span class="n">Gravity</span><span class="p">.</span><span class="n">CENTER_VERTICAL</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<hr />
-<h3 id="run-함수">run() 함수</h3>
-<p><code class="highlighter-rouge">run()</code> 함수는 인자가 없는 익명 함수처럼 사용하는 형태와 객체에서 호출하는 형태를 제공한다.</p>
-<ul>
-  <li><strong>fun &lt; R &gt; run(block: () -&gt; R): R</strong><br />
-함수형 인자 block을 호출하고 그 결과를 리턴한다.<br /><br /></li>
-  <li><strong>fun &lt; T, R &gt; T.run(block: T.() -&gt; R): R</strong><br />
-이 함수를 호출한 객체를 함수형 인자 block의 리시버로 전달하고 그 결과를 리턴한다.<br /></li>
-</ul>
-
-<p><code class="highlighter-rouge">run()</code> 함수를 인자가 없는 익명 함수처럼 사용하는 경우, 복잡한 계산을 위해 여러 임시 변수가 필요할 때 유용하게 사용할 수 있다.</p>
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-</pre></td><td class="rouge-code"><pre><span class="kd">val</span> <span class="py">padding</span> <span class="p">=</span> <span class="n">run</span> <span class="p">{</span>
-    <span class="c1">// 이 블록 내부에서 선언하는 값들은 외부에 노출되지 않는다.</span>
-    <span class="kd">val</span> <span class="py">defaultPadding</span> <span class="p">=</span> <span class="n">TypedValue</span><span class="p">.</span><span class="n">applyDimension</span><span class="p">(</span><span class="o">..</span><span class="p">.)</span>
-    <span class="kd">val</span> <span class="py">extraPadding</span> <span class="p">=</span> <span class="n">TypedValue</span><span class="p">.</span><span class="n">applyDimension</span><span class="p">(</span><span class="o">..</span><span class="p">.)</span>
-
-    <span class="c1">//계산된 값을 반환한다.</span>
-    <span class="n">defaultPadding</span> <span class="p">+</span> <span class="n">extraPadding</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p>객체에서 <code class="highlighter-rouge">run()</code> 함수를 호출하는 경우 with() 함수와 유사한 목적으로 사용할 수 있다.<br />
-<code class="highlighter-rouge">run()</code> 함수는 안전한 호출을 사용할 수 있으므로 널 값일 수 있는 객체의 속성이나 함수에 연속적으로 접근해야 할 때 유용하다.</p>
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<h2 id="반복-ui-갱신">반복 UI 갱신</h2>
+<p>반복해서 UI를 갱신한다. DigitalClock이나 TextColor 같은 위젯도 Handler를 이용해서 현재 시간을 갱신해서 보여준다. 반복해서 UI를 갱신하는 패턴은 다음과 같다.<br /></p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -422,40 +287,126 @@
 12
 13
 14
-</pre></td><td class="rouge-code"><pre><span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(</span><span class="nv">saveInstanceState</span><span class="p">:</span> <span class="nc">Bundle</span><span class="p">?)</span> <span class="p">{</span>
-    <span class="k">super</span><span class="p">.</span><span class="n">onCreate</span><span class="p">(</span><span class="n">saveInstanceState</span><span class="p">)</span>
+</pre></td><td class="rouge-code"><pre><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">DELAY_TIME</span> <span class="o">=</span> <span class="mi">2000</span><span class="o">;</span>
 
-    <span class="c1">//액티비티 생성 시, 기존에 저장된 값이 있는 경우 UI 복원 수행</span>
-    <span class="n">saveInstanceState</span><span class="o">?.</span><span class="n">run</span> <span class="p">{</span>
+<span class="kd">private</span> <span class="n">Runnable</span> <span class="n">updateTimeTask</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
 
-        <span class="c1">//Bundle 내에 저장된 값 추출</span>
-        <span class="kd">val</span> <span class="py">selection</span> <span class="p">=</span> <span class="n">getInt</span><span class="p">(</span><span class="s">"last_selection"</span><span class="p">)</span>
-        <span class="kd">val</span> <span class="py">text</span> <span class="p">=</span> <span class="n">getString</span><span class="p">(</span><span class="s">"last_text"</span><span class="p">)</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">systemInfo</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">monitorService</span><span class="o">.</span><span class="na">getSystemInfo</span><span class="o">());</span>
+        <span class="n">handler</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">DELAY_TIME</span><span class="o">);</span> <span class="c1">//1</span>
+    <span class="o">}</span>
+<span class="o">};</span>
 
-        <span class="c1">//UI 복원 수행</span>
-        <span class="o">..</span><span class="p">.</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onClickButton</span><span class="o">(</span><span class="n">View</span> <span class="n">view</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">handler</span><span class="o">.</span><span class="na">post</span><span class="o">(</span><span class="n">updateTimeTask</span><span class="o">);</span>
+<span class="o">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
+<p>UI 갱신이 끝나고 <code class="highlighter-rouge">1</code> 에서 postDelayed() 에 Runnable 자체를 전달해서 계속 반복한다.</p>
+
+<h2 id="시간-제한">시간 제한</h2>
+<p>시간을 제한할 때 사용한다. 안드로이드에서 내부적으로 ANR을 판단할 때도 사용하는 방법이다. 아래 코드는 개발자 가이드에 있는 것인데, 블루투스 LE 디바이스를 스캔하는 시간을 제한한다.<br /><br />
+<strong>블루투스 LE 스캔 시간 제한</strong></p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="rouge-code"><pre><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">SCAN_PERIOD</span> <span class="o">=</span> <span class="mi">10000</span><span class="o">;</span>
+
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">scanLeDevice</span><span class="o">(</span><span class="kd">final</span> <span class="kt">boolean</span> <span class="n">enable</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">enable</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mHandler</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span> <span class="c1">//1 ~</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                <span class="n">mScanning</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="n">mBluetoothAdapter</span><span class="o">.</span><span class="na">stopLeScan</span><span class="o">(</span><span class="n">mLeScanCallback</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">},</span> <span class="n">SCAN_PERIOD</span><span class="o">);</span> <span class="c1">// 1</span>
+        <span class="n">mScanning</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="n">mBluetoothAdapter</span><span class="o">.</span><span class="na">startLeScan</span><span class="o">(</span><span class="n">mLeScanCallback</span><span class="o">);</span> <span class="c1">//2</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="n">mScanning</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="n">mBluetoothAdapter</span><span class="o">.</span><span class="na">stopLeScan</span><span class="o">(</span><span class="n">mLeScanCallback</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><code class="highlighter-rouge">2</code>에서 startLeScan()을 실행하는데, <code class="highlighter-rouge">1</code>의 postDelayed(Runnable) 메서드에서 stopLeScan()을 10초 후에 실행하도록 Runnable Message 를 전달하였다.<br /><br />
+<strong>백 키를 두 번 이상 연속해서 누를 때만 액티비티 종료</strong></p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="rouge-code"><pre><span class="kd">private</span> <span class="kt">boolean</span> <span class="n">isBackPressedOnce</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span> <span class="c1">//1</span>
+
+<span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onBackPressed</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isBackPressedOnce</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 2</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onBackPressed</span><span class="o">();</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">String</span><span class="o">.</span><span class="na">backpressed_message</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span><span class="c1">// 3</span>
+        <span class="n">isBackPressedOnce</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span> <span class="c1">// 4</span>
+        <span class="n">timerHandler</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="n">timerTask</span><span class="o">,</span> <span class="mi">5000</span><span class="o">);</span><span class="c1">// 5</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">private</span> <span class="kd">final</span> <span class="n">Runnable</span> <span class="n">timerTask</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span> <span class="c1">// 6</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">isBackPressedOnce</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><code class="highlighter-rouge">1</code> <strong>isBackPressedOnce</strong> 변수가 종료 플래그이다. 최초 값은 false 이다.<br />
+<code class="highlighter-rouge">2</code> 종료 플래그가 true 이면 종료한다. 최초 값이 false이기 때문에 처음에는 이 조건에 걸리지 않는다.<br />
+<code class="highlighter-rouge">3</code> 처음 백 키를 누르면 “정말 종료하시겠습니까?” 라는 Toast를 띄운다. 그러고서 <code class="highlighter-rouge">4</code>에서 종료 플래그를 true로 바꾼다.<br />
+<code class="highlighter-rouge">5</code> <strong>postDelayed()</strong> 메서드로 5초 후에 할 작업을 지정한다.<br />
+<code class="highlighter-rouge">6</code> <strong>Runnable Message</strong>는 종료 플래그를 다시 false로 되돌린다.</p>
+
 
 
                 <hr style="visibility: hidden;">
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2019/08/02/kotlin-stream/" data-toggle="tooltip" data-placement="top" title="[Kotlin] Kotlin Stream">
+                        <a href="/2019/09/07/android-thread-handler/" data-toggle="tooltip" data-placement="top" title="[Android] 메인 스레드 & Handler 이해하기">
                         Previous<br>
-                        <span>[Kotlin] Kotlin Stream</span>
+                        <span>[Android] 메인 스레드 & Handler 이해하기</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2019/08/24/android-service2/" data-toggle="tooltip" data-placement="top" title="[Android] Service 란(2)">
-                        Next<br>
-                        <span>[Android] Service 란(2)</span>
-                        </a>
-                    </li>
                     
                 </ul>
                 <hr style="visibility: hidden;">
@@ -576,8 +527,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "junghoon-github-io";
-    var disqus_identifier = "/2019/08/04/kotlin-let-apply-with";
-    var disqus_url = "http://localhost:4000/2019/08/04/kotlin-let-apply-with/";
+    var disqus_identifier = "/2019/10/20/android-handler2";
+    var disqus_url = "http://localhost:4000/2019/10/20/android-handler2/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
