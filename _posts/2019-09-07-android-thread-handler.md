@@ -134,6 +134,120 @@ postXxx(), sendXxx() 메서드에서 실행 시간(what)이 전달되고, `나�
 그리고 Looper.loop() 메서드에서 Message를 처리하고 나서 recycleUnChecked() 메서드를 통해 Message를 다시 초기화해서 재사용한다. 오브젝트 풀이 최대 개수에 도달하지 않았다면 오브젝트 풀에 Message를 추가한다. new Message()와 같이 기본 생성자로 생성해서 값을 채워도 동작에는 문제가 없어 보이지만 Message 처리가 끝나면 불필요하게 풀에 Message를 추가하면서 금방 풀의 최대 개수에 이른다. <br/>
 Message를 풀에서 가져와서(여분이 없으면 새로 생성) 풀에 돌려줘야지 따로 생성해서 풀에 돌려주면 자원이 낭비된다.(`Handler 에서 Message를 처리하는게 아니라, 값을 전달하기 위한 용도로 Message를 대신 사용해서 주고받는 경우에만 Message 기본 생성자를 사용하자.`)
 
+<br/>
+
+# Handler 클래스
+Handler는 Message를 MessageQueue에 넣는 기능과 MessageQueue에서 꺼내 처리하는 기능을 함께 제공한다. 여기서는 Handler가 Looper, MessageQueue와 어떤 관계가 있는지 살펴보고 Handler의 사용 방법에 대해서 알아보자.
+
+## Handler 생성자
+Handler를 사용하려면 먼저 생성자를 이해해야 한다. Handler에는 기본 생성자 외에도 Handler.Callback이 전달되는 생성자도 있고, Looper가 전달되는 생성자도 있다.
+- Handler()
+- Handler(Handler.Callback callback)
+- Handler(Looper looper)
+- Handler(Looper looper, Handler.Callback callback)
+
+당연한 얘기지만 1~3번째 생성자는 파라미터 개수가 가장 많은 4번째 생성자를 다시 호출한다. Handler는 Looper(결국 MessageQueue)와 연결되어 있다. Looper는 이들 생성자와 어떤 관계일까?
+`기본 생성자는 바로 생성자를 호출하는 스레드의 Looper를 사용하겠다는 의미`이다.(Looper는 스레드 로컬 스토리지에 들어간다). 따라서 메인 스레드에서 Handler 기본 생성자는 앱 프로세스가 시작할 때 ActivityThread에서 생성한 메인 Looper를 사용한다. `Handler 기본 생성자는 UI 작업을 할 때 많이 사용된다.`
+
+**백그라운드 스레드에서 Handler 기본 생성자 사용하려면 Looper 필요**
+그럼 백그라운드 스레드에서 Handler 기본 생성자를 사용한다면 어떨까? 이 때 Looper가 준비되어 있지 않다면 RuntimeException이 발생한다. `RuntimeException의 "Can't create handler inside thread that has not called Lopper.prepare"라는 메시지에 따른 문제`를 해결하려면, 먼저 `Looper.prepare()를 실행해서 해당 스레드에서 사용할 Looper를 준비해야한다.` 내부적으로 prepare() 메서드는 MessageQueue를 생성하는 것 외에 별다른 동작을 하지 않는다. Looper API 문서를 보면 백그라운드 스레드에서 Handler를 사용하는 샘플이 나온다.
+~~~java
+class LooperThread extends Thread {
+    public Handler mHandler;
+
+    public void run() {
+        Looper.prepare();
+        mHandler = new Handler() {
+            public void handleMessage(Message msg) { //1
+                //여기서 Message 처리
+            }
+        };
+        Looper.loop();
+    }
+}
+~~~
+LooperThread에서 스레드를 시작하면 Looper.loop()에 무한 반복문이 있기 때문에 해당 스레드는 종료되지 않는다. 그리고 mHandler에서 sendXxx(), postXxx() 메서드를 사용하면 스레드 내에서 `1`을 실행한다.<br/>
+
+**호출 위치가 메인스레드인지 확인이 쉽지 않음**
+개발 중에 Looper가 준비되지 않아서 RuntimeException을 만나는 경우가 있다. `백그라운드 스레드에서 Handler 기본 생성자를 쓴 경우`이다.<br/>
+메서드 호출 스택이 깊어지면 호출 위치가 메인 스레드인지 백그라운드 스레드인지 확인이 금방 안 되기도 한다. 예를 들어 어떤 메서드에서는 단순하게 TextView 의 setText()를 실행하지만, 메서드를 호출하는 곳이 여러 군데이거나 메서드 호출 스택이 깊어서 어떤 스레드에서 호출하는지 알기 쉽지 않은 상황을 가정해보자.<br/>
+여러 곳에서 사용하는 메서드라면 메인 스레드뿐 아니라 백그라운드 스레드에서 생성하는지 모호한 경우가 있다.
+메인 스레드에서는 메인 Looper가 이미 있어서 문제가 되지 않지만, 백그라운드 스레드에서는 대응하는 Looper가 없다면 RuntimeException을 만나게 된다.
+예를 들어, 아래 코드에서 BadgeListener의 updateBadgeCount() 에서 UI를 변경한다.<br/>
+~~~java
+public void process(BadgeListener listener) {
+    int count = ...
+    linstener.updateBadgeCount(count);
+}
+~~~
+process() 메서드는 메인 스레드에서 호출할 때는 문제가 없다. 하지만 백그라운드 스레드에서 호출한다면 CalledFromWrongThreadException 이 발생한다. 이 때 Looper와 Handler의 관계를 잘 모른다면 아래처럼 작성할 수 도 있다.
+~~~java
+public void process(BadgeListener listner) {
+    int count = ...
+    new Handler().post(new Runnable() { //1
+        public void run() {
+            listener.updateBadgeCount(count);//2
+        }
+    });
+}
+~~~
+백그라운드 스레드에서 Looper가 연결되어 있지 않다면 `1`에서 RuntimeException이 발생한다. 백그라운드 스레드에서 Looper를 생성해도 `2`는 UI를 업데이트하는 작업이기 때문에 이번에는 CalledFromWrongThreadException이 발생한다. 메인 스레드에서만 UI를 업데이트할 수 있는데, 바로 메인 Looper와 연결된 Handler가 필요하다. 이 때 Handler의 세 번째 생성자인 Handler(Looper looper)를 사용하면 된다.
+~~~java
+public void process(BadgeListener listner) {
+    int count = ...
+    new Handler(Looper.getMainLooper()).post(new Runnable() {
+        public void run() {
+            listener.updateBadgeCount(count);
+        }
+    });
+}
+~~~
+Handler 생성자에 Looper.getMainLooper()를 전달하면, 메인 Looper의 MessageQueue에서 Runnable Message를 처리한다. 따라서 run() 메서드의 코드는 메인 스레드에서 실행되고 UI를 문제없이 업데이트한다.
+
+## Handler 동작
+앞에서도 언급했듯이 Handler는 Message를 MessageQueue에 보내는 것과 Message를 처리하는 기능을 함께 제공한다. post(), postAtTime(), postDelayed() 메서드를 통해서 Runnable 객체도 전달되는데, Runnable도 내부적으로 Message에 포함되는 값이다.<br/>
+Handler에서 Message를 보내는 메서드 목록을 살펴보자.<br/>
+
+
+|        | send | post |
+|:--------|:--------|:--------|
+| 기본 | sendEmpty(int what) <br/> sendMessage(Message msg) | post(Runnable r) |
+| Delayed | sendEmptyMessageDelayed(int what, long delayMillis) <br/> sendMessageDelayed(Message msg, long delayMillis) | postDelayed(Runnable r, long delayMillis) |
+| AtTime | sendEmptyMessageAtTime(int what, long uptimeMillis) <br/> sendMessageAtTime(Message msg, long uptimeMillis) | postAtTime(Runnable r, Object token, long uptimeMillis) <br/> postAtTime(Runnable r, long uptimeMillis) |
+| AtFrontOfQueue| sendMessageAtFrontOfQueue(Message msg) | postAtFrontOfQueue(Runnable r) |
+
+- **sendEmptyMessage()**, **sendEmptyMessageDelayed()**, **sendEmptyMessageAtTime()** 메서드는 Message의 what 값만을 전달한다.
+- **-Delayed()** 로 끝나는 메서드는 내부적으로 -AtTime() 메서드를 호출한다. 현재 시간 uptimeMillis에 delayMillis를 더한 값이 uptimeMillis 파라미터에 들어간다.
+- **sendMessageAtFrontOfQueue()** 나 **postAtFrontOfQueue()** 메서드는 특별한 상황이 아니면 쓰지 말라는 가이드가 있다. 권한 문제나 심각한 서버 문제처럼, 앱을 더 이상 쓸 수 없는 특별한 때가 아니면 사용할 일이 없다. 남용하면 안되는 메서드이다.
+
+## dispatchMessage() 메서드
+Looper.loop() 메서드에서 호출하는 Handler의 dispatchMessage() 메서드를 보자<br/>
+**Handler.java**
+~~~java
+public void dispatchMessage(Message msg) {
+    if(msg.callback != null) {//1~
+        handleCallback(msg);
+    } else {
+        if (mCallback != null) {
+            if (mCallback.handleMessage(msg)) {
+                return;
+            }
+        }
+        handleMessage(msg);
+    }//1
+}
+
+private static void handleCallback(Message message) {
+    message.callback.run();
+}
+~~~
+`1~1` callback Runnable 이 있다면 그것을 실행하고 아니면 handleMessage()를 호출한다.
+dispatchMessage()는 퍼블릭 메서드이다. 드물긴 하지만 sendXxx() 나 postXxx()를 쓰지 않고 dispatchMessage() 메서드를 직접 호출하기도 하는데, 이 때는 MessageQueue를 거치지 않고 직접 Message를 처리한다.
+
+
+
+
+
 
 
 
