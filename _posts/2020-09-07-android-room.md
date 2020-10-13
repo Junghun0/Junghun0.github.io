@@ -21,6 +21,8 @@ Room Library 동작방식 및 사용해보기
 ## 의존성 추가
 
 ```xml
+apply plugin: 'kotlin-kapt'
+...
 dependencies {
   def room_version = "2.2.5"
 
@@ -56,6 +58,8 @@ Dao는 데이터베이스에 접근해 CRUD 등을 사용할 수 있게 하는 �
 - Database<br/>
 RoomDatabase 클래스를 상속받는 abstract class 이다.
 @Database annotation안에 해당 database와 관련된 Entity 리스트를 포함해야 한다.
+
+## Todo 앱 예제
 
 1. **AppDatabase Class**
 ```java
