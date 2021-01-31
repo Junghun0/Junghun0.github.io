@@ -37,6 +37,11 @@ dependencies {
 }
 ```
 
+### -kapt 란?
+"자바 6부터 도입된 Pluggable Annotation Processing 를 Kotlin에서도 사용 가능하게 하는 것" 이라고 공식 문서에 나온다.<br/>
+여기서 어노테이션 프로세싱이란 우리가 간단하게 '@명령어' 처럼 사용하는 주석 형태의 문자열을 실제 코드로 생성해주는 것이다.<br/>
+@으로 시작하는 명령어를 어노테이션이라고 하는데, 어노테이션이 컴파일 시에 코드로 생성되기 때문에 실행 시에 발생할 수 있는 성능 문제가 많이 개선된다.<br/>
+
 **Room 의 3가지 주요 구성요소**
 Room에는 다음과 같은 세 가지 주요 구성요소가 있습니다.
 
@@ -53,15 +58,30 @@ RoomDatabase를 확장하는 추상 클래스여야 합니다.<br/>
 - Entity<br/>
 Entity는 데이터베이스에서 테이블이라고 생각하면 됩니다.
 테이블명, 칼럼 명, 칼럼 타입, 기본키, 외래키 등을 정의할 수 있는 annotation들이 있다.<br/>
-- Dao<br/>
-Dao는 데이터베이스에 접근해 CRUD 등을 사용할 수 있게 하는 다양한 annotation들이 있다.<br/>
+- DAO<br/>
+DAO(Data Access Object)는 데이터베이스에 접근해 CRUD 등을 사용할 수 있게 하는 다양한 annotation들이 있다.<br/>
 - Database<br/>
 RoomDatabase 클래스를 상속받는 abstract class 이다.
-@Database annotation안에 해당 database와 관련된 Entity 리스트를 포함해야 한다.
+@Database annotation안에 해당 database와 관련된 Entity 리스트를 포함해야 한다.<br/>
+
+- @Ignore
+@Ignore 어노테이션을 사용하면 해당 변수가 테입즐과 관계없는 변수라는 정보를 알릴 수 있다.
+
 
 ## Todo 앱 예제
 
 1. **AppDatabase Class**
+마치 SQLiteOpenHelper를 상속받아서 구현했던 것처럼 Room도 유사한 구조로 사용할 수 있다. Room은 RoomDatabase를 제공하는데 RoomDatabase를 상속받아 클래스를 생성하면 된다.
+주의할 점은 추상 클래스로 생성해야 한다는 점이다. 기존 클래스와 동일하게 생성하고 class앞에 abstract 키워드를 붙이면 된다.<br/>
+
+* @Database 속성정리
+- entities 
+Room 라이브러리가 사용할 엔터티(테이블) 클래스 목록<br/>
+- version
+데이터베이스의 버전<br/>
+- exportSchema
+true면 스키마 정보를 파일로 출력한다.<br/>
+
 ```java
 @Database(entities = [Todo::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
