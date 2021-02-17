@@ -17,7 +17,7 @@ Kotlin 에서 Java 코드 접근하기
 
 ---
 
-## 1. Null 안전성
+## Null 안전성
 자바의 참조 타입을 코틀린으로 불러오면 타입 이름 뒤에 느낌표(!)가 붙는다.`(ex, String!)`
 타입 이름 뒤의 `!`는 이 타입이 `Nullable`인지, `Not-Null`인지 알 수 없다는 뜻이다.
 자바의 참조 타입은 무조건 `null을 허용`하기 때문에 이런 일이 벌어진다.
@@ -52,5 +52,49 @@ public interface JavaInterface {
 
 `@NotNull 이 붙은 String 타입은 코틀린에서 느낌표 없이 String 그대로 인식`된다.
 @NotNull의 반대로 @Nullable 타입도 있다. String 타입 앞에 `@Nullable을 붙이면 코틀린에서 String? 타입` 으로 인식된다.
+
+## Getter/Setter
+간단한 자바 클래스를 보자.
+~~~java
+public class JavaClass {
+    private int value;
+
+    public int getSomething() {
+        return value;
+    }
+
+    public void setSomething(int value) {
+        this.value = value;
+    }
+
+    public double getDoubleValue() {
+        return 3.14;
+    }
+
+    public boolean isGood() {
+        return true;
+    }
+}
+~~~
+[코틀린 예제]
+~~~java
+fun main() {
+    val java = JavaClass()
+
+    java.something = 301
+    println(java.something)
+
+    println(java.isGood)
+    println(java.doubleValue)
+}
+~~~
+[ 결과 ]
+~~~java
+301
+true
+3.14
+~~~
+만약 자바 클래스에 get~ , set~ 으로 시작하는 메서드가 있다면, 코틀린에서 프로퍼티로 접근이 가능하다. getSomething, setSomething 메서드는 둘 다 int 타입의 값을 다루므로 Int 타입의 프로퍼티로 인식된다.
+
 
 
