@@ -33,6 +33,8 @@ API가 깔끔하다는 말이란 ?
 
 
 **코틀린이 간결한 구문을 어떻게 지원하는가 ?**
+
+
 |일반 구문|간결한 구문|사용한 언어 특성|
 |------|---|---|
 |StringUtil.capitalize(s)|s.capitalize()|확장 함수|
@@ -56,7 +58,7 @@ fun buildString(
 ~~~
 
 ~~~kotlin
->>>  val s = buildString { // "it" 은 StringBuilder 인스턴스를 가리킨다.
+val s = buildString { // "it" 은 StringBuilder 인스턴스를 가리킨다.
     it.append("Hello, ")
     it.append("World!")
 }
@@ -82,7 +84,7 @@ fun buildString(
 ~~~
 
 ~~~kotlin
->>> val s = buildString {
+val s = buildString {
     this.append("Hello, ") // "this" 키워드는 StringBuilder 인스턴스를 가리킨다.
     append("World!") // "this" 를 생략해도 묵시적으로 StringBuilder 인스턴스가 수신 객체로 취급된다.
 }
