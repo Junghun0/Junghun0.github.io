@@ -90,6 +90,9 @@ val s = buildString {
 }
 ~~~
 
+이제는 buildString 에게 수신 객체 지정 람다를 인자로 넘기기 때문에 람다안에서 it 을 사용하지 않아도 된다.
+it.append() 대신 append()를 사용한다.
+
 
 
 
