@@ -75,6 +75,7 @@ ff({ i: Int, s: String -> "${i}- ${s}" })
 ~~~
 
 - 코틀린은 익명 람다 함수를 제공한다. 람다 함수는 함수 호출 매개변수로 사용할 수 있는 함수 리터럴이다.
+
 ~~~java
 val f = { i:Int, s:String -> i.toString() + ":" + s }
 // 코틀린은 f 의 타입을 (Int, String) -> String 으로 추론한다.
