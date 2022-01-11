@@ -170,6 +170,78 @@ val f = { i:Int, s:String -> i.toString() + ": " + s}
 
 
 
+## 루프 다시 살펴보기
+
+~~~java
+val arr = arrayOf("Joe", "Isabel", "John")
+arr.forEach { name ->
+    Log.d("A name: ${name}")
+}
+
+arr.forEachIndexed { i,s ->
+    Log.d("Name #${i}: ${name}")
+}
+~~~
+
+`forEach` 나 `forEachIndexed`를 처음 보면 뒤에 있는 `{}`이 구문 블록 처럼 보이지만 `->` 에서 사실 이들이 `람다 함수를 매개변수`로 갖는 함수라는 것을 알 수 있다.
+따라서 `arr.forEach({...})` 또는 `arr.forEachIndexed({...})` 같이 작성하는 것도 가능하다.
+
+
+`forEach` 내부를 살펴보자.
+~~~java
+public inline fun <T> Array<out T>.forEach(action :(T) -> Unit): Unit {
+    for (element in this) action(element)
+}
+~~~
+`forEach` 이후의 `블록이 함수 매개변수로 전달되는 함수`라는 것을 알 수 있다.
+
+
+`forEach` 와 `forEachIndexed`는 언어 구조가 아닌 함수이므로 이들은 반복할 수 있는 뭔가를 포함한 임의의 객체에 직관적으로 적용할 수 있다.
+
+~~~java
+originalCollection.
+    filter([필터함수]).
+    map([맵핑 함수]).
+    take(37).
+    forEach { element ->
+        ...
+    }
+~~~
+
+## 리시버가 있는 함수
+
+예를 들어 `클래스 내부의 함수처럼 함수 객체로 간주` 되고 `컨텍스트에 포함된 함수`를 `리시버 타입이 있는 함수` 라고 한다.
+
+~~~java
+val f : ReceiverType.([매개변수]) = ...
+~~~
+
+이러한 함수는 ReceiverType 클래스의 멤버 함수인 것처럼 동작하며 함수 구현 내부에서 해당 클래스의 인스턴스를 가리키는 `this`를 사용할 수 있다.
+
+~~~java
+class A {
+    var d: Double = 0.0
+    fun plus(x: Double) = d + x
+}
+
+val f: A.(Double) -> Double = {
+    x:Double -> this.d - x
+}
+
+fun A.minus(x: Double) = f
+~~~
+
+예를 들어 앞에서 `함수 f 가 리시버 타입`을 갖는 함수다. `f`를 사용해 클래스 `A`를 `minus()` 함수로 확장하고 있으며 `f`의 구현 내부에 있는 `this.d`는 리시버 타입 (이러한 경우에는 A) 내부의 프로퍼티 `d`를 가리킨다.
+
+**클래스 내부 함수에 대한 직접 참조**는 클래스 환경 내부에서만 작동하므로 다음은 리시버 타입이 있는 함수라는 것을 자연스럽게 알 수 있다.
+~~~java
+class X {
+    fun add(a: Int, b:Int): Int = a + b
+}
+...
+val f: X.(Int, Int) -> Int = X::add
+~~~
+
 
 
 
